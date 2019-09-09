@@ -1,0 +1,29 @@
+/*left_menu*/
+.body .left_menu{
+	float:left;
+	text-align:left;
+}
+
+.body .left_menu ul{
+	list-style-type:none;
+	margin:20px 0 0 20px;
+}
+
+.nav-item1{
+	border-bottom: white 1px solid;
+}
+.nav-item1:hover{
+	background-color:#783712;
+	boarder-top: white 1px solid;
+}
+
+.nav-link{text-decoration:none;color:black;}
+
+.nav-link:hover{
+	color:white;
+	font-weight:bold;	
+}
+
+i.fas{
+	font-size:15px; float:right;
+}
