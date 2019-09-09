@@ -9,7 +9,7 @@ a.top_link:visited{color:black;}
 .header .logo{text-align:left;margin:0;padding:0}
 .menubar{background-color:#783712;text-align:center; margin:0 auto;padding:0 } /* 갈색부분 */
 .menubar .menubar_menu{text-align:left;width:1200px;margin:0 auto;}
-.menubar .menubar_menu ul li{display:inline; padding-right:85px;padding-left:85px;text-align:left;text-color:#FFFFFF;font-size:17px;}
+.menubar .menubar_menu ul li{display:inline; padding-right:82px;padding-left:85px;text-align:left;text-color:#FFFFFF;font-size:17px;}
 a.menu_link{text-decoration:none;color:#FFFFFF;}
 a.menu_link:hover{color:#FFFFFF;font-weight:bold;}
 a.menu_link:visited{color:#FFFFFF;}

@@ -10,15 +10,372 @@
 <link rel="stylesheet" href="style/leftmenustyle.css" />
 <link rel="stylesheet" href="style/basic.css" />
 <link rel="stylesheet" href="style/info.css" />
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
 
+
+
+//목록 조회하기 
+function search_init() {
+	btn_search_onclick();
+}
+
+//대학 이름 검색
+function btn_search_onclick_init(){
+	document.frm.pageIndex.value = 1;
+	$("#univ_nm").val($.trim($("#univ_nm").val()));
+	search_init();
+}
+
+/* //설정한 조건에 맞는 대학 정보 제공
+function btn_search_onclick() {
+			
+	$('#paginationholder').html('');
+	   $('#paginationholder').html('<ul id="pagination" class="pages"></ul>');
+	
+	var lst_area_list = [];
+	var lst_elsm_list = [];
+	var lst_fond_list = [];
+	
+	var arealist = $("input[id^='chk_area']:checked").get();
+	var elsmlist = $("input[id^='chk_elsm']:checked").get();
+	var fondlist = $("input[id^='chk_fond']:checked").get();
+	var empymnlist = $("input[id^='rdo_empymn']:checked").val();
+	var tutfeelist = $("input[id^='rdo_tutfee']:checked").val();
+	
+	$.each(arealist, function(index, item){
+		var area = item.value.toString();
+		if(area != '%'){
+			area = gfn_leadingZeros(area,2);
+		}
+		lst_area_list[index] = area;
+	});
+	
+	$.each(elsmlist, function(index, item){
+		var elsm = item.value.toString();
+		if(elsm != '%'){
+			elsm = gfn_leadingZeros(elsm,2);
+		}
+		lst_elsm_list[index] = elsm;
+	});
+	
+	$.each(fondlist, function(index, item){
+		var fond = item.value.toString();
+	
+		lst_fond_list[index] = fond;
+	});
+	
+	$("#lst_area_cd").val(lst_area_list);
+	$("#lst_elsm_cd").val(lst_elsm_list);
+	$("#lst_fond_se_cd").val(lst_fond_list);
+	$("#lst_empymn_cd").val(empymnlist);
+	$("#lst_tutfee_cd").val(tutfeelist);
+	
+	gfn_Submission_Call("/kcue/ast/eip/eis/inf/univinf/eipUnivInfGnrlList.do",$("#frm").serialize(), function(data){
+		if(data != null){
+	        if (data.resultVO.resultCode == "SUCCESS")
+		    {
+				fn_makeResult("/kcue/ast/eip/eis/inf/univinf/eipUnivInfGnrlList.do",data,Number(document.frm.pageIndex.value));
+		    }else{
+		    	alert(data.resultVO.resultMessage);
+		    }
+		}
+	},'json');
+} */
+
+	/* //결과 리스트에 제공
+	function fn_makeResult(doName, data, currentPage){
+			var dataResultTotCnt = data.resultTotCnt;
+			var dataResultTotCntOrg = data.resultTotCntOrg;
+			var dataResultPageSize = data.resultPageSize;
+			var v_totalPages = Math.ceil(dataResultTotCnt / dataResultPageSize);
+			var dataResultList = data.resultList;
+			var dataCmpet = data.cmpetVO;
+			
+			
+			if(gfn_null(dataCmpet.cmpet_at) == 'N'){
+				$("#notice_div").html("<span class='t_cr02'>"+dataCmpet.cmpet_txt+ "</span>");
+			}else{
+				$("#notice_div").empty();
+			}
+			
+			var strRow = "";
+			var colCnt = 9;  //컬럼 갯수
+			
+			var tbResult = $("#tbResult");
+			var totalCnt = $("#totalCountOrg");
+			
+			$("#empymn_head").empty();
+			$("#cmpet_head").empty();
+			tbResult.empty();
+			totalCnt.empty();
+			
+			totalCnt.append(dataResultTotCntOrg);
+			
+			if(dataResultList != "" && dataResultList != null){
+				
+				if(dataCmpet.cmpet_year != "" && dataCmpet.cmpet_year != null)
+					$("#cmpet_head").append(dataCmpet.cmpet_year);
+				
+				for(var i =0; i < dataResultList.length; i++){
+					
+					var chk = 0;
+					strRow += '<tr>';
+					strRow += "<td class='tt'><a href='javascript:go_set(\""+gfn_null(dataResultList[i].univ_cd)+"\")'>" + gfn_null(dataResultList[i].univ_all_nm) + "</a></td>";
+					strRow += '<td>'+gfn_null(dataResultList[i].area_nm) + '</td>';
+					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].atrcr_cmpet_rt)+'</td>';
+					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].ftrc_cmpet_rt)+'</td>';
+					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].rcnp)+'</td>';
+					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].instl_subjct)+'</td>';
+					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].selctn_inf)+'</td>';
+
+					for(var k = 0 ; k < chkUniv.length ; k++){
+						if(chkUniv[k] == gfn_null(dataResultList[i].univ_cd)){
+							strRow += '<td><a href="javascript:fn_chkCompr_onclick(\''+gfn_null(dataResultList[i].univ_cd)+'\');" id="compr_'+dataResultList[i].univ_cd+'" value="\''+dataResultList[i].univ_cd+'\','+gfn_null(dataResultList[i].univ_all_nm)+'" class="btn_compare" title="비교">비교</a></td>';							
+							chk++;
+						}
+					}
+					if(chk == 0){
+						strRow += '<td><a href="javascript:fn_chkCompr_onclick(\''+gfn_null(dataResultList[i].univ_cd)+'\');" id="compr_'+dataResultList[i].univ_cd+'" value="\''+dataResultList[i].univ_cd+'\','+gfn_null(dataResultList[i].univ_all_nm)+'" class="btn_compare_off" title="비교">비교</a></td>';					
+					}
+					
+					strRow += '<td id="tdIntrst_'+gfn_null(dataResultList[i].univ_cd)+'">';
+					
+					if(gfn_null(dataResultList[i].intrst_cnt) != "0"){
+// 						<!-- 관심설정 on -->
+						strRow += '<a href="javascript:intrst_univ_onclick(\''+gfn_null(dataResultList[i].sch_year)+'\',\''+gfn_null(dataResultList[i].univ_cd)+'\',\'D\')" title="관심설정"><img src="/images/re_icon/icon_favorite_on.gif" alt="관심설정"></a>';
+					}else{
+// 						<!-- 관심설정 off -->
+						strRow += '<a href="javascript:intrst_univ_onclick(\''+gfn_null(dataResultList[i].sch_year)+'\',\''+gfn_null(dataResultList[i].univ_cd)+'\',\'C\')" title="관심설정"><img src="/images/re_icon/icon_favorite_off.gif" alt="관심설정"></a>';
+					}
+					
+					strRow += '</td>';
+					strRow += '</tr>';
+					
+				}
+				tbResult.append(strRow);
+				
+			}else{
+				v_totalPages = 1;
+				strRow += '<tr>';
+				strRow += "<td colspan="+colCnt+">조회된 자료가 없습니다.</td>";
+				strRow += '</tr>';
+				tbResult.append(strRow);
+			}
+			
+			$('#pagination').twbsPagination({totalPages: v_totalPages, visiblePages: 10
+						, startPage: currentPage
+						, first: '<img src="/images/btn_first.png" alt="처음" />'
+			        	, prev: '<img src="/images/btn_prev.png" alt="이전" />'
+				        , next: '<img src="/images/btn_next.png" alt="다음" />'
+				        , last: '<img src="/images/btn_last.png" alt="마지막" />'
+						, onPageClick: function (event, page) {
+					        	var f = document.frm;
+					    		f.pageIndex.value = page;
+					    		gfn_Submission_Call(doName, $("#frm").serialize(),  function(data){
+									if(data != null){
+								        if (data.resultVO.resultCode == "SUCCESS")
+									    {
+											fn_makeResult(doName,data,page);
+									    }else{
+									    	alert(data.resultVO.resultMessage);
+									    }
+									}
+								},'json');
+		        		}
+		    });
+			
+			$("#pagination .num a").filter(function() {
+			    return $(this).text() === document.frm.pageIndex.value;
+			}).addClass("on");
+		} */
+
+	/* //관심대학교 설정
+	function intrst_univ_onclick(sch_year, univ_cd, saveAt){
+			var strRow = "";
+			
+			$("#intrst_sch_year").val(sch_year);
+			$("#intrst_univ_cd").val(univ_cd);
+			
+			if(gs_usidId != "null" && gs_macIp != "null"){
+				gfn_Submission_Call("/kcue/ast/eip/eis/inf/univinf/saveIntrstUniv.do?saveAt="+saveAt,$("#intrstFrm").serialize(), function(data){
+					if(data != null){
+				        if (data.resultVO.resultCode == "SUCCESS")
+					    {
+		 					//관심설정 on
+				        	if(saveAt == "C"){
+								strRow = '<a href="javascript:intrst_univ_onclick(\''+sch_year+'\',\''+univ_cd+'\',\'D\')" title="관심설정" data-title="관심대학"><img src="/images/re_icon/icon_favorite_on.gif" alt="관심설정"></a>';
+					        	$("#tdIntrst_"+univ_cd).html(strRow);
+					        	gfn_setComSession('univRef','Y','N', function(){
+			   						createToast($("#tdIntrst_"+univ_cd+" > a"), 'add');
+					        	});
+				        	}else if(saveAt == "D"){
+			 					//관심설정 off
+								strRow = '<a href="javascript:intrst_univ_onclick(\''+sch_year+'\',\''+univ_cd+'\',\'C\')" title="관심설정" data-title="관심대학"><img src="/images/re_icon/icon_favorite_off.gif" alt="관심설정"></a>';
+					        	$("#tdIntrst_"+univ_cd).html(strRow);
+					        	gfn_setComSession('univRef','Y','N', function(){
+			   						createToast($("#tdIntrst_"+univ_cd+" > a"), 'remove');
+					        	});
+				        	}
+				        	
+					    }else{
+					    	alert(data.resultVO.resultMessage);
+					    }
+					}
+				},'json');
+			}else{
+				alert("로그인 후 이용해주시기 바랍니다!");
+				return;
+			}
+		} */
+
+	//각 항목 선택하기 
+	//지역 선택하기
+	function fn_areaList_onclick(area){
+			
+			if($(area).attr("id") == "chk_area_all"){
+				$("#chk_area_all").prop("checked",true);
+				$("input[id^='chk_area']:not(input[id='chk_area_all'])").prop("checked",false);
+			}else{
+				
+				$("#chk_area_all").prop("checked",false);
+				var chk_area_list = $("input[id^='chk_area']:checked").get();
+				
+				if(chk_area_list.length < 1){
+					$("#chk_area_all").prop("checked",true);
+				}
+			}
+		}
+	//전형요소 선택하기
+		function fn_elsmList_onclick(elsm){
+			if($(elsm).attr("id") == "chk_elsm_all"){
+				$("#chk_elsm_all").prop("checked",true);
+				$("input[id^='chk_elsm']:not(input[id='chk_elsm_all'])").prop("checked",false);
+			}else{
+				
+				$("#chk_elsm_all").prop("checked",false);
+				var chk_elsm_list = $("input[id^='chk_elsm']:checked").get();
+				
+				if(chk_elsm_list.length < 1){
+					$("#chk_elsm_all").prop("checked",true);
+				}
+			}
+			
+		}
+	//학교유형 선택하기
+		function fn_fondList_onclick(fond){
+			if($(fond).attr("id") == "chk_fond_all"){
+				$("#chk_fond_all").prop("checked",true);
+				$("input[id^='chk_fond']:not(input[id='chk_fond_all'])").prop("checked",false);
+			}else{
+				
+				$("#chk_fond_all").prop("checked",false);
+				var chk_fond_list = $("input[id^='chk_fond']:checked").get();
+				
+				if(chk_fond_list.length < 1){
+					$("#chk_fond_all").prop("checked",true);
+				}
+			}
+			
+		}
+	//설립유형 선택하기
+		function fn_empymnList_onclick(empymn){
+			$(empymn).toggleClass("on");
+			
+			// 바로 조회
+			btn_search_onclick_init();
+		}
+	//취업률 선택하기 
+		function fn_tutfeeList_onclick(tutfee){
+			$(tutfee).toggleClass("on");
+			
+			// 바로 조회
+			btn_search_onclick_init();
+		}
+
+	function fn_box_text_set() {
+		//지역 텍스트
+		var chk_area_list = $("input[id^='chk_area']:checked").get();
+		var area_list = "";
+		$.each(chk_area_list, function(index, item){
+			var area_id = item.id.toString();
+			area_list += ","+$("#"+area_id).next("label").html();
+		});
+		
+		$("#span_area_view").html(area_list.substring(1));
+	
+		//학교유형 텍스트
+		var chk_elsm_list = $("input[id^='chk_elsm']:checked").get();
+		var elsm_list = "";
+		$.each(chk_elsm_list, function(index, item){
+			var elsm_id = item.id.toString();
+			elsm_list += ","+$("#"+elsm_id).next("label").html();
+		});
+		
+		$("#span_elsm_view").html(elsm_list.substring(1));
+	
+		//설립유형 텍스트
+		var chk_fond_list = $("input[id^='chk_fond']:checked").get();
+		var fond_list = "";
+		$.each(chk_fond_list, function(index, item){
+			var fond_id = item.id.toString();
+			fond_list += ","+$("#"+fond_id).next("label").html();
+		});
+		
+		$("#span_fond_view").html(fond_list.substring(1));
+	
+		//취업률 텍스트
+		var rdo_empymn_list = $("input[id^='rdo_empymn']:checked").get();
+		var empymn_list = "";
+		$.each(rdo_empymn_list, function(index, item){
+			var empymn_id = item.id.toString();
+			empymn_list += ","+$("#"+empymn_id).next("label").html();
+		});
+		
+		$("#span_empymn_view").html(empymn_list.substring(1));
+	
+		//등록금 텍스트
+		var rdo_tutfee_list = $("input[id^='rdo_tutfee']:checked").get();
+		var tutfee_list = "";
+		$.each(rdo_tutfee_list, function(index, item){
+			var tutfee_id = item.id.toString();
+			tutfee_list += ","+$("#"+tutfee_id).next("label").html();
+		});
+		
+		$("#span_tutfee_view").html(tutfee_list.substring(1));
+	}
+
+
+
+//대학조건 접기
+function fn_box_fold(){
+	fn_box_text_set();
+	
+	$("#btn_box_fold").hide();
+	$("#btn_box_out").show();
+	$("#tbDetail").hide();
+	$("#tbSimple").show();
+}
+
+//대학조건 펼치기
+function fn_box_out(){
+	$("#btn_box_out").hide();
+	$("#btn_box_fold").show();
+	$("#tbSimple").hide();
+	$("#tbDetail").show();
+}
+
+
+</script>
 <style type="text/css">
 	.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
 	.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
+	.contents{height: 950px;;}
 </style>
 
 
@@ -29,6 +386,16 @@
 		<div class="lefttop">
         	 <div class="lefttoptext">대학간다</div>
       	</div>
+<form id="frm" name="frm" action="" method="post" onsubmit="return false;">
+		<input id="pageIndex" name="pageIndex" type="hidden" value="1">
+		<input id="pageSize" name="pageSize" value="15" type="hidden">
+		<input id="univ_se_cd" name="univ_se_cd" value="10" type="hidden">
+		<input type="hidden" name="univ_sort" id="univ_sort" value="UP">
+		<input type="hidden" name="area_sort" id="area_sort" value="">
+		<input type="hidden" name="main_search_at" id="main_search_at" value="">
+		<input type="hidden" name="gnrlKeyword" id="gnrlKeyword" value="">
+		<input type="hidden" name="area" id="area" value="">
+		<input type="hidden" name="stdr_sch_year" id="stdr_sch_year" value="">
       <div class="righttop">
          <div class="righttoptext">대학 검색</div>
       </div>
@@ -45,18 +412,14 @@
 			</nav>
 		</div>
 		<div class="rightcontents">
-		
-		
-		
 				<!-- 조건박스 모두 열렸을떄 -->
 				<div class="search_tbl_box">
 					<fieldset>
 						<!-- 대학 -->
 						<div class="tbl_wrap">
-							<!-- <p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./대입정보포털 - 대학_학과_전형 - 대학정보 - 일반대학_files/btn_box_fold.png" alt="접기"></a></p>
-							<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./대입정보포털 - 대학_학과_전형 - 대학정보 - 일반대학_files/btn_box_out.png" alt="펼치기"></a></p> -->
+							<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
+							<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 							<table class="search_tbl01">
-								<caption>검색박스</caption>
 								<colgroup>
 									<col style="width:8%;">
 									<col>
@@ -69,20 +432,22 @@
 										</th>
 										<td colspan="2">
 											<input id="univ_nm" name="univ_nm" title="대학명검색" style="ime-mode:active" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
-												<button title="검색" class="btn btn-default btn-sm">
-													<i class="fa fa-search"></i>&nbsp;&nbsp;<b>검색</b>
-												</buton>
-											
+												<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
+													<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+														<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
+													</buton>
+												</a>
 										</td>
 									</tr>
 								</tbody>
-								
-								
+							
+						
 								<tbody id="tbDetail" style="">
 									<tr>
 										<th scope="col" rowspan="5">
 											<label for="uv">대학<br>조건</label>
 										</th>
+									
 										<td class="tt">지역</td>
 										<td>
 											<input id="lst_area_cd" name="lst_area_cd" type="hidden" value="">
@@ -95,6 +460,7 @@
 											<input type="checkbox" name="chk_area" id="chk_area_03" value="03" onclick="fn_areaList_onclick(this);"><label for="chk_area_03">대구</label>
 											<input type="checkbox" name="chk_area" id="chk_area_06" value="06" onclick="fn_areaList_onclick(this);"><label for="chk_area_06">대전</label>
 											<input type="checkbox" name="chk_area" id="chk_area_02" value="02" onclick="fn_areaList_onclick(this);"><label for="chk_area_02">부산</label>
+											<br/>
 											<input type="checkbox" name="chk_area" id="chk_area_01" value="01" onclick="fn_areaList_onclick(this);"><label for="chk_area_01">서울</label>
 											<input type="checkbox" name="chk_area" id="chk_area_17" value="17" onclick="fn_areaList_onclick(this);"><label for="chk_area_17">세종</label>
 											<input type="checkbox" name="chk_area" id="chk_area_07" value="07" onclick="fn_areaList_onclick(this);"><label for="chk_area_07">울산</label>
@@ -168,12 +534,12 @@
 										
 										</td>
 									</tr>
-									
+								
 								</tbody>
 								
 								<tbody id="tbSimple" class="tbl_fold" style="display: none;">
 									<tr>
-										<th scope="col">대학<br>조건</th>
+										<td scope="col">대학조건</td>
 										<td colspan="2" onclick="fn_box_out()">
 											<span class="tt_fold first">지역</span><span id="span_area_view">전체</span>
 											<span class="tt_fold">학교유형</span><span id="span_elsm_view">전체</span>
@@ -190,11 +556,15 @@
 				</div>
 				<!-- 조건박스 -->
 				
+				<!-- search_tbl_box -->
+				<div class="search_box_btn">
+					<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
+				</div>
+			
+				
 				
 				<!-- 대학리스트 -->
 			<div class="tbl_list">
-				
-				
 				<br>
 				<div class="but_table">
 					<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
@@ -221,7 +591,6 @@
 							<th scope="col" rowspan="2">입학정원</th>
 							<th scope="col" rowspan="2">설치<br>학과</th>
 							<th scope="col" rowspan="2">전형<br>정보</th>
-							<th scope="col" rowspan="2">비교<br>분석</th>
 							<th scope="col" rowspan="2">관심<br>설정</th>
 						</tr>
 						<tr>
@@ -230,14 +599,19 @@
 						</tr>
 					</thead>
 					<tbody id="tbResult">
-						<tr><td colspan="9">조회된 자료가 없습니다.</td></tr>
+						<tr><td colspan="8">조회된 자료가 없습니다.</td></tr>
 					</tbody>
 				</table>
 			</div>
 			<!-- //대학리스트 -->
 				
 				
-				
+			<!-- 페이징 -->
+	    	<div class="paging" id="paginationholder"> 
+	        	<ul id="pagination" class="pages"></ul>
+	    	</div>
+			<!-- //페이징 -->
+	</form>			
 				
 				
 				
