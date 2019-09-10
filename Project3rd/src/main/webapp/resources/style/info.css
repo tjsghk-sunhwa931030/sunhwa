@@ -70,15 +70,13 @@
 .list_tbl01{ width: 100%; border-top: 2px solid #535353; border-bottom: 1px solid #535353; color: #333; margin-top: 15px; }
 .list_tbl01 th{ background: #f9f9f9; padding: 8px 5px; vertical-align:middle; font-size: 14px; }
 .list_tbl01 tr{ border-bottom: 1px solid #e5e5e5; }
-.list_tbl01 tr:last-child{ border-bottom: none; }
+.list_tbl01 tr:last-child{ border-bottom: none; text-align: center;}
 .list_tbl01 td{ border-right: 1px solid #e5e5e5; padding: 12px 5px; text-align: center; vertical-align:middle; font-size: 13px; }
 .list_tbl01 td:last-child{ border-right: none; }
 .list_tbl01 .tt{ font-weight: bold; text-align: left; padding-left: 10px; }
 .list_tbl01 .tt a{ color: #333; }
 .list_tbl01 .line{ padding: 0 5px; vertical-align: 0; }
 .list_tbl01 .point{ vertical-align: middle; display: inline-block; margin: 1px 0 0 5px; }
-.list_tbl01 .btn_compare{ padding: 3px 6px 4px 6px; background: #eb6036; color: #fff; font-size: 13px; }
-.list_tbl01 .btn_compare_off{ padding: 3px 6px 4px 6px; background: #3c5375; color: #fff; font-size: 13px; }
 .list_tbl01 .btn_result{ padding: 3px 6px 4px 6px; background: #3c5375; color: #fff; font-size: 13px; }
 
 .btn_array_up{ width: 9px; height: 9px; display: inline-block; margin-left: 8px; vertical-align: middle; background:  no-repeat 0 -9px; }
@@ -118,22 +116,7 @@
 .uv_comp_box_wrap .btn_bt{ border: 1px solid #ddd; border-top: none; padding-bottom: 14px; margin-top: -2px; }
 .uv_comp_box_wrap .btn_bt a{ display: block; background: #ea6b50; color: #fff; padding: 7px 0; width: 92px; margin: 0 auto; font-size: 14px; text-align: center; }
 
-/* 용어사전 팝업 */
-#popup{ position: absolute; width: 600px; left: 80px; top: -40px; z-index: 1000; }
-#popup .popup_wrap{ /* display: none; */ position: relative;/* background: url('../images/re_icon/popup_pt.gif') repeat;*/ background:#666; border-radius: 10px; box-shadow: #999 0px 0 13px; }
-#popup .popup_box{  }
-#popup .pop_top{  }
-#popup .pop_top h4{ display: inline-block; padding: 15px 0 15px 15px; font-weight: bold; font-size: 18px; color: #fff; /*background: url('../images/re_icon/icon_dictionary.png') no-repeat 16px 14px; */}
-#popup .popup_close{ position: absolute; top: 15px; right: 16px; }
 
-#popup .popup_content{ width: 100%; display: inline-block; }
-#popup .popup_content .con{ border-top: none; margin: 0 16px 10px 16px; background-color: #fff; }
-#popup .popup_content .con .content { width: 95%; min-height: 114px !important; height: 114px; float: left; margin: 0 !important; padding: 20px 6px 20px 25px !important; }
-#popup .popup_content .con .pop_dic_box{ overflow-y:scroll;overflow-x:hidden; }
-#popup .popup_content .con .content .tt{ font-size: 18px; font-weight: bold; vertical-align: -1px; padding: 2px 5px; background: #fff1a5; display: inline-block; margin-bottom: 12px; }
-#popup .popup_content .con .content .dictionary_box{ width: 95%; font-size: 14px; color: #777; line-height: 1.5; }
-#popup .popup_btn{ padding: 16px 0 6px 0; display: inline-block; width: 100%; text-align: center; /*background: url('../images/re_icon/popup_pt.gif') repeat;*/ background:#666;}
-#popup .popup_btn .btn_close02{ width: 100px; display: block; background: #333; color: #fff; padding: 7px 0; margin: 0 auto; font-size: 14px; }
 
 /* 20180104_진로정보 추가 */
 .job_info_box{ width: 100%; display: inline-block; margin-top: 20px; }
@@ -152,15 +135,3 @@
 
 .job_info_box .red{color:#e60012; }
 
-/* 20180108_개인정보처리방침 재동의 추가 */
-.personalData_box{ width: 100%; display: inline-block; margin-top: 20px; }
-.personalData_box h2{ font-size: 18px; font-weight: bold; letter-spacing: -1px; color: #444; }
-.personalData_tbl{ margin-top: 20px; width: 100%; border: 1px solid #ddd; font-size: 14px; }
-.personalData_tbl tr{ border-bottom: 1px solid #ddd; }
-.personalData_tbl th{ padding: 10px; background: #f9f9f9; border-left: 1px solid #ddd; }
-.personalData_tbl th:first-child{ border-right: none; }
-.personalData_tbl td{ padding: 20px 10px; text-align: center; vertical-align: middle; line-height: 22px; font-size: 13px; border-left: 1px solid #ddd; color: #555; }
-.personalData_tbl td:first-child{ border-right: none; }
-.personalData_box .agree_box{ margin-top: 12px; font-size: 14px; line-height: 24px; color: #555; }
-.personalData_box .agree_box .agree_chk{ margin-bottom: 20px; text-align: right; }
-.personalData_box .agree_box .agree_chk .chk{ margin-left: 10px; vertical-align:-2px; width: 14px; height: 14px; }

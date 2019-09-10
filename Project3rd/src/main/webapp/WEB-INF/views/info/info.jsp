@@ -16,6 +16,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./jsfile.js"></script>
 <script type="text/javascript">
 
 
@@ -28,54 +29,49 @@ function search_init() {
 //대학 이름 검색
 function btn_search_onclick_init(){
 	document.frm.pageIndex.value = 1;
-	$("#univ_nm").val($.trim($("#univ_nm").val()));
+	$("#uname").val($.trim($("#uname").val()));
 	search_init();
-}
+} 
 
-/* //설정한 조건에 맞는 대학 정보 제공
+//검색 버튼 클릭했을 때
 function btn_search_onclick() {
 			
-	$('#paginationholder').html('');
+	$('#paginationholder').html(''); //페이징
 	   $('#paginationholder').html('<ul id="pagination" class="pages"></ul>');
 	
-	var lst_area_list = [];
-	var lst_elsm_list = [];
-	var lst_fond_list = [];
+	var lst_location_list = [];
+	var lst_ptype_list = [];
 	
-	var arealist = $("input[id^='chk_area']:checked").get();
-	var elsmlist = $("input[id^='chk_elsm']:checked").get();
-	var fondlist = $("input[id^='chk_fond']:checked").get();
-	var empymnlist = $("input[id^='rdo_empymn']:checked").val();
-	var tutfeelist = $("input[id^='rdo_tutfee']:checked").val();
-	
-	$.each(arealist, function(index, item){
-		var area = item.value.toString();
-		if(area != '%'){
-			area = gfn_leadingZeros(area,2);
+	var locationlist = $("input[id^='chk_location']:checked").get();
+	var ptypelist = $("input[id^='chk_ptype']:checked").get();
+	var jobratelist = $("input[id^='rdo_jobrate']:checked").val();
+	var tuitionlist = $("input[id^='rdo_tuition']:checked").val();
+
+	//지역
+	$.each(locationlist, function(index, item){
+		var location = item.value.toString();
+		//지역이 전체가 아닐경우
+		if(location != '%'){
+			location = addZero(location,2);
 		}
-		lst_area_list[index] = area;
+		lst_location_list[index] = location;
 	});
 	
-	$.each(elsmlist, function(index, item){
-		var elsm = item.value.toString();
-		if(elsm != '%'){
-			elsm = gfn_leadingZeros(elsm,2);
-		}
-		lst_elsm_list[index] = elsm;
+	//설립유형
+	$.each(ptypelist, function(index, item){
+		var ptype = item.value.toString();
+	
+		lst_ptype_list[index] = ptype;
 	});
 	
-	$.each(fondlist, function(index, item){
-		var fond = item.value.toString();
+	$("#lst_location_cd").val(lst_location_list);
+	$("#lst_ptype_se_cd").val(lst_ptype_list);
+	$("#lst_jobrate_cd").val(jobratelist);
+	$("#lst_tuition_cd").val(tuitionlist);
 	
-		lst_fond_list[index] = fond;
-	});
 	
-	$("#lst_area_cd").val(lst_area_list);
-	$("#lst_elsm_cd").val(lst_elsm_list);
-	$("#lst_fond_se_cd").val(lst_fond_list);
-	$("#lst_empymn_cd").val(empymnlist);
-	$("#lst_tutfee_cd").val(tutfeelist);
-	
+	//이해불가...
+	//다른 jsp폴더에서 불러서 널이아니면 결과 리스트에 제공하고 그렇지 아니면 조회결과없습니다 메세지를 내뱉는다. 
 	gfn_Submission_Call("/kcue/ast/eip/eis/inf/univinf/eipUnivInfGnrlList.do",$("#frm").serialize(), function(data){
 		if(data != null){
 	        if (data.resultVO.resultCode == "SUCCESS")
@@ -86,7 +82,7 @@ function btn_search_onclick() {
 		    }
 		}
 	},'json');
-} */
+}
 
 	/* //결과 리스트에 제공
 	function fn_makeResult(doName, data, currentPage){
@@ -267,22 +263,7 @@ function btn_search_onclick() {
 			}
 			
 		}
-	//학교유형 선택하기
-		function fn_fondList_onclick(fond){
-			if($(fond).attr("id") == "chk_fond_all"){
-				$("#chk_fond_all").prop("checked",true);
-				$("input[id^='chk_fond']:not(input[id='chk_fond_all'])").prop("checked",false);
-			}else{
-				
-				$("#chk_fond_all").prop("checked",false);
-				var chk_fond_list = $("input[id^='chk_fond']:checked").get();
-				
-				if(chk_fond_list.length < 1){
-					$("#chk_fond_all").prop("checked",true);
-				}
-			}
-			
-		}
+	
 	//설립유형 선택하기
 		function fn_empymnList_onclick(empymn){
 			$(empymn).toggleClass("on");
@@ -291,8 +272,8 @@ function btn_search_onclick() {
 			btn_search_onclick_init();
 		}
 	//취업률 선택하기 
-		function fn_tutfeeList_onclick(tutfee){
-			$(tutfee).toggleClass("on");
+		function fn_tuitionList_onclick(tuition){
+			$(tuition).toggleClass("on");
 			
 			// 바로 조회
 			btn_search_onclick_init();
@@ -340,14 +321,14 @@ function btn_search_onclick() {
 		$("#span_empymn_view").html(empymn_list.substring(1));
 	
 		//등록금 텍스트
-		var rdo_tutfee_list = $("input[id^='rdo_tutfee']:checked").get();
-		var tutfee_list = "";
-		$.each(rdo_tutfee_list, function(index, item){
-			var tutfee_id = item.id.toString();
-			tutfee_list += ","+$("#"+tutfee_id).next("label").html();
+		var rdo_tuition_list = $("input[id^='rdo_tuition']:checked").get();
+		var tuition_list = "";
+		$.each(rdo_tuition_list, function(index, item){
+			var tuition_id = item.id.toString();
+			tuition_list += ","+$("#"+tuition_id).next("label").html();
 		});
 		
-		$("#span_tutfee_view").html(tutfee_list.substring(1));
+		$("#span_tuition_view").html(tuition_list.substring(1));
 	}
 
 
@@ -375,7 +356,7 @@ function fn_box_out(){
 <style type="text/css">
 	.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
 	.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
-	.contents{height: 950px;;}
+	.contents{height: 1000px;}
 </style>
 
 
@@ -386,16 +367,7 @@ function fn_box_out(){
 		<div class="lefttop">
         	 <div class="lefttoptext">대학간다</div>
       	</div>
-<form id="frm" name="frm" action="" method="post" onsubmit="return false;">
-		<input id="pageIndex" name="pageIndex" type="hidden" value="1">
-		<input id="pageSize" name="pageSize" value="15" type="hidden">
-		<input id="univ_se_cd" name="univ_se_cd" value="10" type="hidden">
-		<input type="hidden" name="univ_sort" id="univ_sort" value="UP">
-		<input type="hidden" name="area_sort" id="area_sort" value="">
-		<input type="hidden" name="main_search_at" id="main_search_at" value="">
-		<input type="hidden" name="gnrlKeyword" id="gnrlKeyword" value="">
-		<input type="hidden" name="area" id="area" value="">
-		<input type="hidden" name="stdr_sch_year" id="stdr_sch_year" value="">
+
       <div class="righttop">
          <div class="righttoptext">대학 검색</div>
       </div>
@@ -411,213 +383,410 @@ function fn_box_out(){
 				</ul>
 			</nav>
 		</div>
+		
 		<div class="rightcontents">
-				<!-- 조건박스 모두 열렸을떄 -->
-				<div class="search_tbl_box">
-					<fieldset>
-						<!-- 대학 -->
-						<div class="tbl_wrap">
-							<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-							<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
-							<table class="search_tbl01">
-								<colgroup>
-									<col style="width:8%;">
-									<col>
-									<col style="width:80%;">
-								</colgroup>
-								<tbody style="border-bottom: 1px solid #ddd;">
-									<tr>
-										<th scope="col">
-											<label for="univ_nm">대학</label>
-										</th>
-										<td colspan="2">
-											<input id="univ_nm" name="univ_nm" title="대학명검색" style="ime-mode:active" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
-												<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
-													<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
-														<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
-													</buton>
-												</a>
-										</td>
-									</tr>
-								</tbody>
-							
-						
-								<tbody id="tbDetail" style="">
-									<tr>
-										<th scope="col" rowspan="5">
-											<label for="uv">대학<br>조건</label>
-										</th>
-									
-										<td class="tt">지역</td>
-										<td>
-											<input id="lst_area_cd" name="lst_area_cd" type="hidden" value="">
-											<input type="checkbox" name="chk_area" id="chk_area_all" value="%" checked="checked" onclick="fn_areaList_onclick(this);"><label for="chk_area_all">전체</label>
-											<input type="checkbox" name="chk_area" id="chk_area_09" value="09" onclick="fn_areaList_onclick(this);"><label for="chk_area_09">강원</label>
-											<input type="checkbox" name="chk_area" id="chk_area_08" value="08" onclick="fn_areaList_onclick(this);"><label for="chk_area_08">경기</label>
-											<input type="checkbox" name="chk_area" id="chk_area_15" value="15" onclick="fn_areaList_onclick(this);"><label for="chk_area_15">경남</label>
-											<input type="checkbox" name="chk_area" id="chk_area_14" value="14" onclick="fn_areaList_onclick(this);"><label for="chk_area_14">경북</label>
-											<input type="checkbox" name="chk_area" id="chk_area_05" value="05" onclick="fn_areaList_onclick(this);"><label for="chk_area_05">광주</label>
-											<input type="checkbox" name="chk_area" id="chk_area_03" value="03" onclick="fn_areaList_onclick(this);"><label for="chk_area_03">대구</label>
-											<input type="checkbox" name="chk_area" id="chk_area_06" value="06" onclick="fn_areaList_onclick(this);"><label for="chk_area_06">대전</label>
-											<input type="checkbox" name="chk_area" id="chk_area_02" value="02" onclick="fn_areaList_onclick(this);"><label for="chk_area_02">부산</label>
-											<br/>
-											<input type="checkbox" name="chk_area" id="chk_area_01" value="01" onclick="fn_areaList_onclick(this);"><label for="chk_area_01">서울</label>
-											<input type="checkbox" name="chk_area" id="chk_area_17" value="17" onclick="fn_areaList_onclick(this);"><label for="chk_area_17">세종</label>
-											<input type="checkbox" name="chk_area" id="chk_area_07" value="07" onclick="fn_areaList_onclick(this);"><label for="chk_area_07">울산</label>
-											<input type="checkbox" name="chk_area" id="chk_area_04" value="04" onclick="fn_areaList_onclick(this);"><label for="chk_area_04">인천</label>
-											<input type="checkbox" name="chk_area" id="chk_area_13" value="13" onclick="fn_areaList_onclick(this);"><label for="chk_area_13">전남</label>
-											<input type="checkbox" name="chk_area" id="chk_area_12" value="12" onclick="fn_areaList_onclick(this);"><label for="chk_area_12">전북</label>
-											<input type="checkbox" name="chk_area" id="chk_area_16" value="16" onclick="fn_areaList_onclick(this);"><label for="chk_area_16">제주</label>
-											<input type="checkbox" name="chk_area" id="chk_area_11" value="11" onclick="fn_areaList_onclick(this);"><label for="chk_area_11">충남</label>
-											<input type="checkbox" name="chk_area" id="chk_area_10" value="10" onclick="fn_areaList_onclick(this);"><label for="chk_area_10">충북</label>
-										
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="tt">학교유형</td>
-										<td>
-											<input id="lst_elsm_cd" name="lst_elsm_cd" type="hidden" value="">
-	            							<input type="checkbox" name="chk_elsm" id="chk_elsm_all" value="%" checked="checked" onclick="fn_elsmList_onclick(this)"><label for="chk_elsm_all">전체</label>
-											<input type="checkbox" name="chk_elsm" id="chk_elsm_02" value="02" onclick="fn_elsmList_onclick(this)"><label for="chk_elsm_02">교육대학</label>
-											<input type="checkbox" name="chk_elsm" id="chk_elsm_03" value="03" onclick="fn_elsmList_onclick(this)"><label for="chk_elsm_03">대학교</label>
-											<input type="checkbox" name="chk_elsm" id="chk_elsm_05" value="05" onclick="fn_elsmList_onclick(this)"><label for="chk_elsm_05">산업대학</label>	
-										</td>
-										
-									</tr>
-									
-									<tr>
-										<td class="tt">설립유형</td>
-										<td>
-											<input id="lst_fond_se_cd" name="lst_fond_se_cd" type="hidden" value="">
-	            							<input type="checkbox" name="chk_fond" id="chk_fond_all" value="%" checked="checked" onclick="fn_fondList_onclick(this)"><label for="chk_fond_all">전체</label>
-											<input type="checkbox" name="chk_fond" id="chk_fond_1" value="1" onclick="fn_fondList_onclick(this)"><label for="chk_fond_1">국립</label>
-	            							<input type="checkbox" name="chk_fond" id="chk_fond_2" value="2" onclick="fn_fondList_onclick(this)"><label for="chk_fond_2">공립</label>
-											<input type="checkbox" name="chk_fond" id="chk_fond_3" value="3" onclick="fn_fondList_onclick(this)"><label for="chk_fond_3">사립</label>
-	            							<input type="checkbox" name="chk_fond" id="chk_fond_6" value="6" onclick="fn_fondList_onclick(this)"><label for="chk_fond_6">특별법법인</label>
-	            							<input type="checkbox" name="chk_fond" id="chk_fond_7" value="7" onclick="fn_fondList_onclick(this)"><label for="chk_fond_7">국립대법인</label>
-	            					
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="tt">취업률</td>
-										<td>
-										
-									<input id="lst_empymn_cd" name="lst_empymn_cd" type="hidden" value="">
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_all" value="" checked="checked"><label for="rdo_empymn_all">전체</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_90" value="90"><label for="rdo_empymn_90">90%이상</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_80" value="80"><label for="rdo_empymn_80">80%&nbsp;~&nbsp;90%</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_70" value="70"><label for="rdo_empymn_70">70%&nbsp;~&nbsp;80%</label>
-									<br>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_60" value="60"><label for="rdo_empymn_60">60%&nbsp;~&nbsp;70%</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_50" value="50"><label for="rdo_empymn_50">50%&nbsp;~&nbsp;60%</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_40" value="40"><label for="rdo_empymn_40">40%&nbsp;~&nbsp;50%</label>
-									<input type="radio" name="rdo_empymn" id="rdo_empymn_39" value="39"><label for="rdo_empymn_39">40%미만</label>
-										</td>
-									</tr>
-									
-									<tr>
-										<td class="tt">등록금</td>
-										<td>
-										
-										<input id="lst_tutfee_cd" name="lst_tutfee_cd" type="hidden" value="">
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_all" value="" checked="checked"><label for="rdo_tutfee_all">전체</label>
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_1000" value="1000"><label for="rdo_tutfee_1000">1000만이상</label>
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_800" value="800"><label for="rdo_tutfee_800">800만&nbsp;~&nbsp;1000만</label>
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_600" value="600"><label for="rdo_tutfee_600">600만&nbsp;~&nbsp;800만</label>
-											<br>
-											
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_400" value="400"><label for="rdo_tutfee_400">400만&nbsp;~&nbsp;600만</label>
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_200" value="200"><label for="rdo_tutfee_200">200만&nbsp;~&nbsp;400만</label>
-										<input type="radio" name="rdo_tutfee" id="rdo_tutfee_199" value="199"><label for="rdo_tutfee_199">200만미만</label>
-										
-										</td>
-									</tr>
-								
-								</tbody>
-								
-								<tbody id="tbSimple" class="tbl_fold" style="display: none;">
-									<tr>
-										<td scope="col">대학조건</td>
-										<td colspan="2" onclick="fn_box_out()">
-											<span class="tt_fold first">지역</span><span id="span_area_view">전체</span>
-											<span class="tt_fold">학교유형</span><span id="span_elsm_view">전체</span>
-											<span class="tt_fold">설립유형</span><span id="span_fond_view">전체</span><br>
-											<span class="tt_fold first">취업률</span><span id="span_empymn_view">전체</span>
-											<span class="tt_fold">등록금</span><span id="span_tutfee_view">전체</span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<!-- //대학 -->
-					</fieldset>
-				</div>
-				<!-- 조건박스 -->
-				
-				<!-- search_tbl_box -->
-				<div class="search_box_btn">
-					<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
-				</div>
 			
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#ilban">일반대학교</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-toggle="tab" href="#junmun">전문대학교</a>
+				</li>
+			</ul>
+			
+			<div class="tab-content">
+					<!-- 일반대학교 시작 -->
+				<div id="ilban" class="container tab-pane active"><br/>
+					<div class="search_tbl_box" >
+						<fieldset>
+							<!-- 대학 -->
+							<div class="tbl_wrap">
+								<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
+								<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
+								<table class="search_tbl01">
+									<colgroup>
+										<col style="width:8%;">
+										<col>
+										<col style="width:80%;">
+									</colgroup>
+									<tbody style="border-bottom: 1px solid #ddd;">
+										<tr>
+											<th scope="col">
+												<label for="univ_nm">대학</label>
+											</th>
+											<td colspan="2">
+												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
+													<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
+														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
+														</button>
+													</a>
+											</td>
+										</tr>
+									</tbody>
+								
+							
+									<tbody id="tbDetail" style="">
+										<tr>
+											<th scope="col" rowspan="5">
+												<label for="uv">대학<br>조건</label>
+											</th>
+										
+											<td class="tt">지역</td>
+											<td>
+												<input id="lst_location_cd" name="lst_location_cd" type="hidden" value="">
+												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="fn_locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="fn_locationList_onclick(this);"><label for="chk_location_01">강원</label>
+												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="fn_locationList_onclick(this);"><label for="chk_location_02">경기</label>
+												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="fn_locationList_onclick(this);"><label for="chk_location_03">경남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="fn_locationList_onclick(this);"><label for="chk_location_04">경북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="fn_locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="fn_locationList_onclick(this);"><label for="chk_location_06">대구</label>
+												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="fn_locationList_onclick(this);"><label for="chk_location_07">대전</label>
+												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="fn_locationList_onclick(this);"><label for="chk_location_08">부산</label>
+												<br/>
+												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="fn_locationList_onclick(this);"><label for="chk_location_09">서울</label>
+												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="fn_locationList_onclick(this);"><label for="chk_location_10">세종</label>
+												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="fn_locationList_onclick(this);"><label for="chk_location_11">울산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="fn_locationList_onclick(this);"><label for="chk_location_12">인천</label>
+												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="fn_locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="fn_locationList_onclick(this);"><label for="chk_location_14">전북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="fn_locationList_onclick(this);"><label for="chk_location_15">제주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="fn_locationList_onclick(this);"><label for="chk_location_16">충남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="fn_locationList_onclick(this);"><label for="chk_location_17">충북</label>
+											
+											</td>
+										</tr>
+										
+										
+										
+										<tr>
+											<td class="tt">설립유형</td>
+											<td>
+												<input id="lst_ptype_se_cd" name="lst_ptype_se_cd" type="hidden" value="">
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_4" value="4" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_4">특별법법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_5" value="5" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_5">국립대법인</label>
+		            					
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="tt">취업률</td>
+											<td>
+											
+										<input id="lst_jobrate_cd" name="lst_jobrate_cd" type="hidden" value="">
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_all" value="" checked="checked"><label for="rdo_jobrate_all">전체</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_90" value="90"><label for="rdo_jobrate_90">90%이상</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_80" value="80"><label for="rdo_jobrate_80">80%&nbsp;~&nbsp;90%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_70" value="70"><label for="rdo_jobrate_70">70%&nbsp;~&nbsp;80%</label>
+										<br>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_60" value="60"><label for="rdo_jobrate_60">60%&nbsp;~&nbsp;70%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_50" value="50"><label for="rdo_jobrate_50">50%&nbsp;~&nbsp;60%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_40" value="40"><label for="rdo_jobrate_40">40%&nbsp;~&nbsp;50%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_39" value="39"><label for="rdo_jobrate_39">40%미만</label>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="tt">등록금</td>
+											<td>
+											
+											<input id="lst_tuition_cd" name="lst_tuition_cd" type="hidden" value="">
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_all" value="" checked="checked"><label for="rdo_tuition_all">전체</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_1000" value="1000"><label for="rdo_tuition_1000">1000만이상</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_800" value="800"><label for="rdo_tuition_800">800만&nbsp;~&nbsp;1000만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_600" value="600"><label for="rdo_tuition_600">600만&nbsp;~&nbsp;800만</label>
+												<br>
+												
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_400" value="400"><label for="rdo_tuition_400">400만&nbsp;~&nbsp;600만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_200" value="200"><label for="rdo_tuition_200">200만&nbsp;~&nbsp;400만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_199" value="199"><label for="rdo_tuition_199">200만미만</label>
+											
+											</td>
+										</tr>
+									
+									</tbody>
+									
+									<tbody id="tbSimple" class="tbl_fold" style="display: none;">
+										<tr>
+											<td scope="col">대학조건</td>
+											<td colspan="2" onclick="fn_box_out()">
+												<span class="tt_fold first">지역</span><span id="span_location_view">전체</span>
+												<span class="tt_fold">설립유형</span><span id="span_ptype_view">전체</span><br>
+												<span class="tt_fold first">취업률</span><span id="span_jobrate_view">전체</span>
+												<span class="tt_fold">등록금</span><span id="span_tuition_view">전체</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //대학 -->
+						</fieldset>
+					</div>
+					<!-- 조건박스 -->
+					
+					<!-- search_tbl_box -->
+					<div class="search_box_btn">
+						<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
+					</div>
 				
-				
-				<!-- 대학리스트 -->
-			<div class="tbl_list">
-				<br>
-				<div class="but_table">
-					<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
+					
+					
+					<!-- 대학리스트 -->
+				<div class="tbl_list">
+					<br>
+					<div class="but_table">
+						<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
+					</div>
+					
+					<table class="list_tbl01">
+						<caption>대학 리스트</caption>
+						<colgroup>
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:40px;">
+						</colgroup>
+						<thead style="border-bottom: 1px solid #ddd;">
+							<tr style="border-bottom: none;">
+								<th scope="col" rowspan="2">대학명</th>
+								<th scope="col" rowspan="2">지역</th>
+								<th scope="col" rowspan="2">경쟁률</th>
+								<th scope="col" rowspan="2">입학정원</th>
+								<th scope="col" rowspan="2">설치학과</th>
+								<th scope="col" rowspan="2">전형정보</th>
+								<th scope="col" rowspan="2">관심설정</th>
+							</tr>
+						</thead>
+						<tbody id="tbResult">
+							<c:forEach items="${lists }" var="row">
+								<tr>
+								</tr>
+								<tr>		
+									<td scope="col" rowspan="2">${row.uname}</td>
+									<td scope="col" rowspan="2">${row.location}</td>
+									<td scope="col" rowspan="2">${row.rate_univ}</td>
+									<td scope="col" rowspan="2">${row.totalman}</td>
+									<td scope="col" rowspan="2">${row.major_num}</td>
+									<td scope="col" rowspan="2">${row.enter_num}</td>
+									<td scope="col" rowspan="2">${row.interest}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
 				</div>
+				<!-- //대학리스트 -->
+					
+					
+			
+		
+			</div><!-- 일반대학교 끝 -->
+			
+			
+			<!-- 전문대학교 시작 -->
+				<div id="junmun" class="container tab-pane fade"><br/>
+					<div class="search_tbl_box" >
+						<fieldset>
+							<!-- 대학 -->
+							<div class="tbl_wrap">
+								<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
+								<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
+								<table class="search_tbl01">
+									<colgroup>
+										<col style="width:8%;">
+										<col>
+										<col style="width:80%;">
+									</colgroup>
+									<tbody style="border-bottom: 1px solid #ddd;">
+										<tr>
+											<th scope="col">
+												<label for="uname">대학</label>
+											</th>
+											<td colspan="2">
+												<input id="uname" name="uname" title="대학명검색" style="ime-mode:active" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
+													<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
+														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
+														</button>
+													</a>
+											</td>
+										</tr>
+									</tbody>
+								
+							
+									<tbody id="tbDetail" style="">
+										<tr>
+											<th scope="col" rowspan="5">
+												<label for="uv">대학<br>조건</label>
+											</th>
+										
+											<td class="tt">지역</td>
+											<td>
+												<input id="lst_location_cd" name="lst_location_cd" type="hidden" value="">
+												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="fn_locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="fn_locationList_onclick(this);"><label for="chk_location_09">강원</label>
+												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="fn_locationList_onclick(this);"><label for="chk_location_08">경기</label>
+												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="fn_locationList_onclick(this);"><label for="chk_location_15">경남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="fn_locationList_onclick(this);"><label for="chk_location_14">경북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="fn_locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="fn_locationList_onclick(this);"><label for="chk_location_03">대구</label>
+												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="fn_locationList_onclick(this);"><label for="chk_location_06">대전</label>
+												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="fn_locationList_onclick(this);"><label for="chk_location_02">부산</label>
+												<br/>
+												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="fn_locationList_onclick(this);"><label for="chk_location_01">서울</label>
+												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="fn_locationList_onclick(this);"><label for="chk_location_17">세종</label>
+												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="fn_locationList_onclick(this);"><label for="chk_location_07">울산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="fn_locationList_onclick(this);"><label for="chk_location_04">인천</label>
+												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="fn_locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="fn_locationList_onclick(this);"><label for="chk_location_12">전북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="fn_locationList_onclick(this);"><label for="chk_location_16">제주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="fn_locationList_onclick(this);"><label for="chk_location_11">충남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="fn_locationList_onclick(this);"><label for="chk_location_10">충북</label>
+											
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="tt">설립유형</td>
+											<td>
+												<input id="lst_ptype_se_cd" name="lst_ptype_se_cd" type="hidden" value="">
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_6" value="6" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_6">특별법법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_7" value="7" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_7">국립대법인</label>
+		            					
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="tt">취업률</td>
+											<td>
+											
+										<input id="lst_jobrate_cd" name="lst_jobrate_cd" type="hidden" value="">
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_all" value="" checked="checked"><label for="rdo_jobrate_all">전체</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_90" value="90"><label for="rdo_jobrate_90">90%이상</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_80" value="80"><label for="rdo_jobrate_80">80%&nbsp;~&nbsp;90%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_70" value="70"><label for="rdo_jobrate_70">70%&nbsp;~&nbsp;80%</label>
+										<br>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_60" value="60"><label for="rdo_jobrate_60">60%&nbsp;~&nbsp;70%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_50" value="50"><label for="rdo_jobrate_50">50%&nbsp;~&nbsp;60%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_40" value="40"><label for="rdo_jobrate_40">40%&nbsp;~&nbsp;50%</label>
+										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_39" value="39"><label for="rdo_jobrate_39">40%미만</label>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="tt">등록금</td>
+											<td>
+											
+											<input id="lst_tuition_cd" name="lst_tuition_cd" type="hidden" value="">
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_all" value="" checked="checked"><label for="rdo_tuition_all">전체</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_1000" value="1000"><label for="rdo_tuition_1000">1000만이상</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_800" value="800"><label for="rdo_tuition_800">800만&nbsp;~&nbsp;1000만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_600" value="600"><label for="rdo_tuition_600">600만&nbsp;~&nbsp;800만</label>
+												<br>
+												
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_400" value="400"><label for="rdo_tuition_400">400만&nbsp;~&nbsp;600만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_200" value="200"><label for="rdo_tuition_200">200만&nbsp;~&nbsp;400만</label>
+											<input type="radio" name="rdo_tuition" id="rdo_tuition_199" value="199"><label for="rdo_tuition_199">200만미만</label>
+											
+											</td>
+										</tr>
+									
+									</tbody>
+									
+									<tbody id="tbSimple" class="tbl_fold" style="display: none;">
+										<tr>
+											<td scope="col">대학조건</td>
+											<td colspan="2" onclick="fn_box_out()">
+												<span class="tt_fold first">지역</span><span id="span_location_view">전체</span>
+												<span class="tt_fold">설립유형</span><span id="span_ptype_view">전체</span><br>
+												<span class="tt_fold first">취업률</span><span id="span_jobrate_view">전체</span>
+												<span class="tt_fold">등록금</span><span id="span_tuition_view">전체</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- //대학 -->
+						</fieldset>
+					</div>
+					<!-- 조건박스 -->
+					
+					<!-- search_tbl_box -->
+					<div class="search_box_btn">
+						<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
+					</div>
 				
-				<table class="list_tbl01">
-					<caption>대학 리스트</caption>
-					<colgroup>
-						<col>
-						<col style="width:70px;">
-						<col style="width:70px;">
-						<col style="width:70px;">
-						<col style="width:70px;">
-						<col style="width:70px;">
-						<col style="width:70px;">
-						<col style="width:60px;">
-						<col style="width:40px;">
-					</colgroup>
-					<thead style="border-bottom: 1px solid #ddd;">
-						<tr style="border-bottom: none;">
-							<th scope="col" rowspan="2">대학명<a href="javascript:btn_univ_sort_onclick()" id="thead_univ_sort" class="btn_array_up"></a></th>
-							<th scope="col" rowspan="2">지역<a href="javascript:btn_area_sort_onclick()" id="thead_area_sort" class="btn_array_up"></a></th>
-							<th scope="col" colspan="2"><span id="cmpet_head"></span>경쟁률</th>
-							<th scope="col" rowspan="2">입학정원</th>
-							<th scope="col" rowspan="2">설치<br>학과</th>
-							<th scope="col" rowspan="2">전형<br>정보</th>
-							<th scope="col" rowspan="2">관심<br>설정</th>
-						</tr>
-						<tr>
-							<th>수시</th>
-							<th>정시</th>
-						</tr>
-					</thead>
-					<tbody id="tbResult">
-						<tr><td colspan="8">조회된 자료가 없습니다.</td></tr>
-					</tbody>
-				</table>
-			</div>
-			<!-- //대학리스트 -->
-				
-				
-			<!-- 페이징 -->
-	    	<div class="paging" id="paginationholder"> 
-	        	<ul id="pagination" class="pages"></ul>
-	    	</div>
-			<!-- //페이징 -->
-	</form>			
-				
-				
-				
-		</div>
-	</div>
+					
+					
+					<!-- 대학리스트 -->
+				<div class="tbl_list">
+					<br>
+					<div class="but_table">
+						<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
+					</div>
+					
+					<table class="list_tbl01">
+						<caption>대학 리스트</caption>
+						<colgroup>
+							<col>
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:70px;">
+							<col style="width:60px;">
+							
+						</colgroup>
+						<thead style="border-bottom: 1px solid #ddd;">
+							<tr style="border-bottom: none;">
+								<th scope="col" rowspan="2">대학명<a href="javascript:btn_univ_sort_onclick()" id="thead_univ_sort" class="btn_array_up"></a></th>
+								<th scope="col" rowspan="2">지역<a href="javascript:btn_area_sort_onclick()" id="thead_area_sort" class="btn_array_up"></a></th>
+								<th scope="col" colspan="2"><span id="cmpet_head"></span>경쟁률</th>
+								<th scope="col" rowspan="2">입학정원</th>
+								<th scope="col" rowspan="2">설치<br>학과</th>
+								<th scope="col" rowspan="2">전형<br>정보</th>
+								<th scope="col" rowspan="2">관심<br>설정</th>
+							</tr>
+							<tr>
+								<th>수시</th>
+								<th>정시</th>
+							</tr>
+						</thead>
+						<tbody id="tbResult">
+							<tr><td colspan="8">조회된 자료가 없습니다.</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- //대학리스트 -->
+					
+					
+				<!-- 페이징 -->
+		    	<div class="paging" id="paginationholder"> 
+		        	<ul id="pagination" class="pages"></ul>
+		    	</div>
+				<!-- //페이징 -->
 	
+			</div>
+		</div><!-- tab-content  -->
+		
+		
+		
+		
+	</div><!-- rightcontents  -->
+</div><!-- contents -->
 	<%@include file="../main/bottom.jsp" %>
 
 
