@@ -10,18 +10,15 @@
 <link rel="stylesheet" href="style/leftmenustyle.css" />
 <link rel="stylesheet" href="style/basic.css" />
 <link rel="stylesheet" href="style/info.css" />
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./jsfile.js"></script>
+
 <script type="text/javascript">
 
-
-
-//목록 조회하기 
+// 검색버튼 누르기  
 function search_init() {
 	btn_search_onclick();
 }
@@ -33,303 +30,49 @@ function btn_search_onclick_init(){
 	search_init();
 } 
 
-//검색 버튼 클릭했을 때
-function btn_search_onclick() {
-			
-	$('#paginationholder').html(''); //페이징
-	   $('#paginationholder').html('<ul id="pagination" class="pages"></ul>');
-	
-	var lst_location_list = [];
-	var lst_ptype_list = [];
-	
-	var locationlist = $("input[id^='chk_location']:checked").get();
-	var ptypelist = $("input[id^='chk_ptype']:checked").get();
-	var jobratelist = $("input[id^='rdo_jobrate']:checked").val();
-	var tuitionlist = $("input[id^='rdo_tuition']:checked").val();
 
-	//지역
-	$.each(locationlist, function(index, item){
-		var location = item.value.toString();
-		//지역이 전체가 아닐경우
-		if(location != '%'){
-			location = addZero(location,2);
-		}
-		lst_location_list[index] = location;
+//체크박스 접었을때 (전체 -> 2개나오는거 수정해야함 )
+function fn_box_text_set() {
+	//지역 텍스트
+	var chk_location_list = $("input[id^='chk_location']:checked").get();
+	var location_list = "";
+	$.each(chk_location_list, function(index, item){
+		var location_id = item.id.toString();
+		location_list += ","+$("#"+location_id).next("label").html();
 	});
 	
-	//설립유형
-	$.each(ptypelist, function(index, item){
-		var ptype = item.value.toString();
-	
-		lst_ptype_list[index] = ptype;
+	$("#location_view").html(location_list.substring(1));
+
+	//설립유형 텍스트
+	var chk_ptype_list = $("input[id^='chk_ptype']:checked").get();
+	var ptype_list = "";
+	$.each(chk_ptype_list, function(index, item){
+		var ptype_id = item.id.toString();
+		ptype_list += ","+$("#"+ptype_id).next("label").html();
 	});
 	
-	$("#lst_location_cd").val(lst_location_list);
-	$("#lst_ptype_se_cd").val(lst_ptype_list);
-	$("#lst_jobrate_cd").val(jobratelist);
-	$("#lst_tuition_cd").val(tuitionlist);
-	
-	
-	//이해불가...
-	//다른 jsp폴더에서 불러서 널이아니면 결과 리스트에 제공하고 그렇지 아니면 조회결과없습니다 메세지를 내뱉는다. 
-	gfn_Submission_Call("/kcue/ast/eip/eis/inf/univinf/eipUnivInfGnrlList.do",$("#frm").serialize(), function(data){
-		if(data != null){
-	        if (data.resultVO.resultCode == "SUCCESS")
-		    {
-				fn_makeResult("/kcue/ast/eip/eis/inf/univinf/eipUnivInfGnrlList.do",data,Number(document.frm.pageIndex.value));
-		    }else{
-		    	alert(data.resultVO.resultMessage);
-		    }
-		}
-	},'json');
-}
+	$("#ptype_view").html(ptype_list.substring(1));
 
-	/* //결과 리스트에 제공
-	function fn_makeResult(doName, data, currentPage){
-			var dataResultTotCnt = data.resultTotCnt;
-			var dataResultTotCntOrg = data.resultTotCntOrg;
-			var dataResultPageSize = data.resultPageSize;
-			var v_totalPages = Math.ceil(dataResultTotCnt / dataResultPageSize);
-			var dataResultList = data.resultList;
-			var dataCmpet = data.cmpetVO;
-			
-			
-			if(gfn_null(dataCmpet.cmpet_at) == 'N'){
-				$("#notice_div").html("<span class='t_cr02'>"+dataCmpet.cmpet_txt+ "</span>");
-			}else{
-				$("#notice_div").empty();
-			}
-			
-			var strRow = "";
-			var colCnt = 9;  //컬럼 갯수
-			
-			var tbResult = $("#tbResult");
-			var totalCnt = $("#totalCountOrg");
-			
-			$("#empymn_head").empty();
-			$("#cmpet_head").empty();
-			tbResult.empty();
-			totalCnt.empty();
-			
-			totalCnt.append(dataResultTotCntOrg);
-			
-			if(dataResultList != "" && dataResultList != null){
-				
-				if(dataCmpet.cmpet_year != "" && dataCmpet.cmpet_year != null)
-					$("#cmpet_head").append(dataCmpet.cmpet_year);
-				
-				for(var i =0; i < dataResultList.length; i++){
-					
-					var chk = 0;
-					strRow += '<tr>';
-					strRow += "<td class='tt'><a href='javascript:go_set(\""+gfn_null(dataResultList[i].univ_cd)+"\")'>" + gfn_null(dataResultList[i].univ_all_nm) + "</a></td>";
-					strRow += '<td>'+gfn_null(dataResultList[i].area_nm) + '</td>';
-					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].atrcr_cmpet_rt)+'</td>';
-					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].ftrc_cmpet_rt)+'</td>';
-					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].rcnp)+'</td>';
-					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].instl_subjct)+'</td>';
-					strRow += '<td>'+gfn_zeroToHipen(dataResultList[i].selctn_inf)+'</td>';
+	//취업률 텍스트
+	var rdo_jobrate_list = $("input[id^='rdo_jobrate']:checked").get();
+	var jobrate_list = "";
+	$.each(rdo_jobrate_list, function(index, item){
+		var jobrate_id = item.id.toString();
+		jobrate_list += ","+$("#"+jobrate_id).next("label").html();
+	});
+	
+	$("#jobrate_view").html(jobrate_list.substring(1));
 
-					for(var k = 0 ; k < chkUniv.length ; k++){
-						if(chkUniv[k] == gfn_null(dataResultList[i].univ_cd)){
-							strRow += '<td><a href="javascript:fn_chkCompr_onclick(\''+gfn_null(dataResultList[i].univ_cd)+'\');" id="compr_'+dataResultList[i].univ_cd+'" value="\''+dataResultList[i].univ_cd+'\','+gfn_null(dataResultList[i].univ_all_nm)+'" class="btn_compare" title="비교">비교</a></td>';							
-							chk++;
-						}
-					}
-					if(chk == 0){
-						strRow += '<td><a href="javascript:fn_chkCompr_onclick(\''+gfn_null(dataResultList[i].univ_cd)+'\');" id="compr_'+dataResultList[i].univ_cd+'" value="\''+dataResultList[i].univ_cd+'\','+gfn_null(dataResultList[i].univ_all_nm)+'" class="btn_compare_off" title="비교">비교</a></td>';					
-					}
-					
-					strRow += '<td id="tdIntrst_'+gfn_null(dataResultList[i].univ_cd)+'">';
-					
-					if(gfn_null(dataResultList[i].intrst_cnt) != "0"){
-// 						<!-- 관심설정 on -->
-						strRow += '<a href="javascript:intrst_univ_onclick(\''+gfn_null(dataResultList[i].sch_year)+'\',\''+gfn_null(dataResultList[i].univ_cd)+'\',\'D\')" title="관심설정"><img src="/images/re_icon/icon_favorite_on.gif" alt="관심설정"></a>';
-					}else{
-// 						<!-- 관심설정 off -->
-						strRow += '<a href="javascript:intrst_univ_onclick(\''+gfn_null(dataResultList[i].sch_year)+'\',\''+gfn_null(dataResultList[i].univ_cd)+'\',\'C\')" title="관심설정"><img src="/images/re_icon/icon_favorite_off.gif" alt="관심설정"></a>';
-					}
-					
-					strRow += '</td>';
-					strRow += '</tr>';
-					
-				}
-				tbResult.append(strRow);
-				
-			}else{
-				v_totalPages = 1;
-				strRow += '<tr>';
-				strRow += "<td colspan="+colCnt+">조회된 자료가 없습니다.</td>";
-				strRow += '</tr>';
-				tbResult.append(strRow);
-			}
-			
-			$('#pagination').twbsPagination({totalPages: v_totalPages, visiblePages: 10
-						, startPage: currentPage
-						, first: '<img src="/images/btn_first.png" alt="처음" />'
-			        	, prev: '<img src="/images/btn_prev.png" alt="이전" />'
-				        , next: '<img src="/images/btn_next.png" alt="다음" />'
-				        , last: '<img src="/images/btn_last.png" alt="마지막" />'
-						, onPageClick: function (event, page) {
-					        	var f = document.frm;
-					    		f.pageIndex.value = page;
-					    		gfn_Submission_Call(doName, $("#frm").serialize(),  function(data){
-									if(data != null){
-								        if (data.resultVO.resultCode == "SUCCESS")
-									    {
-											fn_makeResult(doName,data,page);
-									    }else{
-									    	alert(data.resultVO.resultMessage);
-									    }
-									}
-								},'json');
-		        		}
-		    });
-			
-			$("#pagination .num a").filter(function() {
-			    return $(this).text() === document.frm.pageIndex.value;
-			}).addClass("on");
-		} */
-
-	/* //관심대학교 설정
-	function intrst_univ_onclick(sch_year, univ_cd, saveAt){
-			var strRow = "";
-			
-			$("#intrst_sch_year").val(sch_year);
-			$("#intrst_univ_cd").val(univ_cd);
-			
-			if(gs_usidId != "null" && gs_macIp != "null"){
-				gfn_Submission_Call("/kcue/ast/eip/eis/inf/univinf/saveIntrstUniv.do?saveAt="+saveAt,$("#intrstFrm").serialize(), function(data){
-					if(data != null){
-				        if (data.resultVO.resultCode == "SUCCESS")
-					    {
-		 					//관심설정 on
-				        	if(saveAt == "C"){
-								strRow = '<a href="javascript:intrst_univ_onclick(\''+sch_year+'\',\''+univ_cd+'\',\'D\')" title="관심설정" data-title="관심대학"><img src="/images/re_icon/icon_favorite_on.gif" alt="관심설정"></a>';
-					        	$("#tdIntrst_"+univ_cd).html(strRow);
-					        	gfn_setComSession('univRef','Y','N', function(){
-			   						createToast($("#tdIntrst_"+univ_cd+" > a"), 'add');
-					        	});
-				        	}else if(saveAt == "D"){
-			 					//관심설정 off
-								strRow = '<a href="javascript:intrst_univ_onclick(\''+sch_year+'\',\''+univ_cd+'\',\'C\')" title="관심설정" data-title="관심대학"><img src="/images/re_icon/icon_favorite_off.gif" alt="관심설정"></a>';
-					        	$("#tdIntrst_"+univ_cd).html(strRow);
-					        	gfn_setComSession('univRef','Y','N', function(){
-			   						createToast($("#tdIntrst_"+univ_cd+" > a"), 'remove');
-					        	});
-				        	}
-				        	
-					    }else{
-					    	alert(data.resultVO.resultMessage);
-					    }
-					}
-				},'json');
-			}else{
-				alert("로그인 후 이용해주시기 바랍니다!");
-				return;
-			}
-		} */
-
-	//각 항목 선택하기 
-	//지역 선택하기
-	function fn_areaList_onclick(area){
-			
-			if($(area).attr("id") == "chk_area_all"){
-				$("#chk_area_all").prop("checked",true);
-				$("input[id^='chk_area']:not(input[id='chk_area_all'])").prop("checked",false);
-			}else{
-				
-				$("#chk_area_all").prop("checked",false);
-				var chk_area_list = $("input[id^='chk_area']:checked").get();
-				
-				if(chk_area_list.length < 1){
-					$("#chk_area_all").prop("checked",true);
-				}
-			}
-		}
-	//전형요소 선택하기
-		function fn_elsmList_onclick(elsm){
-			if($(elsm).attr("id") == "chk_elsm_all"){
-				$("#chk_elsm_all").prop("checked",true);
-				$("input[id^='chk_elsm']:not(input[id='chk_elsm_all'])").prop("checked",false);
-			}else{
-				
-				$("#chk_elsm_all").prop("checked",false);
-				var chk_elsm_list = $("input[id^='chk_elsm']:checked").get();
-				
-				if(chk_elsm_list.length < 1){
-					$("#chk_elsm_all").prop("checked",true);
-				}
-			}
-			
-		}
+	//등록금 텍스트
+	var rdo_tuition_list = $("input[id^='rdo_tuition']:checked").get();
+	var tuition_list = "";
+	$.each(rdo_tuition_list, function(index, item){
+		var tuition_id = item.id.toString();
+		tuition_list += ","+$("#"+tuition_id).next("label").html();
+	});
 	
-	//설립유형 선택하기
-		function fn_empymnList_onclick(empymn){
-			$(empymn).toggleClass("on");
-			
-			// 바로 조회
-			btn_search_onclick_init();
-		}
-	//취업률 선택하기 
-		function fn_tuitionList_onclick(tuition){
-			$(tuition).toggleClass("on");
-			
-			// 바로 조회
-			btn_search_onclick_init();
-		}
-
-	function fn_box_text_set() {
-		//지역 텍스트
-		var chk_area_list = $("input[id^='chk_area']:checked").get();
-		var area_list = "";
-		$.each(chk_area_list, function(index, item){
-			var area_id = item.id.toString();
-			area_list += ","+$("#"+area_id).next("label").html();
-		});
-		
-		$("#span_area_view").html(area_list.substring(1));
-	
-		//학교유형 텍스트
-		var chk_elsm_list = $("input[id^='chk_elsm']:checked").get();
-		var elsm_list = "";
-		$.each(chk_elsm_list, function(index, item){
-			var elsm_id = item.id.toString();
-			elsm_list += ","+$("#"+elsm_id).next("label").html();
-		});
-		
-		$("#span_elsm_view").html(elsm_list.substring(1));
-	
-		//설립유형 텍스트
-		var chk_fond_list = $("input[id^='chk_fond']:checked").get();
-		var fond_list = "";
-		$.each(chk_fond_list, function(index, item){
-			var fond_id = item.id.toString();
-			fond_list += ","+$("#"+fond_id).next("label").html();
-		});
-		
-		$("#span_fond_view").html(fond_list.substring(1));
-	
-		//취업률 텍스트
-		var rdo_empymn_list = $("input[id^='rdo_empymn']:checked").get();
-		var empymn_list = "";
-		$.each(rdo_empymn_list, function(index, item){
-			var empymn_id = item.id.toString();
-			empymn_list += ","+$("#"+empymn_id).next("label").html();
-		});
-		
-		$("#span_empymn_view").html(empymn_list.substring(1));
-	
-		//등록금 텍스트
-		var rdo_tuition_list = $("input[id^='rdo_tuition']:checked").get();
-		var tuition_list = "";
-		$.each(rdo_tuition_list, function(index, item){
-			var tuition_id = item.id.toString();
-			tuition_list += ","+$("#"+tuition_id).next("label").html();
-		});
-		
-		$("#span_tuition_view").html(tuition_list.substring(1));
-	}
+	$("#tuition_view").html(tuition_list.substring(1));
+}//체크박스 접기
 
 
 
@@ -350,6 +93,79 @@ function fn_box_out(){
 	$("#tbSimple").hide();
 	$("#tbDetail").show();
 }
+
+//체크박스 동작 구현 (전체 선택 <--> 개별선택)
+//지역
+function locationList_onclick(lct){
+	
+	if($(lct).attr("id") == "chk_location_all"){
+		$("#chk_location_all").prop("checked",true);
+		$("input[id^='chk_location']:not(input[id='chk_location_all'])").prop("checked",false);
+	}else{
+		
+		$("#chk_location_all").prop("checked",false);
+		var chk_location_list = $("input[id^='chk_location']:checked").get();
+		
+		if(chk_location_list.length < 1){
+			$("#chk_location_all").prop("checked",true);
+		}
+	}	
+}
+
+//설립유형
+function ptypeList_onclick(ptype){
+	if($(ptype).attr("id") == "chk_ptype_all"){
+		$("#chk_ptype_all").prop("checked",true);
+		$("input[id^='chk_ptype']:not(input[id='chk_ptype_all'])").prop("checked",false);
+	}else{
+		
+		$("#chk_ptype_all").prop("checked",false);
+		var chk_ptype_list = $("input[id^='chk_ptype']:checked").get();
+		
+		if(chk_ptype_list.length < 1){
+			$("#chk_ptype_all").prop("checked",true);
+		}
+	}			
+}
+/* //취업률라디오 버튼이라 할 필요가 없었다
+function jobrateList_onclick(jr){
+	if($(jr).attr("id") == "rdo_jobrate_all"){
+		$("#chk_jobrate_all").prop("checked",true);
+		$("input[id^='chk_jobrate']:not(input[id='chk_jobrate_all'])").prop("checked",false);
+	}else{
+		
+		$("#chk_jobrate_all").prop("checked",false);
+		var chk_jobrate_list = $("input[id^='rdo_jobrate']:checked").get();
+		
+		if(chk_jobrate_list.length < 1){
+			$("#chk_jobrate_all").prop("checked",true);
+		}
+	}			
+}
+//등록금
+function tuitionList_onclick(tuition){
+	if($(tuition).attr("id") == "chk_tuition_all"){
+		$("#chk_tuition_all").prop("checked",true);
+		$("input[id^='chk_tuition']:not(input[id='chk_tuition_all'])").prop("checked",false);
+	}else{
+		
+		$("#chk_tuition_all").prop("checked",false);
+		var chk_tuition_list = $("input[id^='rdo_tuition']:checked").get();
+		
+		if(chk_tuition_list.length < 1){
+			$("#chk_tuition_all").prop("checked",true);
+		}
+	}			
+}
+ */
+
+ //검색 버튼 눌렀을때
+ function btn_search_onclick(){
+	 
+	 location.href='searchBtn.do?';
+	
+ }
+ 
 
 
 </script>
@@ -372,6 +188,8 @@ function fn_box_out(){
          <div class="righttoptext">대학 검색</div>
       </div>
 	</div>
+
+
 	<div class="contents">
 		<div class="leftmenu">
 			<nav class="left1" >
@@ -385,7 +203,6 @@ function fn_box_out(){
 		</div>
 		
 		<div class="rightcontents">
-			
 			<ul class="nav nav-tabs">
 				<li class="nav-item">
 					<a class="nav-link active" data-toggle="tab" href="#ilban">일반대학교</a>
@@ -398,6 +215,9 @@ function fn_box_out(){
 			<div class="tab-content">
 					<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active"><br/>
+<!--  -->				
+			<!-- <form id="frm" name="frm" action="검색 컨트롤러로 전송" method="post" onsubmit="return false;"> -->
+<!--  -->
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -436,25 +256,25 @@ function fn_box_out(){
 											<td class="tt">지역</td>
 											<td>
 												<input id="lst_location_cd" name="lst_location_cd" type="hidden" value="">
-												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="fn_locationList_onclick(this);"><label for="chk_location_all">전체</label>
-												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="fn_locationList_onclick(this);"><label for="chk_location_01">강원</label>
-												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="fn_locationList_onclick(this);"><label for="chk_location_02">경기</label>
-												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="fn_locationList_onclick(this);"><label for="chk_location_03">경남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="fn_locationList_onclick(this);"><label for="chk_location_04">경북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="fn_locationList_onclick(this);"><label for="chk_location_05">광주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="fn_locationList_onclick(this);"><label for="chk_location_06">대구</label>
-												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="fn_locationList_onclick(this);"><label for="chk_location_07">대전</label>
-												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="fn_locationList_onclick(this);"><label for="chk_location_08">부산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="locationList_onclick(this);"><label for="chk_location_01">강원</label>
+												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="locationList_onclick(this);"><label for="chk_location_02">경기</label>
+												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="locationList_onclick(this);"><label for="chk_location_03">경남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="locationList_onclick(this);"><label for="chk_location_04">경북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="locationList_onclick(this);"><label for="chk_location_06">대구</label>
+												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="locationList_onclick(this);"><label for="chk_location_07">대전</label>
+												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="locationList_onclick(this);"><label for="chk_location_08">부산</label>
 												<br/>
-												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="fn_locationList_onclick(this);"><label for="chk_location_09">서울</label>
-												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="fn_locationList_onclick(this);"><label for="chk_location_10">세종</label>
-												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="fn_locationList_onclick(this);"><label for="chk_location_11">울산</label>
-												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="fn_locationList_onclick(this);"><label for="chk_location_12">인천</label>
-												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="fn_locationList_onclick(this);"><label for="chk_location_13">전남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="fn_locationList_onclick(this);"><label for="chk_location_14">전북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="fn_locationList_onclick(this);"><label for="chk_location_15">제주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="fn_locationList_onclick(this);"><label for="chk_location_16">충남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="fn_locationList_onclick(this);"><label for="chk_location_17">충북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="locationList_onclick(this);"><label for="chk_location_09">서울</label>
+												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
+												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
+												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
 											
 											</td>
 										</tr>
@@ -465,12 +285,12 @@ function fn_box_out(){
 											<td class="tt">설립유형</td>
 											<td>
 												<input id="lst_ptype_se_cd" name="lst_ptype_se_cd" type="hidden" value="">
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_4" value="4" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_4">특별법법인</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_5" value="5" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_5">국립대법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_4" value="4" onclick="ptypeList_onclick(this)"><label for="chk_ptype_4">특별법법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_5" value="5" onclick="ptypeList_onclick(this)"><label for="chk_ptype_5">국립대법인</label>
 		            					
 											</td>
 										</tr>
@@ -514,12 +334,12 @@ function fn_box_out(){
 									
 									<tbody id="tbSimple" class="tbl_fold" style="display: none;">
 										<tr>
-											<td scope="col">대학조건</td>
+											<th scope="col"><label for="uv">대학<br>조건</label></th>
 											<td colspan="2" onclick="fn_box_out()">
-												<span class="tt_fold first">지역</span><span id="span_location_view">전체</span>
-												<span class="tt_fold">설립유형</span><span id="span_ptype_view">전체</span><br>
-												<span class="tt_fold first">취업률</span><span id="span_jobrate_view">전체</span>
-												<span class="tt_fold">등록금</span><span id="span_tuition_view">전체</span>
+												<span class="tt_fold first">지역</span><span id="location_view"></span>
+												<span class="tt_fold">설립유형</span><span id="ptype_view"></span><br>
+												<span class="tt_fold first">취업률</span><span id="jobrate_view"></span>
+												<span class="tt_fold">등록금</span><span id="tuition_view"></span>
 											</td>
 										</tr>
 									</tbody>
@@ -584,15 +404,14 @@ function fn_box_out(){
 					</table>
 				</div>
 				<!-- //대학리스트 -->
-					
-					
-			
-		
+				</form>
 			</div><!-- 일반대학교 끝 -->
 			
 			
 			<!-- 전문대학교 시작 -->
 				<div id="junmun" class="container tab-pane fade"><br/>
+				<form id="frm2" name="frm2" action="컨트롤러로 전송" method="post" onsubmit="return false;">
+				
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -631,25 +450,25 @@ function fn_box_out(){
 											<td class="tt">지역</td>
 											<td>
 												<input id="lst_location_cd" name="lst_location_cd" type="hidden" value="">
-												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="fn_locationList_onclick(this);"><label for="chk_location_all">전체</label>
-												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="fn_locationList_onclick(this);"><label for="chk_location_09">강원</label>
-												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="fn_locationList_onclick(this);"><label for="chk_location_08">경기</label>
-												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="fn_locationList_onclick(this);"><label for="chk_location_15">경남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="fn_locationList_onclick(this);"><label for="chk_location_14">경북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="fn_locationList_onclick(this);"><label for="chk_location_05">광주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="fn_locationList_onclick(this);"><label for="chk_location_03">대구</label>
-												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="fn_locationList_onclick(this);"><label for="chk_location_06">대전</label>
-												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="fn_locationList_onclick(this);"><label for="chk_location_02">부산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="locationList_onclick(this);"><label for="chk_location_09">강원</label>
+												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="locationList_onclick(this);"><label for="chk_location_08">경기</label>
+												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="locationList_onclick(this);"><label for="chk_location_15">경남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="locationList_onclick(this);"><label for="chk_location_14">경북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="locationList_onclick(this);"><label for="chk_location_03">대구</label>
+												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="locationList_onclick(this);"><label for="chk_location_06">대전</label>
+												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="locationList_onclick(this);"><label for="chk_location_02">부산</label>
 												<br/>
-												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="fn_locationList_onclick(this);"><label for="chk_location_01">서울</label>
-												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="fn_locationList_onclick(this);"><label for="chk_location_17">세종</label>
-												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="fn_locationList_onclick(this);"><label for="chk_location_07">울산</label>
-												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="fn_locationList_onclick(this);"><label for="chk_location_04">인천</label>
-												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="fn_locationList_onclick(this);"><label for="chk_location_13">전남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="fn_locationList_onclick(this);"><label for="chk_location_12">전북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="fn_locationList_onclick(this);"><label for="chk_location_16">제주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="fn_locationList_onclick(this);"><label for="chk_location_11">충남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="fn_locationList_onclick(this);"><label for="chk_location_10">충북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="locationList_onclick(this);"><label for="chk_location_01">서울</label>
+												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="locationList_onclick(this);"><label for="chk_location_17">세종</label>
+												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="locationList_onclick(this);"><label for="chk_location_07">울산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="locationList_onclick(this);"><label for="chk_location_04">인천</label>
+												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="locationList_onclick(this);"><label for="chk_location_12">전북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="locationList_onclick(this);"><label for="chk_location_16">제주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="locationList_onclick(this);"><label for="chk_location_11">충남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="locationList_onclick(this);"><label for="chk_location_10">충북</label>
 											
 											</td>
 										</tr>
@@ -658,12 +477,12 @@ function fn_box_out(){
 											<td class="tt">설립유형</td>
 											<td>
 												<input id="lst_ptype_se_cd" name="lst_ptype_se_cd" type="hidden" value="">
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_6" value="6" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_6">특별법법인</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_7" value="7" onclick="fn_ptypeList_onclick(this)"><label for="chk_ptype_7">국립대법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_6" value="6" onclick="ptypeList_onclick(this)"><label for="chk_ptype_6">특별법법인</label>
+		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_7" value="7" onclick="ptypeList_onclick(this)"><label for="chk_ptype_7">국립대법인</label>
 		            					
 											</td>
 										</tr>
@@ -778,7 +597,7 @@ function fn_box_out(){
 		        	<ul id="pagination" class="pages"></ul>
 		    	</div>
 				<!-- //페이징 -->
-	
+				</form>
 			</div>
 		</div><!-- tab-content  -->
 		
