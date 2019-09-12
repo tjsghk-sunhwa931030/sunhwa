@@ -31,8 +31,9 @@ function btn_search_onclick_init(){
 } 
 
 
-//체크박스 접었을때 (전체 -> 2개나오는거 수정해야함 )
+//체크박스 접었을때 (접었을때 전체가 디폴트로 나오는거 수정해야함 )
 function fn_box_text_set() {
+	
 	//지역 텍스트
 	var chk_location_list = $("input[id^='chk_location']:checked").get();
 	var location_list = "";
@@ -236,7 +237,7 @@ function tuitionList_onclick(tuition){
 												<label for="univ_nm">대학</label>
 											</th>
 											<td colspan="2">
-												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
+												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="${map.uname }" maxlength="30">
 													<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
 														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
 															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
@@ -585,7 +586,19 @@ function tuitionList_onclick(tuition){
 							</tr>
 						</thead>
 						<tbody id="tbResult">
-							<tr><td colspan="8">조회된 자료가 없습니다.</td></tr>
+							<c:forEach items="${lists }" var="row">
+								<tr>
+								</tr>
+								<tr>		
+									<td scope="col" rowspan="2">${row.uname}</td>
+									<td scope="col" rowspan="2">${row.location}</td>
+									<td scope="col" rowspan="2">${row.rate_univ}</td>
+									<td scope="col" rowspan="2">${row.totalman}</td>
+									<td scope="col" rowspan="2">${row.major_num}</td>
+									<td scope="col" rowspan="2">${row.enter_num}</td>
+									<td scope="col" rowspan="2">${row.interest}</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>
