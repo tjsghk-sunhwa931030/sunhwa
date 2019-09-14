@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import mybatis.CheckedDTO;
+
 import mybatis.UInfoDAOImpl;
 import mybatis.UInfoDTO;
 import paging.util.PagingUtil;
@@ -33,9 +33,86 @@ public class InfoController {
 		
 		int totalRecordCount = 
 				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
+		model.addAttribute("totalRecordCount", totalRecordCount);
+			
+		/*
+		 * ArrayList<UInfoDTO> lists =
+		 * sqlSession.getMapper(UInfoDAOImpl.class).listPage();
+		 * model.addAttribute("lists", lists);
+		 */
 		
 		return "info/info";
 	}
+	
+	@RequestMapping("/info/checkAction.do")
+	public ModelAndView checkAction(HttpServletRequest req, Model model, HttpSession session) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).search2(
+				req.getParameter("uname"),
+				req.getParameter("location"),
+				req.getParameter("p_type"),
+				req.getParameter("jobrate"),
+				req.getParameter("tuition")
+		);
+		
+		int totalRecordCount = 
+				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
+		model.addAttribute("totalRecordCount", totalRecordCount);
+		
+		ArrayList<UInfoDTO> lists =
+				sqlSession.getMapper(UInfoDAOImpl.class).search1(
+						req.getParameter("uname"),
+						req.getParameter("location"),
+						req.getParameter("rate_univ"),
+						req.getParameter("totalman"),
+						req.getParameter("major_num"),
+						req.getParameter("enter_num"),
+						req.getParameter("interest")
+						);
+		model.addAttribute("lists", lists);
+		
+		System.out.println(dto);
+		return mv;
+	}
+	
+	
+	@RequestMapping("/info/searchUAction.do")
+	public ModelAndView searchUAction(HttpServletRequest req, Model model, HttpSession session) {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).searchU(
+				req.getParameter("uname"),
+				req.getParameter("location"),
+				req.getParameter("rate_univ"),
+				req.getParameter("totalman"),
+				req.getParameter("major_num"),
+				req.getParameter("enter_num"),
+				req.getParameter("interest")
+		);
+		
+		int totalRecordCount = 
+				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
+		model.addAttribute("totalRecordCount", totalRecordCount);
+		
+		ArrayList<UInfoDTO> lists =
+				sqlSession.getMapper(UInfoDAOImpl.class).searchU(
+						req.getParameter("uname")
+						);
+		model.addAttribute("lists", lists);
+		
+		System.out.println(dto);
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//학과 홈페이지
@@ -53,57 +130,6 @@ public class InfoController {
 	}
 	
 
-	
-	
-	//검색을 처리하겠어 modelandview로 
-	@RequestMapping(value ="/searchBtn.do", method=RequestMethod.POST)
-	public ModelAndView searchBtn(Model model, HttpServletRequest req, HttpSession session,
-			@RequestParam(value="pageNum", defaultValue = "1") String pageNum,
-			@RequestParam(value="checklist", defaultValue = "all")String checklist,
-			@RequestParam(value="unamekey", defaultValue = "") String unamekey) {
-		
-		//전체 대학 리스트에서 체크된 값과 검색한대학이름을 가지고 오겠다 
-		ArrayList<UInfoDTO> lists = 
-				sqlSession.getMapper(UInfoDAOImpl.class).listPage();
-		
-		int totalRecordCount = 
-				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
-		
-		ModelAndView mv = new ModelAndView();
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list",lists);
-		map.put("totalRecordCount",totalRecordCount);
-		map.put("checklist",checklist);
-		map.put("unamekey",unamekey);
 
-		
-		
-
-		/*
-		 * //맵퍼로 DTO 객체를 파라미터로 전달함 ....... UInfoDTO dto =
-		 * sqlSession.getMapper(UInfoDAOImpl.class);
-		 * 
-		 * 
-		 * 
-		 * if(dto==null) { //결과가 없을 경우 mv.addObject("해당하는 대학없음","조회된 자료가 없습니다.");
-		 * mv.setViewName("info/list"); return mv; } else { //결과가 있으면 session영역에저장 ->
-		 * 리스트에 나왔으면 좋겠다...ㅠㅠ session.setAttribute("univListinfo", dto); }
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * model.addAttribute("lists", lists);
-		 */
-
-		
-
-		
-	
-		
-		
-		return mv;
-	}
 	
 }

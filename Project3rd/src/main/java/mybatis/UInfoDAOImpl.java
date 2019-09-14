@@ -12,17 +12,10 @@ public interface UInfoDAOImpl {
 	public int getTotalCount();
 	
 
-	public ArrayList<UInfoDTO> listPage(String checked, String univnm);
-	public UInfoDTO list(
-			String uname,
-			String location,
-			String p_type,
-			String jobrate,
-			String tuition
-	);
+	public ArrayList<UInfoDTO> listPage();
 	
-	public UInfoDTO search(CheckedDTO checkedDTO);
-	
+	public ArrayList<UInfoDTO> search1(String uname, String location, String p_type,String jobrate, String tuition);
+	public UInfoDTO search2(String uname, String location, String p_type,String jobrate, String tuition);
 
-	
+	public ArrayList<UInfoDTO> searchU(String uname);
 }

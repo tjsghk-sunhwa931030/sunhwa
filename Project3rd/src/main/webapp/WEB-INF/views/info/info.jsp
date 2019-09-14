@@ -23,12 +23,12 @@ function search_init() {
 	btn_search_onclick();
 }
 
-//대학 이름 검색
+
 function btn_search_onclick_init(){
-	document.frm.pageIndex.value = 1;
-	$("#uname").val($.trim($("#uname").val()));
+	/* document.frm.pageIndex.value = 1;
+	$("#uname").val($.trim($("#uname").val())); */
 	search_init();
-} 
+}  
 
 
 //체크박스 접었을때 (접었을때 전체가 디폴트로 나오는거 수정해야함 )
@@ -128,45 +128,63 @@ function ptypeList_onclick(ptype){
 		}
 	}			
 }
-/* //취업률라디오 버튼이라 할 필요가 없었다
-function jobrateList_onclick(jr){
-	if($(jr).attr("id") == "rdo_jobrate_all"){
-		$("#chk_jobrate_all").prop("checked",true);
-		$("input[id^='chk_jobrate']:not(input[id='chk_jobrate_all'])").prop("checked",false);
-	}else{
-		
-		$("#chk_jobrate_all").prop("checked",false);
-		var chk_jobrate_list = $("input[id^='rdo_jobrate']:checked").get();
-		
-		if(chk_jobrate_list.length < 1){
-			$("#chk_jobrate_all").prop("checked",true);
-		}
-	}			
-}
-//등록금
-function tuitionList_onclick(tuition){
-	if($(tuition).attr("id") == "chk_tuition_all"){
-		$("#chk_tuition_all").prop("checked",true);
-		$("input[id^='chk_tuition']:not(input[id='chk_tuition_all'])").prop("checked",false);
-	}else{
-		
-		$("#chk_tuition_all").prop("checked",false);
-		var chk_tuition_list = $("input[id^='rdo_tuition']:checked").get();
-		
-		if(chk_tuition_list.length < 1){
-			$("#chk_tuition_all").prop("checked",true);
-		}
-	}			
-}
- */
 
- //검색 버튼 눌렀을때
- function btn_search_onclick(){
-	 
-	 location.href='searchBtn.do?';
+//폼값 전달하기 
+function checkboxFrm(fn){
 	
- }
- 
+	var fn = document.checkFrm;
+	
+	var lst_location_list = [];
+	var lst_ptype_list = [];
+	
+	var locationlist = $("input[id^='chk_location']:checked").get();
+	var ptypelist = $("input[id^='chk_ptype']:checked").get();
+	var jobratelist = $("input[id^='rdo_jobrate']:checked").val();
+	var tuitionlist = $("input[id^='rdo_tuition']:checked").val();
+	
+	$.each(locationlist, function(index, item){
+		var location = item.value.toString();
+	
+		lst_location_list[index] = location;
+	});
+	
+	$.each(ptypelist, function(index, item){
+		var ptype = item.value.toString();
+
+		lst_ptype_list[index] = ptype;
+	});
+	
+	
+	
+//선화가 이거 안함
+
+	
+	
+	fn.action="./checkAction.do";
+	fn.method = "get";
+	fn.submit();
+	
+}
+
+
+function btn_search_uname(fn){
+	
+	var fn = document.checkFrm;
+	fn.action = "./searchUAction.do";
+	fn.method = "post";
+	fn.submit();
+	
+}
+
+
+
+
+
+
+
+
+
+
 
 
 </script>
@@ -216,9 +234,8 @@ function tuitionList_onclick(tuition){
 			<div class="tab-content">
 					<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active"><br/>
-<!--  -->				
-			<!-- <form id="frm" name="frm" action="검색 컨트롤러로 전송" method="post" onsubmit="return false;"> -->
-<!--  -->
+				
+			 <form id="checkFrm" name="checkFrm" action="checkAction.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -237,9 +254,9 @@ function tuitionList_onclick(tuition){
 												<label for="univ_nm">대학</label>
 											</th>
 											<td colspan="2">
-												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="${map.uname }" maxlength="30">
-													<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
-														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="${searchU }" maxlength="30">
+													<a href="javascript:btn_search_uname()" title="검색" class="btn_search" style="color:#783712 ">
+														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
 															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
 														</button>
 													</a>
@@ -256,18 +273,17 @@ function tuitionList_onclick(tuition){
 										
 											<td class="tt">지역</td>
 											<td>
-												<input id="lst_location_cd" name="lst_location_cd" type="hidden" value="">
 												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
-												<input type="checkbox" name="chk_location" id="chk_location_01" value="01" onclick="locationList_onclick(this);"><label for="chk_location_01">강원</label>
-												<input type="checkbox" name="chk_location" id="chk_location_02" value="02" onclick="locationList_onclick(this);"><label for="chk_location_02">경기</label>
-												<input type="checkbox" name="chk_location" id="chk_location_03" value="03" onclick="locationList_onclick(this);"><label for="chk_location_03">경남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_04" value="04" onclick="locationList_onclick(this);"><label for="chk_location_04">경북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_05" value="05" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_06" value="06" onclick="locationList_onclick(this);"><label for="chk_location_06">대구</label>
-												<input type="checkbox" name="chk_location" id="chk_location_07" value="07" onclick="locationList_onclick(this);"><label for="chk_location_07">대전</label>
-												<input type="checkbox" name="chk_location" id="chk_location_08" value="08" onclick="locationList_onclick(this);"><label for="chk_location_08">부산</label>
+												<input type="checkbox" name="chk_location" id="chk_location_1" value="1" onclick="locationList_onclick(this);"><label for="chk_location_01">강원</label>
+												<input type="checkbox" name="chk_location" id="chk_location_2" value="2" onclick="locationList_onclick(this);"><label for="chk_location_02">경기</label>
+												<input type="checkbox" name="chk_location" id="chk_location_3" value="3" onclick="locationList_onclick(this);"><label for="chk_location_03">경남</label>
+												<input type="checkbox" name="chk_location" id="chk_location_4" value="4" onclick="locationList_onclick(this);"><label for="chk_location_04">경북</label>
+												<input type="checkbox" name="chk_location" id="chk_location_5" value="5" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="chk_location" id="chk_location_6" value="6" onclick="locationList_onclick(this);"><label for="chk_location_06">대구</label>
+												<input type="checkbox" name="chk_location" id="chk_location_7" value="7" onclick="locationList_onclick(this);"><label for="chk_location_07">대전</label>
+												<input type="checkbox" name="chk_location" id="chk_location_8" value="8" onclick="locationList_onclick(this);"><label for="chk_location_08">부산</label>
 												<br/>
-												<input type="checkbox" name="chk_location" id="chk_location_09" value="09" onclick="locationList_onclick(this);"><label for="chk_location_09">서울</label>
+												<input type="checkbox" name="chk_location" id="chk_location_9" value="9" onclick="locationList_onclick(this);"><label for="chk_location_09">서울</label>
 												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
 												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
 												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
@@ -285,13 +301,11 @@ function tuitionList_onclick(tuition){
 										<tr>
 											<td class="tt">설립유형</td>
 											<td>
-												<input id="lst_ptype_se_cd" name="lst_ptype_se_cd" type="hidden" value="">
+											
 		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_2">공립</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_3" value="3" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_4" value="4" onclick="ptypeList_onclick(this)"><label for="chk_ptype_4">특별법법인</label>
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_5" value="5" onclick="ptypeList_onclick(this)"><label for="chk_ptype_5">국립대법인</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
+												<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							
 		            					
 											</td>
 										</tr>
@@ -300,7 +314,7 @@ function tuitionList_onclick(tuition){
 											<td class="tt">취업률</td>
 											<td>
 											
-										<input id="lst_jobrate_cd" name="lst_jobrate_cd" type="hidden" value="">
+									
 										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_all" value="" checked="checked"><label for="rdo_jobrate_all">전체</label>
 										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_90" value="90"><label for="rdo_jobrate_90">90%이상</label>
 										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_80" value="80"><label for="rdo_jobrate_80">80%&nbsp;~&nbsp;90%</label>
@@ -317,7 +331,7 @@ function tuitionList_onclick(tuition){
 											<td class="tt">등록금</td>
 											<td>
 											
-											<input id="lst_tuition_cd" name="lst_tuition_cd" type="hidden" value="">
+											
 											<input type="radio" name="rdo_tuition" id="rdo_tuition_all" value="" checked="checked"><label for="rdo_tuition_all">전체</label>
 											<input type="radio" name="rdo_tuition" id="rdo_tuition_1000" value="1000"><label for="rdo_tuition_1000">1000만이상</label>
 											<input type="radio" name="rdo_tuition" id="rdo_tuition_800" value="800"><label for="rdo_tuition_800">800만&nbsp;~&nbsp;1000만</label>
@@ -353,18 +367,18 @@ function tuitionList_onclick(tuition){
 					
 					<!-- search_tbl_box -->
 					<div class="search_box_btn">
-						<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
+						<button type="submit" title="검색" class="btn_searchAll btn btn-dark" >검색</button>
 					</div>
-				
+		 </form>	
 					
 					
 					<!-- 대학리스트 -->
 				<div class="tbl_list">
 					<br>
 					<div class="but_table">
-						<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
+						<div class="t_span" style="min-width: 170px; max-width: 170px;">총 ${totalRecordCount} 건이 있습니다.</div>
 					</div>
-					
+		<form>	
 					<table class="list_tbl01">
 						<caption>대학 리스트</caption>
 						<colgroup>
@@ -403,15 +417,16 @@ function tuitionList_onclick(tuition){
 							</c:forEach>
 						</tbody>
 					</table>
+		</form>
 				</div>
 				<!-- //대학리스트 -->
-				</form>
+		
 			</div><!-- 일반대학교 끝 -->
 			
 			
 			<!-- 전문대학교 시작 -->
 				<div id="junmun" class="container tab-pane fade"><br/>
-				<form id="frm2" name="frm2" action="컨트롤러로 전송" method="post" onsubmit="return false;">
+		<form id="checkfrm" name="checkfrm" action="폼값넘기기" method="post" onsubmit="return false;">
 				
 					<div class="search_tbl_box" >
 						<fieldset>
@@ -433,7 +448,7 @@ function tuitionList_onclick(tuition){
 											<td colspan="2">
 												<input id="uname" name="uname" title="대학명검색" style="ime-mode:active" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
 													<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_search" style="color:#783712 ">
-														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
 															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
 														</button>
 													</a>
@@ -547,7 +562,7 @@ function tuitionList_onclick(tuition){
 					<div class="search_box_btn">
 						<a href="javascript:btn_search_onclick_init()" title="검색" class="btn_searchAll btn btn-dark" role="button">검색</a>
 					</div>
-				
+		</form>
 					
 					
 					<!-- 대학리스트 -->
@@ -556,7 +571,7 @@ function tuitionList_onclick(tuition){
 					<div class="but_table">
 						<div class="t_span" style="min-width: 170px; max-width: 170px;">총 <span class="t_cr01 font_w" id="totalCountOrg">0</span>건이 있습니다.</div>
 					</div>
-					
+		<form>	
 					<table class="list_tbl01">
 						<caption>대학 리스트</caption>
 						<colgroup>
@@ -601,16 +616,17 @@ function tuitionList_onclick(tuition){
 							</c:forEach>
 						</tbody>
 					</table>
+				</form>	
 				</div>
 				<!-- //대학리스트 -->
-					
-					
+			
+				
 				<!-- 페이징 -->
 		    	<div class="paging" id="paginationholder"> 
 		        	<ul id="pagination" class="pages"></ul>
 		    	</div>
 				<!-- //페이징 -->
-				</form>
+				
 			</div>
 		</div><!-- tab-content  -->
 		
