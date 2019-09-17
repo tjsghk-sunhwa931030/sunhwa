@@ -141,6 +141,8 @@ function checkboxFrm(fn){
 	var ptypelist = $("input[id^='chk_ptype']:checked").get();
 	var jobratelist = $("input[id^='rdo_jobrate']:checked").val();
 	var tuitionlist = $("input[id^='rdo_tuition']:checked").val();
+
+	
 	
 	$.each(locationlist, function(index, item){
 		var location = item.value.toString();
@@ -154,27 +156,13 @@ function checkboxFrm(fn){
 		lst_ptype_list[index] = ptype;
 	});
 	
-	
-	
-//선화가 이거 안함
 
-	
-	
-	fn.action="./checkAction.do";
+/* 	fn.action="./checkAction.do";
 	fn.method = "get";
-	fn.submit();
+	fn.submit(); */
 	
 }
 
-
-function btn_search_uname(fn){
-	
-	var fn = document.checkFrm;
-	fn.action = "./searchUAction.do";
-	fn.method = "post";
-	fn.submit();
-	
-}
 
 
 
@@ -235,7 +223,7 @@ function btn_search_uname(fn){
 					<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active"><br/>
 				
-			 <form id="checkFrm" name="checkFrm" action="checkAction.do" method="get" onsubmit="return checkboxFrm();">
+			 <form id="checkFrm" name="checkFrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -254,12 +242,12 @@ function btn_search_uname(fn){
 												<label for="univ_nm">대학</label>
 											</th>
 											<td colspan="2">
-												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="${searchU }" maxlength="30">
-													<a href="javascript:btn_search_uname()" title="검색" class="btn_search" style="color:#783712 ">
-														<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
+												<input id="uname" name="uname" title="대학명검색" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
+												
+														<button type="submit" title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
 															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
 														</button>
-													</a>
+											
 											</td>
 										</tr>
 									</tbody>
@@ -273,25 +261,25 @@ function btn_search_uname(fn){
 										
 											<td class="tt">지역</td>
 											<td>
-												<input type="checkbox" name="chk_location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
-												<input type="checkbox" name="chk_location" id="chk_location_1" value="1" onclick="locationList_onclick(this);"><label for="chk_location_01">강원</label>
-												<input type="checkbox" name="chk_location" id="chk_location_2" value="2" onclick="locationList_onclick(this);"><label for="chk_location_02">경기</label>
-												<input type="checkbox" name="chk_location" id="chk_location_3" value="3" onclick="locationList_onclick(this);"><label for="chk_location_03">경남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_4" value="4" onclick="locationList_onclick(this);"><label for="chk_location_04">경북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_5" value="5" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_6" value="6" onclick="locationList_onclick(this);"><label for="chk_location_06">대구</label>
-												<input type="checkbox" name="chk_location" id="chk_location_7" value="7" onclick="locationList_onclick(this);"><label for="chk_location_07">대전</label>
-												<input type="checkbox" name="chk_location" id="chk_location_8" value="8" onclick="locationList_onclick(this);"><label for="chk_location_08">부산</label>
+												<input type="checkbox" name="location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name=location id="chk_location_1" value="1" onclick="locationList_onclick(this);"><label for="chk_location_01">강원</label>
+												<input type="checkbox" name="location" id="chk_location_2" value="2" onclick="locationList_onclick(this);"><label for="chk_location_02">경기</label>
+												<input type="checkbox" name="location" id="chk_location_3" value="3" onclick="locationList_onclick(this);"><label for="chk_location_03">경남</label>
+												<input type="checkbox" name="location" id="chk_location_4" value="4" onclick="locationList_onclick(this);"><label for="chk_location_04">경북</label>
+												<input type="checkbox" name="location" id="chk_location_5" value="5" onclick="locationList_onclick(this);"><label for="chk_location_05">광주</label>
+												<input type="checkbox" name="location" id="chk_location_6" value="6" onclick="locationList_onclick(this);"><label for="chk_location_06">대구</label>
+												<input type="checkbox" name="location" id="chk_location_7" value="7" onclick="locationList_onclick(this);"><label for="chk_location_07">대전</label>
+												<input type="checkbox" name="location" id="chk_location_8" value="8" onclick="locationList_onclick(this);"><label for="chk_location_08">부산</label>
 												<br/>
-												<input type="checkbox" name="chk_location" id="chk_location_9" value="9" onclick="locationList_onclick(this);"><label for="chk_location_09">서울</label>
-												<input type="checkbox" name="chk_location" id="chk_location_10" value="10" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
-												<input type="checkbox" name="chk_location" id="chk_location_11" value="11" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
-												<input type="checkbox" name="chk_location" id="chk_location_12" value="12" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
-												<input type="checkbox" name="chk_location" id="chk_location_13" value="13" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_14" value="14" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
-												<input type="checkbox" name="chk_location" id="chk_location_15" value="15" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
-												<input type="checkbox" name="chk_location" id="chk_location_16" value="16" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
-												<input type="checkbox" name="chk_location" id="chk_location_17" value="17" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
+												<input type="checkbox" name="location" id="chk_location_9" value="9" onclick="locationList_onclick(this);"><label for="chk_location_09">서울</label>
+												<input type="checkbox" name="location" id="chk_location_10" value="10" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
+												<input type="checkbox" name="location" id="chk_location_11" value="11" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
+												<input type="checkbox" name="location" id="chk_location_12" value="12" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
+												<input type="checkbox" name="location" id="chk_location_13" value="13" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="location" id="chk_location_14" value="14" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
+												<input type="checkbox" name="location" id="chk_location_15" value="15" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
+												<input type="checkbox" name="location" id="chk_location_16" value="16" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
+												<input type="checkbox" name="location" id="chk_location_17" value="17" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
 											
 											</td>
 										</tr>
@@ -302,9 +290,9 @@ function btn_search_uname(fn){
 											<td class="tt">설립유형</td>
 											<td>
 											
-		            							<input type="checkbox" name="chk_ptype" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
-												<input type="checkbox" name="chk_ptype" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="ptype" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="p_type" id="chk_ptype_1" value="1" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
+												<input type="checkbox" name="p_type" id="chk_ptype_2" value="2" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
 		            							
 		            					
 											</td>
@@ -315,15 +303,15 @@ function btn_search_uname(fn){
 											<td>
 											
 									
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_all" value="" checked="checked"><label for="rdo_jobrate_all">전체</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_90" value="90"><label for="rdo_jobrate_90">90%이상</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_80" value="80"><label for="rdo_jobrate_80">80%&nbsp;~&nbsp;90%</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_70" value="70"><label for="rdo_jobrate_70">70%&nbsp;~&nbsp;80%</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_all" value="" checked="checked"><label for="rdo_jobrate_all">전체</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_90" value="90"><label for="rdo_jobrate_90">90%이상</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_80" value="80"><label for="rdo_jobrate_80">80%&nbsp;~&nbsp;90%</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_70" value="70"><label for="rdo_jobrate_70">70%&nbsp;~&nbsp;80%</label>
 										<br>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_60" value="60"><label for="rdo_jobrate_60">60%&nbsp;~&nbsp;70%</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_50" value="50"><label for="rdo_jobrate_50">50%&nbsp;~&nbsp;60%</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_40" value="40"><label for="rdo_jobrate_40">40%&nbsp;~&nbsp;50%</label>
-										<input type="radio" name="rdo_jobrate" id="rdo_jobrate_39" value="39"><label for="rdo_jobrate_39">40%미만</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_60" value="60"><label for="rdo_jobrate_60">60%&nbsp;~&nbsp;70%</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_50" value="50"><label for="rdo_jobrate_50">50%&nbsp;~&nbsp;60%</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_40" value="40"><label for="rdo_jobrate_40">40%&nbsp;~&nbsp;50%</label>
+										<input type="radio" name="jobrate" id="rdo_jobrate_39" value="39"><label for="rdo_jobrate_39">40%미만</label>
 											</td>
 										</tr>
 										
@@ -332,15 +320,15 @@ function btn_search_uname(fn){
 											<td>
 											
 											
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_all" value="" checked="checked"><label for="rdo_tuition_all">전체</label>
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_1000" value="1000"><label for="rdo_tuition_1000">1000만이상</label>
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_800" value="800"><label for="rdo_tuition_800">800만&nbsp;~&nbsp;1000만</label>
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_600" value="600"><label for="rdo_tuition_600">600만&nbsp;~&nbsp;800만</label>
+											<input type="radio" name="tuition" id="rdo_tuition_all" value="" checked="checked"><label for="rdo_tuition_all">전체</label>
+											<input type="radio" name="tuition" id="rdo_tuition_1000" value="1000"><label for="rdo_tuition_1000">1000만이상</label>
+											<input type="radio" name="tuition" id="rdo_tuition_800" value="800"><label for="rdo_tuition_800">800만&nbsp;~&nbsp;1000만</label>
+											<input type="radio" name="tuition" id="rdo_tuition_600" value="600"><label for="rdo_tuition_600">600만&nbsp;~&nbsp;800만</label>
 												<br>
 												
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_400" value="400"><label for="rdo_tuition_400">400만&nbsp;~&nbsp;600만</label>
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_200" value="200"><label for="rdo_tuition_200">200만&nbsp;~&nbsp;400만</label>
-											<input type="radio" name="rdo_tuition" id="rdo_tuition_199" value="199"><label for="rdo_tuition_199">200만미만</label>
+											<input type="radio" name="tuition" id="rdo_tuition_400" value="400"><label for="rdo_tuition_400">400만&nbsp;~&nbsp;600만</label>
+											<input type="radio" name="tuition" id="rdo_tuition_200" value="200"><label for="rdo_tuition_200">200만&nbsp;~&nbsp;400만</label>
+											<input type="radio" name="tuition" id="rdo_tuition_199" value="199"><label for="rdo_tuition_199">200만미만</label>
 											
 											</td>
 										</tr>

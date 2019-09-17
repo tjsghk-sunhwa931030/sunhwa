@@ -35,78 +35,62 @@ public class InfoController {
 				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
 		model.addAttribute("totalRecordCount", totalRecordCount);
 			
+		
+		
 		/*
 		 * ArrayList<UInfoDTO> lists =
 		 * sqlSession.getMapper(UInfoDAOImpl.class).listPage();
+		 * 
+		 * 
 		 * model.addAttribute("lists", lists);
 		 */
+		
 		
 		return "info/info";
 	}
 	
-	@RequestMapping("/info/checkAction.do")
+	//체크된 폼값 전달받음 
+	@RequestMapping("/checkAction.do")
 	public ModelAndView checkAction(HttpServletRequest req, Model model, HttpSession session) {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).search2(
-				req.getParameter("uname"),
-				req.getParameter("location"),
-				req.getParameter("p_type"),
-				req.getParameter("jobrate"),
-				req.getParameter("tuition")
-		);
+		/*
+		 * UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).search(
+		 * req.getParameter("uname"), req.getParameter("location"),
+		 * req.getParameter("p_type"), req.getParameter("jobrate"),
+		 * req.getParameter("tuition") );
+		 */
 		
-		int totalRecordCount = 
-				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
-		model.addAttribute("totalRecordCount", totalRecordCount);
 		
-		ArrayList<UInfoDTO> lists =
-				sqlSession.getMapper(UInfoDAOImpl.class).search1(
-						req.getParameter("uname"),
-						req.getParameter("location"),
-						req.getParameter("rate_univ"),
-						req.getParameter("totalman"),
-						req.getParameter("major_num"),
-						req.getParameter("enter_num"),
-						req.getParameter("interest")
-						);
-		model.addAttribute("lists", lists);
-		
-		System.out.println(dto);
+	 //출력
+		 ArrayList<UInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC( 
+				 req.getParameter("uname"),
+				 req.getParameter("location"), 
+				 req.getParameter("p_type"), 
+				 req.getParameter("jobrate"),
+				 req.getParameter("tuition")
+				
+			);
+		 System.out.println(lists.size());
+		 System.out.println(lists);
+		 System.out.println(
+				 req.getParameter("uname"));
+		 System.out.println(
+				 req.getParameter("location"));
+		 System.out.println(
+				 req.getParameter("p_type"));
+		 System.out.println(
+				 req.getParameter("jobrate"));
+		 System.out.println(
+				 req.getParameter("tuition"));
+		 
+		 mv.addObject("lists", lists);
+		 mv.setViewName("info/info");
 		return mv;
 	}
 	
-	
-	@RequestMapping("/info/searchUAction.do")
-	public ModelAndView searchUAction(HttpServletRequest req, Model model, HttpSession session) {
-		
-		ModelAndView mv = new ModelAndView();
-		
-		UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).searchU(
-				req.getParameter("uname"),
-				req.getParameter("location"),
-				req.getParameter("rate_univ"),
-				req.getParameter("totalman"),
-				req.getParameter("major_num"),
-				req.getParameter("enter_num"),
-				req.getParameter("interest")
-		);
-		
-		int totalRecordCount = 
-				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
-		model.addAttribute("totalRecordCount", totalRecordCount);
-		
-		ArrayList<UInfoDTO> lists =
-				sqlSession.getMapper(UInfoDAOImpl.class).searchU(
-						req.getParameter("uname")
-						);
-		model.addAttribute("lists", lists);
-		
-		System.out.println(dto);
-		return mv;
-	}
-	
+
 	
 	
 	

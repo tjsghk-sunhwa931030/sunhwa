@@ -7,22 +7,29 @@
  
  <mapper namespace="mybatis.UInfoDAOImpl">
  
+ <!-- 리스트 출력수  -->
  	<select id="getTotalCount" resultType="int">
  		SELECT COUNT(*) from info_univ
  	</select>
+ 	
+ <!-- 출력  -->
  	<select id="listPage" resultType="mybatis.UInfoDTO">
  		SELECT * FROM info_univ
  	</select>
  	
- 	<select id="search1" resultType="mybatis.UInfoDTO">
- 		SELECT * FROM info_univ WHERE uname=#{0} and location=#{1} and p_type=#{2} and jobrate=#{3} and tuition=#{4}
- 	
+<!--체크리스트  -->
+ 	<select id="searchC" resultType="mybatis.UInfoDTO">
+	SELECT * FROM info_univ WHERE uname=#{param1,jdbcType=VARCHAR} LIKE CONCAT('%',#{param1},'%') and location=#{param2,jdbcType=VARCHAR} and p_type=#{param3,jdbcType=VARCHAR} and jobrate=#{param4,jdbcType=VARCHAR} and tuition=#{param5,jdbcType=VARCHAR}
+
  	</select>
+<!-- 출력한 값 나오게 하기 -->
+
+ 	
 	
-	
-	<select id="searchU" resultType="mybatis.UInfoDTO">
+ <!-- 대학교 이름검색  -->	
+<!-- 	<select id="searchU" resultType="mybatis.UInfoDTO">
 		SELECT * FROM info_univ WHERE uname LIKE '%{searchU}%';
-	</select>
+	</select>  -->
 	
  </mapper>
   
