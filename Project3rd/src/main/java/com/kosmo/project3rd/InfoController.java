@@ -31,9 +31,7 @@ public class InfoController {
 	@RequestMapping("/info.do")
 	public String info(Model model, HttpServletRequest req) {
 		
-		int totalRecordCount = 
-				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
-		model.addAttribute("totalRecordCount", totalRecordCount);
+		
 			
 		
 		
@@ -51,9 +49,9 @@ public class InfoController {
 	
 	//체크된 폼값 전달받음 
 	@RequestMapping("/checkAction.do")
-	public ModelAndView checkAction(HttpServletRequest req, Model model, HttpSession session) {
+	public String checkAction(HttpServletRequest req, Model model, HttpSession session) {
 		
-		ModelAndView mv = new ModelAndView();
+		/* ModelAndView mv = new ModelAndView(); */
 		
 		/*
 		 * UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).search(
@@ -62,32 +60,48 @@ public class InfoController {
 		 * req.getParameter("tuition") );
 		 */
 		
+		int totalRecordCount = 
+				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
+		model.addAttribute("totalRecordCount", totalRecordCount);
 		
-	 //출력
-		 ArrayList<UInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC( 
-				 req.getParameter("uname"),
+		
+	 //체크한 값
+		
+		 ArrayList<UInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
+				 req.getParameter("searchWord"),
 				 req.getParameter("location"), 
 				 req.getParameter("p_type"), 
 				 req.getParameter("jobrate"),
 				 req.getParameter("tuition")
 				
 			);
-		 System.out.println(lists.size());
-		 System.out.println(lists);
-		 System.out.println(
-				 req.getParameter("uname"));
-		 System.out.println(
-				 req.getParameter("location"));
-		 System.out.println(
-				 req.getParameter("p_type"));
-		 System.out.println(
-				 req.getParameter("jobrate"));
-		 System.out.println(
-				 req.getParameter("tuition"));
 		 
-		 mv.addObject("lists", lists);
-		 mv.setViewName("info/info");
-		return mv;
+		/* ArrayList<UInfoDTO> lists2 =sqlSession.getMapper(UInfoDAOImpl.class).searchW( */
+				 
+		 model.addAttribute("lists", lists);
+		 
+		 System.out.println(lists.size());
+
+		 System.out.println("uname="+
+				 req.getParameter("searchWord"));
+		 System.out.println("location="+
+				 req.getParameter("location"));
+		 System.out.println("p_type="+
+				 req.getParameter("p_type"));
+		 System.out.println("jobrate="+
+				 req.getParameter("jobrate"));
+		 System.out.println("tuition="+
+				 req.getParameter("tuition"));
+		 System.out.println(lists);
+		 
+		 
+		/*
+		 * mv.addObject("lists", lists); System.out.println(lists);
+		 * mv.setViewName("info/info");
+		 */
+		 
+		return "info/info";
+		
 	}
 	
 

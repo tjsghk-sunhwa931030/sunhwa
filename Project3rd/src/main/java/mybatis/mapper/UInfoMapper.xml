@@ -19,10 +19,19 @@
  	
 <!--체크리스트  -->
  	<select id="searchC" resultType="mybatis.UInfoDTO">
-	SELECT * FROM info_univ WHERE uname=#{param1,jdbcType=VARCHAR} LIKE CONCAT('%',#{param1},'%') and location=#{param2,jdbcType=VARCHAR} and p_type=#{param3,jdbcType=VARCHAR} and jobrate=#{param4,jdbcType=VARCHAR} and tuition=#{param5,jdbcType=VARCHAR}
-
+	SELECT * FROM info_univ WHERE uname LIKE '%'||#{param1}||'%'
+		AND location LIKE '%'||#{param2}||'%'
+		AND p_type LIKE '%'||#{param3}||'%'
+		AND jobrate LIKE '%'||#{param4}||'%'
+		AND tuition LIKE '%'||#{param5}||'%'
+	
  	</select>
-<!-- 출력한 값 나오게 하기 -->
+
+<!-- 검색 -->
+ 	<!-- <select id="searchW" resultType="mybatis.UInfoDTO">
+	SELECT * FROM info_univ WHERE uname LIKE '%'||#{searchWord}||'%'
+ 	</select> -->
+
 
  	
 	

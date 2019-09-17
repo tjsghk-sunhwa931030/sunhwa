@@ -19,6 +19,10 @@ public interface UInfoDAOImpl {
 			String uname,String location,String p_type,String jobrate, String tuition
 			);
 	
+	/*
+	 * public ArrayList<UInfoDTO> searchW( String uname );
+	 */
+	
 	
 	/*
 	 * public UInfoDTO search( String uname, String location, String p_type,String
