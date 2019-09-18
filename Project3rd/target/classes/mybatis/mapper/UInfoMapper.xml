@@ -19,12 +19,11 @@
  	
 <!--체크리스트  -->
  	<select id="searchC" resultType="mybatis.UInfoDTO">
-	SELECT * FROM info_univ WHERE uname LIKE '%'||#{param1}||'%'
-		AND location LIKE '%'||#{param2}||'%'
-		AND p_type LIKE '%'||#{param3}||'%'
-		AND jobrate LIKE '%'||#{param4}||'%'
-		AND tuition LIKE '%'||#{param5}||'%'
-	
+	SELECT * FROM info_univ WHERE u_type =#{param1,jdbcType=VARCHAR}
+		AND	uname LIKE '%'||#{param2}||'%'
+		AND location LIKE '%'||#{param3}||'%'
+		AND p_type LIKE '%'||#{param4}||'%'
+
  	</select>
 
 <!-- 검색 -->

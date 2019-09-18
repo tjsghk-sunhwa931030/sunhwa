@@ -16,7 +16,7 @@ public interface UInfoDAOImpl {
 	public ArrayList<UInfoDTO> listPage();
 
 	public ArrayList<UInfoDTO> searchC(
-			String uname,String location,String p_type,String jobrate, String tuition
+			String u_type,String uname,String location,String p_type
 			);
 	
 	/*

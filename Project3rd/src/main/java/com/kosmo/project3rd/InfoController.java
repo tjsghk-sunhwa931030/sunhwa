@@ -30,11 +30,7 @@ public class InfoController {
 	//대학 홈페이지
 	@RequestMapping("/info.do")
 	public String info(Model model, HttpServletRequest req) {
-		
-		
-			
-		
-		
+				
 		/*
 		 * ArrayList<UInfoDTO> lists =
 		 * sqlSession.getMapper(UInfoDAOImpl.class).listPage();
@@ -68,11 +64,10 @@ public class InfoController {
 	 //체크한 값
 		
 		 ArrayList<UInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
+				 req.getParameter("u_type"),
 				 req.getParameter("searchWord"),
 				 req.getParameter("location"), 
-				 req.getParameter("p_type"), 
-				 req.getParameter("jobrate"),
-				 req.getParameter("tuition")
+				 req.getParameter("p_type")
 				
 			);
 		 
@@ -82,16 +77,14 @@ public class InfoController {
 		 
 		 System.out.println(lists.size());
 
+		 System.out.println("u_type"+req.getParameter("u_type"));
 		 System.out.println("uname="+
 				 req.getParameter("searchWord"));
 		 System.out.println("location="+
 				 req.getParameter("location"));
 		 System.out.println("p_type="+
 				 req.getParameter("p_type"));
-		 System.out.println("jobrate="+
-				 req.getParameter("jobrate"));
-		 System.out.println("tuition="+
-				 req.getParameter("tuition"));
+	
 		 System.out.println(lists);
 		 
 		 
