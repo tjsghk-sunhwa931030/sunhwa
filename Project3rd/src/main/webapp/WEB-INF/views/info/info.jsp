@@ -21,18 +21,6 @@ UInfoDTO dto = new UInfoDTO();
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
-// 검색버튼 누르기  
-function search_init() {
-	btn_search_onclick();
-}
-
-
-function btn_search_onclick_init(){
-	/* document.frm.pageIndex.value = 1;
-	$("#uname").val($.trim($("#uname").val())); */
-	search_init();
-}  
-
 
 //체크박스 접었을때 (접었을때 전체가 디폴트로 나오는거 수정해야함 )
 function fn_box_text_set() {
@@ -220,7 +208,7 @@ function utypeClick(){
 					<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active"><br/>
 				
-			 <form id="checkFrm1" name="checkFrm1" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
+			 <form id="checkFrm" name="checkFrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -327,7 +315,7 @@ function utypeClick(){
 				<div class="tbl_list">
 					<br>
 					
-		<form id="checkFrm2" name="checkFrm2">	
+		
 					<table class="list_tbl01">
 						<caption>대학 리스트</caption>
 						<colgroup>
@@ -376,7 +364,7 @@ function utypeClick(){
 							</c:forEach>
 						</tbody>
 					</table>
-		</form>
+	
 				</div>
 				<!-- //대학리스트 -->
 		
@@ -385,13 +373,13 @@ function utypeClick(){
 			
 			<!-- 전문대학교 시작 -->
 				<div id="junmun" class="container tab-pane fade" onclick="javascript:utypeClick();"><br/>
-		<form id="checkfrm1" name="checkfrm1" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
+		<form id="checkfrm" name="checkfrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
 				
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
 							<div class="tbl_wrap">
-							<input type="hidden" id="u_type" name="u_type" value="전문대" />
+						<input type="hidden" id="u_type" name="u_type" value="전문대" />
 								<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
 								<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 								<table class="search_tbl01">
@@ -488,7 +476,7 @@ function utypeClick(){
 				<div class="tbl_list">
 					<br>
 					
-		<form id="checkFrm2" name="checkFrm2">	
+	
 					<table class="list_tbl01">
 						<caption>대학 리스트</caption>
 						<colgroup>
@@ -536,7 +524,7 @@ function utypeClick(){
 							</c:forEach>
 						</tbody>
 					</table>
-				</form>	
+
 				</div>
 				<!-- //대학리스트 -->
 			

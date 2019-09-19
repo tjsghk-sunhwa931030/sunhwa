@@ -13,10 +13,19 @@ public interface UInfoDAOImpl {
 	public int getTotalCount();
 	
 
-	public ArrayList<UInfoDTO> listPage();
+	public ArrayList<HInfoDTO> listPage();
 
-	public ArrayList<UInfoDTO> searchC(
+	public ArrayList<AllInfoDTO> searchC(
 			String u_type,String uname,String location,String p_type
+			);
+	
+	public ArrayList<AllInfoDTO> searchH(
+			String u_type,String uname, String major, String major1, String major2, String location
+			);
+	
+	public ArrayList<AllInfoDTO> searchJ(
+			String u_type,String uname, String recruit_time, String enter_type, String enter_name, String location,
+			String enter_ele,String enter_test, String major, String major1, String major2
 			);
 	
 	/*
