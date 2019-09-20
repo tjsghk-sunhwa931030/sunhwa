@@ -26,11 +26,11 @@
 .bor_no { border-bottom: none !important; }
 
 .search_tbl01 .list{ float: left; background: #fff; font-size: 15px;  }
-.search_tbl01 .list h3{ background: #783712 no-repeat right center; color: #fff; padding: 8px 0; text-align: center; font-size: 14px; }
+.search_tbl01 .list .btn{ background: #783712 no-repeat right center; color: #fff; padding: 8px 0; text-align: center; font-size: 14px; width: 100%; }
 .search_tbl01 .list .menu{ height: 128px; padding: 5px 0; font-size: 14px; border: 1px solid #ddd; border-right: none; }
 .search_tbl01 .list .menu li{ line-height: 1.8; color: #333; }
 .search_tbl01 .list .menu li a{ display: block; padding-left: 22px; }
-.search_tbl01 .list .menu li a.on{ background: #d62260; color:#fff; }
+
 
 .search_tbl01 .box_txt { position: absolute; top: 140px; left: 32%; padding: 10px 20px; background: #ddd; opacity: 0.7; z-index: 100; font-size: 13px; }
 .search_tbl01 .box_wrap{ width: 100%; display: inline-block; }
@@ -116,22 +116,4 @@
 .uv_comp_box_wrap .btn_bt{ border: 1px solid #ddd; border-top: none; padding-bottom: 14px; margin-top: -2px; }
 .uv_comp_box_wrap .btn_bt a{ display: block; background: #ea6b50; color: #fff; padding: 7px 0; width: 92px; margin: 0 auto; font-size: 14px; text-align: center; }
 
-
-
-/* 20180104_진로정보 추가 */
-.job_info_box{ width: 100%; display: inline-block; margin-top: 20px; }
-.job_info_box .top{ font-size: 14px; color: #555; line-height: 20px; }
-.job_info_box .top li{ padding-left: 12px; background: url('../images/bullet_03.gif') no-repeat left 9px; margin-bottom: 10px; }
-.job_info_box .info{ padding: 60px 30px 60px 170px; background:  no-repeat 20px center; }
-.job_info_box .info h1{ font-size: 15px; font-weight: bold; margin-bottom: 6px; }
-.job_info_box .info h2{ font-size: 18px; font-weight: bold; margin-bottom: 10px; }
-.job_info_box .info p{ font-size: 14px; line-height: 20px; color: #555; }
-.job_info_box .info_img {}
-.job_info_box .info_img h3{ font-size: 14px; margin-bottom: 20px; line-height: 20px; }
-.job_info_box .info_img .img01{ padding: 30px 24px; border: 1px solid #ddd; background: #fbfbfb; width: 39%; margin-left: 20px; float: left; }
-.job_info_box .info_img .img02{ padding: 30px 24px; border: 1px solid #ddd; background: #fbfbfb; width: 39%; margin-left: 20px; float: left; }
-.job_info_box .info_img .img03{ padding: 30px 24px; border: 1px solid #ddd; background: #fbfbfb; margin-left: 20px; width: 87.3%; float: left; margin-top: 20px; position: relative; }
-.job_info_box .info_img .img03 h3{ position: absolute; top: 42px; right: 54px; }
-
-.job_info_box .red{color:#e60012; }
 

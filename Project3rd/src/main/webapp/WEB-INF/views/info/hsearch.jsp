@@ -1,3 +1,4 @@
+<%@page import="mybatis.UInfoDTO"%>
 <%@page import="mybatis.HInfoDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -57,6 +58,63 @@ function utypeClick(){
 	$('.tbResult').empty();
 	
  }
+
+
+function ch_major(s){
+	var outmajor1 = document.getElementById("sel_major1").textContent;
+	
+	document.getElementById("result_major1").value=s;
+	
+	
+	$.ajaxSetup({
+		type : "get",
+		contentType : "text/html;charset:utf-8",
+		error : function(e){
+		alert("실패"+e.status)
+		}
+	});
+	
+	$('#major1').change(function(){
+		$.ajax({
+			url : "./mybatis/mapper/UInfoMapper",
+			dataType : "xml",
+			data : {
+				major1Idx : $("#major1").val()
+			},
+			success : function(d){
+				$('#major2').val(d);
+				$('#rmajor1').text(d);
+				
+			}
+		
+		});
+	});
+	
+	
+	$('#major2').change(function(){
+		$.ajax({
+			url : "./mybatis/mapper/UInfoMapper.xml",
+			dataType : "xml",
+			data : {
+				major2Idx : $("#major2").val()
+				
+			},
+			success : function(d){
+				
+				$('#major').append(d);
+	
+				$('#rmajor').text(major2);
+			
+			}
+			
+		
+		});
+		
+		
+	});
+
+}
+
 
 
 </script>
@@ -146,71 +204,51 @@ function utypeClick(){
 										<!-- 계열 선택 전 문구 -->
 										<!-- <div class="box_txt" id="box_keyword_txt" style="top:200px;">학과관련 키워드 혹은 해당 계열을 선택합니다.</div> -->
 										<!-- //계열 선택 전 문구 -->
-										<div class="box_wrap" id="searchBox">
-											<div class="list box01">
-												<h3>대계열</h3>
-												
-												<div class="menu" id="major1">
-													<input id="major1" name="major1" type="hidden" value="">
-				            						<ul>
-				            							<li>대계열</li>
-				            							<li></li>
-				            							<li></li>
-				            							<li></li>
-				            						</ul>
+										<!-- <form  action=""> -->
+											<div class="box_wrap" id="searchBox">
+												<div class="list box01" class="dropdown">
+													<button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+												      대학분류 [대계열]
+												    </button>
+													<div class="menu dropdown-menu" id="major1">
+														<input id="major1" name="major1" type="hidden" value="">
+															<c:forEach var="col" items="${listsM1}">
+																<a class="dropdown-item" id="sel_major1" href="#" onclick="ch_major();" >${col.major1}</a>
+															</c:forEach>
+													</div>
+													<br/>
+													<input type="text" id="resul_major1" name="resul_major1" value="result_major1" />
 												</div>
-												
-											</div>
-											<div class="list box02">
-												<h3>중계열</h3>
-												<div class="menu" id="major2">
-													<input id="major2" name="major2" type="hidden" value="">
-				            						<ul>
-				            							<li>중계열</li>
-				            							<li></li>
-				            							<li></li>
-				            							<li></li>
-				            						</ul>
+												<div class="list box02" class="dropdown">
+													<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+												      대학분류 [중계열]
+												    </button>
+													<div class="menu dropdown-menu" id="major1">
+														<input id="major2" name="major2" type="hidden" value="">
+															<c:if test="major1 != null">
+																<c:forEach var="col" items="${listsM1}">
+																	<a class="dropdown-item" id="major2" onclick="ch_major();">${col.major2}</a>
+																</c:forEach>
+																	<input type="text" id="mojor2result" name="mojor2result" />
+															</c:if>
+													</div>
+												</div>
+												<div class="list box04" class="dropdown">
+													<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+												      학과명
+												    </button>
+													<div class="menu dropdown-menu" id="major1">
+														<input id="major" name="major" type="hidden" value="">
+															<c:if test="major1 !=null && major2!==null">
+																<c:forEach var="col" items="${listsM1}">
+																	<a class="dropdown-item" id="major" onclick="ch_major();">${col.major}</a>
+																</c:forEach>
+																	<input type="text" id="mojorresult" name="mojorresult" />
+															</c:if>
+													</div>
 												</div>
 											</div>
-											<div class="list box04">
-												<h3>학과명</h3>
-												<div class="menu" id="major">
-													<input id="major" name="major" type="hidden" value="">
-				            						<ul>
-				            							<li>학과명</li>
-				            							<li></li>
-				            							<li></li>
-				            							<li></li>
-				            						</ul>
-												</div>
-											</div>
-										</div>
-										
-										<%-- <!-- 키워드로 검색시 -->
-										<div class="box_wrap" id="keywordBox" style="display: none;">
-											<ul class="h3">
-												<li class="h3_01">대계열</li>
-												<li class="h3_02">중계열</li>
-												<li class="h3_03">소계열</li>
-												<li class="h3_04"><input type="checkbox" name="chk_keySubjct_all" id="chk_keySubjct_all" onclick="fn_chkKeywordSubjct_onclick()"><label for="chk_keySubjct_all">학과명</label></li>
-											</ul>
-											<div class="keyword_list_box">
-												<table class="search_tbl02">
-													<caption>검색박스</caption>
-													<colgroup>
-														<col style="width:20%;">
-														<col style="width:20%;">
-														<col style="width:26%;">
-														<col>
-													</colgroup>
-													<tbody id="tbKeyword">
-													</tbody>
-												</table>
-											</div>
-										</div>
-										<!-- //키워드로 검색시 --> --%>
-			
+										<!-- </form> -->
 									</td>
 								</tr>
 								<tr>
@@ -254,8 +292,10 @@ function utypeClick(){
 			
 			<!-- search_tbl_box -->
 				<div class="search_box_btn">
-						<button type="submit" title="검색" class="btn_searchAll btn btn-dark" >검색</button>
+							<button type="submit" title="검색" class="btn_searchAll btn btn-dark" >검색</button>
 				</div>
+				
+				
 	</form>
 		
 			<!-- 대학리스트 -->

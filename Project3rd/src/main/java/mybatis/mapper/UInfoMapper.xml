@@ -41,7 +41,7 @@
  <!-- 전형 검색 체크리스트 -->	
  	<select  id="searchJ" resultType="mybatis.AllInfoDTO" >
  		SELECT * FROM info_junh INNER JOIN info_univ ON info_junh.uname = info_univ.uname
- 								INNER JOIN info_major On info_junh.idx = info_junh.idx
+ 								INNER JOIN info_major On info_junh.idx = info_major.idx
  			WHERE u_type =#{param1,jdbcType=VARCHAR}
  			AND	info_univ.uname LIKE '%'||#{param2}||'%'
 			AND recruit_time LIKE '%'||#{param3}||'%'
@@ -55,6 +55,10 @@
 			AND major2 LIKE '%'||#{param11}||'%'
  	</select>
  	
+ 	
+ 	<select id="listM1" resultType="mybatis.AllInfoDTO">
+ 		SELECT * FROM info_major
+ 	</select>
  	
 	
  </mapper>

@@ -112,13 +112,14 @@ public class InfoController {
 	public String hsearch(Model model, HttpServletRequest req) {
 		
 		
-		/*
-		 * ArrayList<HInfoDTO> listsH =
-		 * sqlSession.getMapper(UInfoDAOImpl.class).listPage();
-		 * 
-		 * 
-		 * model.addAttribute("listsH", listsH);
-		 */
+		
+		  ArrayList<AllInfoDTO> listsM1 = sqlSession.getMapper(UInfoDAOImpl.class).listM1(
+				  
+				  );
+		  		
+		  
+		  model.addAttribute("listsM1", listsM1);
+		
 		 
 		
 		
@@ -128,7 +129,6 @@ public class InfoController {
 	//(학과정보) 체크된 폼값 전달받음 
 		@RequestMapping("/checkAction2.do")
 		public String checkAction2(HttpServletRequest req, Model model, HttpSession session) {
-
 	
 		 //체크한 값
 			 ArrayList<AllInfoDTO> listsH =sqlSession.getMapper(UInfoDAOImpl.class).searchH(
@@ -201,22 +201,41 @@ public class InfoController {
 						 req.getParameter("major2")
 					);
 						 
-				 model.addAttribute("listsH", listsJ);
+				 model.addAttribute("listsJ", listsJ);
 				 
 				 System.out.println(listsJ.size());
 
 				 System.out.println("u_type"+req.getParameter("u_type"));
 				 System.out.println("uname="+
 						 req.getParameter("searchWord"));
+				 
 				 System.out.println("location="+
 						 req.getParameter("location"));
+				 
 				 System.out.println("searchKeyword="+
 						 req.getParameter("major"));
+				 
 				 System.out.println("major1="+
 						 req.getParameter("major1"));
+				 
 				 System.out.println("major2="+
 						 req.getParameter("major2"));
-			
+				 
+				 System.out.println("recruit_time="+
+						 req.getParameter("recruit_time"));
+				 
+				 System.out.println("enter_type="+
+						 req.getParameter("enter_type"));
+				 
+				 System.out.println("enter_name="+
+						 req.getParameter("enter_name"));
+				 
+				 System.out.println("enter_ele="+
+						 req.getParameter("enter_ele"));
+				 
+				 System.out.println("enter_test="+
+						 req.getParameter("enter_test"));	
+				 
 				 System.out.println(listsJ);
 				 
 				 
