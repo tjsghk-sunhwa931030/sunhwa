@@ -32,14 +32,7 @@ public class InfoController {
 	@RequestMapping("/info.do")
 	public String info(Model model, HttpServletRequest req) {
 				
-		/*
-		 * ArrayList<UInfoDTO> lists =
-		 * sqlSession.getMapper(UInfoDAOImpl.class).listPage();
-		 * 
-		 * 
-		 * model.addAttribute("lists", lists);
-		 */
-		
+	
 		
 		return "info/info";
 	}
@@ -48,22 +41,8 @@ public class InfoController {
 	@RequestMapping("/checkAction.do")
 	public String checkAction(HttpServletRequest req, Model model, HttpSession session) {
 		
-		/* ModelAndView mv = new ModelAndView(); */
 		
-		/*
-		 * UInfoDTO dto = sqlSession.getMapper(UInfoDAOImpl.class).search(
-		 * req.getParameter("uname"), req.getParameter("location"),
-		 * req.getParameter("p_type"), req.getParameter("jobrate"),
-		 * req.getParameter("tuition") );
-		 */
-		
-		int totalRecordCount = 
-				sqlSession.getMapper(UInfoDAOImpl.class).getTotalCount();
-		model.addAttribute("totalRecordCount", totalRecordCount);
-		
-		
-	 //체크한 값
-		
+	
 		 ArrayList<AllInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
 				 req.getParameter("u_type"),
 				 req.getParameter("searchWord"),
@@ -72,7 +51,7 @@ public class InfoController {
 				
 			);
 		 
-		/* ArrayList<UInfoDTO> lists2 =sqlSession.getMapper(UInfoDAOImpl.class).searchW( */
+	
 				 
 		 model.addAttribute("lists", lists);
 		 
@@ -88,11 +67,7 @@ public class InfoController {
 	
 		 System.out.println(lists);
 		 
-		 
-		/*
-		 * mv.addObject("lists", lists); System.out.println(lists);
-		 * mv.setViewName("info/info");
-		 */
+	
 		 
 		return "info/info";
 		
@@ -113,9 +88,7 @@ public class InfoController {
 		
 		
 		
-		  ArrayList<AllInfoDTO> listsM1 = sqlSession.getMapper(UInfoDAOImpl.class).listM1(
-				  
-				  );
+		  ArrayList<AllInfoDTO> listsM1 = sqlSession.getMapper(UInfoDAOImpl.class).listM1();
 		  		
 		  
 		  model.addAttribute("listsM1", listsM1);
@@ -160,15 +133,43 @@ public class InfoController {
 		
 			 System.out.println(listsH);
 			 
-			 
-			/*
-			 * mv.addObject("lists", lists); System.out.println(lists);
-			 * mv.setViewName("info/info");
-			 */
-			 
+		
 			return "info/hsearch";
 			
 		}
+		
+	
+	  @RequestMapping("/CallMajor2.do") public String CallMajor2(HttpServletRequest
+	  req, Model model, HttpSession session) {
+	  
+	  ArrayList<AllInfoDTO> listsMj2 =
+	  sqlSession.getMapper(UInfoDAOImpl.class).listMj2( req.getParameter("major1")
+	  );
+	  
+	  model.addAttribute("listsMj2", listsMj2);
+	  
+	  return "info/CallMajor2"; 
+	  }
+	 
+	  
+	  
+	  @RequestMapping("/CallMajor3.do") 
+	  public String CallMajor3(HttpServletRequest req, Model model, HttpSession session) {
+		  
+		
+	  ArrayList<AllInfoDTO> listsMj3 = sqlSession.getMapper(UInfoDAOImpl.class).listMj3(
+	  
+	  req.getParameter("major1"),
+	  req.getParameter("major2")
+
+	  );
+	  
+	  model.addAttribute("listsMj3", listsMj3);
+	  
+	  return "info/CallMajor3";
+	  }
+	
+	
 		
 	
 ///////////////////////////////////////////////////////////////////////////	
@@ -200,7 +201,9 @@ public class InfoController {
 						 req.getParameter("major1"),
 						 req.getParameter("major2")
 					);
-						 
+				
+				 
+				
 				 model.addAttribute("listsJ", listsJ);
 				 
 				 System.out.println(listsJ.size());
@@ -238,11 +241,7 @@ public class InfoController {
 				 
 				 System.out.println(listsJ);
 				 
-				 
-				/*
-				 * mv.addObject("lists", lists); System.out.println(lists);
-				 * mv.setViewName("info/info");
-				 */
+		
 				 
 				return "info/jsearch";
 				

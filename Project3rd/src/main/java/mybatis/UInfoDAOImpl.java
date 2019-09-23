@@ -26,6 +26,12 @@ public interface UInfoDAOImpl {
 	public ArrayList<AllInfoDTO> listM1(
 			
 			);
+	public ArrayList<AllInfoDTO> listMj2(
+			String major1
+			);
+	public ArrayList<AllInfoDTO> listMj3(
+			String major1,String major2
+			);
 	
 	
 	

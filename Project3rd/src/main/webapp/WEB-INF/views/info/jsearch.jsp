@@ -226,7 +226,7 @@ function checkboxFrm(fn){
 
 	
 
-	$.each(locationlist, function(index, item){
+	/* $.each(locationlist, function(index, item){
 		var location = item.value.toString();
 	
 		lst_location_list[index] = location;
@@ -260,7 +260,7 @@ function checkboxFrm(fn){
 		var enter_test = item.value.toString();
 
 		lst_enter_test_list[index] = enter_test;
-	});
+	}); */
 	
 
 }
