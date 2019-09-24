@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -45,7 +44,7 @@
  								INNER JOIN info_major On info_junh.idx = info_major.idx
  			WHERE u_type =#{param1,jdbcType=VARCHAR}
  			AND	info_univ.uname LIKE '%'||#{param2}||'%'
-			AND recruit_time LIKE '%'||#{param3}||'%' 
+			AND recruit_time LIKE '%'||#{param3}||'%'
 			AND enter_type LIKE '%'||#{param4}||'%'
 			AND enter_name LIKE '%'||#{param5}||'%'
 			AND location LIKE '%'||#{param6}||'%'

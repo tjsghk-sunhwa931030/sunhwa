@@ -88,11 +88,13 @@ public class InfoController {
 		
 		
 		
-		  ArrayList<AllInfoDTO> listsM1 = sqlSession.getMapper(UInfoDAOImpl.class).listM1();
-		  		
+		
+		  ArrayList<AllInfoDTO> listsM1 =
+		  sqlSession.getMapper(UInfoDAOImpl.class).listM1();
+		  
 		  
 		  model.addAttribute("listsM1", listsM1);
-		
+		 
 		 
 		
 		
@@ -108,7 +110,7 @@ public class InfoController {
 				
 					 req.getParameter("u_type"),
 					 req.getParameter("searchWord"),
-					 req.getParameter("searchKeyword"), //학과명
+					 req.getParameter("major"), //학과명
 					 req.getParameter("major1"),	//대계열명
 					 req.getParameter("major2"),		//중계열
 					 req.getParameter("location")
@@ -124,7 +126,7 @@ public class InfoController {
 					 req.getParameter("searchWord"));
 			 System.out.println("location="+
 					 req.getParameter("location"));
-			 System.out.println("searchKeyword="+
+			 System.out.println("major="+
 					 req.getParameter("major"));
 			 System.out.println("major1="+
 					 req.getParameter("major1"));
@@ -138,12 +140,12 @@ public class InfoController {
 			
 		}
 		
-	
-	  @RequestMapping("/CallMajor2.do") public String CallMajor2(HttpServletRequest
-	  req, Model model, HttpSession session) {
+	//대계열에서 선택
+	  @RequestMapping("/CallMajor2.do") 
+	  public String CallMajor2(HttpServletRequest req, Model model, HttpSession session) {
 	  
-	  ArrayList<AllInfoDTO> listsMj2 =
-	  sqlSession.getMapper(UInfoDAOImpl.class).listMj2( req.getParameter("major1")
+	  ArrayList<AllInfoDTO> listsMj2 = sqlSession.getMapper(UInfoDAOImpl.class).listMj2(
+			  req.getParameter("major1")
 	  );
 	  
 	  model.addAttribute("listsMj2", listsMj2);
@@ -152,7 +154,7 @@ public class InfoController {
 	  }
 	 
 	  
-	  
+	 //중계열에서 선택 
 	  @RequestMapping("/CallMajor3.do") 
 	  public String CallMajor3(HttpServletRequest req, Model model, HttpSession session) {
 		  
@@ -176,7 +178,18 @@ public class InfoController {
 	
 	//전형 홈페이지 
 	@RequestMapping("/jsearch.do")
-	public String jsearch() {
+	public String jsearch(Model model, HttpServletRequest req) {
+		
+		
+		ArrayList<AllInfoDTO> listM1 =sqlSession.getMapper(UInfoDAOImpl.class).listM1(
+						
+						  );
+				  
+				  
+				  model.addAttribute("listsM1", listM1);
+				  
+		
+		
 		
 		return "info/jsearch";
 	}
@@ -197,7 +210,7 @@ public class InfoController {
 						 req.getParameter("location"),
 						 req.getParameter("enter_ele"),
 						 req.getParameter("enter_test"),
-						 req.getParameter("searchKeyword"),
+						 req.getParameter("major"),
 						 req.getParameter("major1"),
 						 req.getParameter("major2")
 					);

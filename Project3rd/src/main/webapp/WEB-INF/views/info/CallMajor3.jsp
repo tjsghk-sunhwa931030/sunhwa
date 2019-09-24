@@ -10,9 +10,9 @@
 
 
 <c:forEach var="col" items="${listsMj3}">
-	<a class="dropdown-item" id="major" onclick="ch_major();">${col.major3}</a>
+	<a class="dropdown-item" onclick="ch_major3('${col.major}');">${col.major}</a>
 </c:forEach> 
-	<input type="text" id="major3" name="major3" /> 
+	
 	
 	
 

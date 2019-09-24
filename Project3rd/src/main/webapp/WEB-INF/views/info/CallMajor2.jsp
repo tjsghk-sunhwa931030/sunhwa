@@ -9,9 +9,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:forEach var="col" items="${listsMj2}">
-	<a class="dropdown-item" id="major" onclick="ch_major();">${col.major2}</a>
+	<a class="dropdown-item" onclick="ch_major2('${col.major2}');" >${col.major2}</a>
 </c:forEach> 
-	<input type="text" id="major2" name="major2" /> 
+	
 	
 	
 

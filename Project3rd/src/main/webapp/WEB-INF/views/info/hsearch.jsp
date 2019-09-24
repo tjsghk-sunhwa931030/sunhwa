@@ -1,109 +1,23 @@
 <%@page import="mybatis.UInfoDTO"%>
 <%@page import="mybatis.HInfoDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <link rel="stylesheet" href="style/leftmenustyle.css" />
 <link rel="stylesheet" href="style/basic.css" />
 <link rel="stylesheet" href="style/info.css" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src='https://kit.fontawesome.com/a076d05399.js'></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-//지역 체크박스
-function locationList_onclick(lct){
-	
-	if($(lct).attr("id") == "chk_location_all"){
-		$("#chk_location_all").prop("checked",true);
-		$("input[id^='chk_location']:not(input[id='chk_location_all'])").prop("checked",false);
-	}else{
-		
-		$("#chk_location_all").prop("checked",false);
-		var chk_location_list = $("input[id^='chk_location']:checked").get();
-		
-		if(chk_location_list.length < 1){
-			$("#chk_location_all").prop("checked",true);
-		}
-	}	
-}
-//폼값 전달하기
-function checkboxFrm(fn){
-	
-	var fn = document.checkFrm;
-	
-	var lst_location_list = [];
-	var locationlist = $("input[id^='chk_location']:checked").get();
-	$.each(locationlist, function(index, item){
-		var location = item.value.toString();
-	
-		lst_location_list[index] = location;
-	});
-}
-function utypeClick(){
-	$('.tbResult').empty();
-	
- }
- 
- 
-function ch_major(maj){
-	
-	$('#major1').change(function(){
-		$.ajax({
-			url : "./CallMajor2.do",
-			dataType : "html",
-			data : {
-				
-			},
-			success : function(d){
-				$('#major2').val(d);
-				$('#rmajor1').text(d);
-				
-			},
-			error : function(e){
-				alert("실패"+e.status)
-				}
-		
-		});
-	});
-	
-	
-	$('#major2').change(function(){
-		$.ajax({
-			url : "./mybatis/mapper/UInfoMapper.xml",
-			dataType : "xml",
-			data : {
-				major2Idx : $("#major2").val()
-				
-			},
-			success : function(d){
-				
-				$('#major').append(d);
-	
-				$('#rmajor').text(major2);
-			
-			}
-			
-		
-		});
-		
-		
-	});
-}
-</script>
-
-
 
 <style type="text/css">
 .lefttoptext {
@@ -127,6 +41,109 @@ function ch_major(maj){
 	display: none;
 }
 </style>
+
+
+<script type="text/javascript">
+//지역 체크박스
+function locationList_onclick(lct){
+	
+	if($(lct).attr("id") == "chk_location_all"){
+		$("#chk_location_all").prop("checked",true);
+		$("input[id^='chk_location']:not(input[id='chk_location_all'])").prop("checked",false);
+	}
+	else{		
+		$("#chk_location_all").prop("checked",false);
+		var chk_location_list = $("input[id^='chk_location']:checked").get();
+		
+		if(chk_location_list.length < 1){
+			$("#chk_location_all").prop("checked",true);
+		}
+	}	
+}
+//폼값 전달하기
+function checkboxFrm(fn){
+	
+	var fn = document.checkFrm;
+	
+	var lst_location_list = [];
+	var locationlist = $("input[id^='chk_location']:checked").get();
+	$.each(locationlist, function(index, item){
+		var location = item.value.toString();	
+		lst_location_list[index] = location;
+	});
+}
+
+function utypeClick(){
+	$('.tbResult').empty();
+}
+ 
+ 
+ //대계열 선택 
+function ch_major(maj){
+
+	 document.getElementById('major1').value =maj;
+		
+		$("#button2").click(function(){
+			$.ajax({
+				url : "./CallMajor2.do",
+				dataType : "html",
+				data : {
+					major1 : maj
+				},
+				success : function(maj2){
+					
+					$('#maj2div').append(maj2);
+					
+					document.getElementById('major2').value = maj2;
+					
+					
+				},
+				error : function(e){
+					alert("실패"+e.status)
+				}
+			
+			});
+		});
+
+}
+//일반대만 사용 > 중계열에서 선택
+function ch_major2(maj2){
+		
+	document.getElementById('major2').value =maj2;
+	var maj= document.getElementById('major1').value;
+	
+	$('#button3').click(function(){
+		$.ajax({
+			url : "./CallMajor3.do",
+			dataType : "html",
+			data : {
+				major1: maj,
+				major2 : maj2
+			},
+			success : function(maj3){
+				$('#maj3div').append(maj3);
+				//document.getElementById('major3').value = maj3;
+			},
+			error : function(e){
+				alert("실패"+e.status)
+			}
+		});
+	});
+}
+
+function ch_major3(maj3){
+	
+	document.getElementById('major3').value =maj3;
+	document.getElementById('major').value =maj3;
+	
+	var maj= document.getElementById('major1').value;
+	var maj2= document.getElementById('major2').value;
+
+}
+
+
+</script>
+
 </head>
 <body>
 	<%@include file="../main/head.jsp"%>
@@ -163,13 +180,13 @@ function ch_major(maj){
 				<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active">
 					<br />
-					<form id="checkFrm" name="checkFrm" action="./checkAction2.do"
+	<!-- 일반대 -->	<form id="checkFrm" name="checkFrm" action="./checkAction2.do"
 						method="get" onsubmit="return checkboxFrm();">
 						<div class="search_tbl_box">
 							<fieldset>
 								<!-- 학과 -->
 								<div class="tbl_wrap">
-									<input type="hidden" id="u_type" name="u_type" value="일반대" />
+			<!-- 일반대 -->		<input type="hidden" id="u_type" name="u_type" value="일반대" />
 									<table class="search_tbl01">
 										<%-- <caption>검색박스</caption> --%>
 										<colgroup>
@@ -180,13 +197,9 @@ function ch_major(maj){
 										<tbody id="tbsersDetail">
 											<tr>
 												<th scope="col"><label for="univ_nm">대학</label></th>
-												<td colspan="2"><input id="searchWord"
-													name="searchWord" title="대학명검색" placeholder="대학명을 입력해주세요."
-													type="text" value="" maxlength="30">
-													<button type="submit" title="검색"
-														class="btn btn-default btn-sm btn btn-outline-dark"
-														style="border-color: #783712"
-														onclick="javascript:btn_search_onclick_init()">
+												<td colspan="2">
+												<input id="searchWord" name="searchWord" title="대학명검색" placeholder="대학명을 입력해주세요." type="text" value="" maxlength="30">
+													<button type="submit" title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
 														<i class="fa fa-search" style="color: #783712"></i>&nbsp;<b>검색</b>
 													</button></td>
 											</tr>
@@ -194,131 +207,94 @@ function ch_major(maj){
 												<th scope="row" rowspan="2"><label for="uv">학과</label>
 												</th>
 
-												<td colspan="2"><input id="searchKeyword"
-													name="searchKeyword" title="학과검색어"
-													onkeypress="if(event.keyCode==13){btn_search_keyword_init();}"
-													style="ime-mode: active" placeholder="학과관련 키워드"
-													class="search_input" type="text" value="" maxlength="30">
-													<button title="검색"
-														class="btn btn-default btn-sm btn btn-outline-dark"
-														style="border-color: #783712">
+												<td colspan="2">
+													<input id="major" name="major" title="학과검색어"  onkeypress="if(event.keyCode==13){btn_search_keyword_init();}" 
+													style="ime-mode: active" placeholder="학과관련 키워드" class="search_input" type="text" value="" maxlength="30">
+													<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
 														<i class="fa fa-search" style="color: #783712"></i>&nbsp;<b>검색</b>
-													</button></td>
+													</button>
+												</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="list_wrap">
 
 													<div class="box_wrap" id="searchBox">
 														<div class="list box01" class="dropdown">
-															<button type="submit"
-																class="btn btn-default dropdown-toggle"
-																data-toggle="dropdown">대학분류 [대계열]</button>
-															<div class="menu dropdown-menu" id="major1">
-																<input id="major1" name="major1" type="hidden" value="">
+															<button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [대계열]</button>
+															<div class="menu dropdown-menu" >
 																<c:forEach var="col" items="${listsM1}">
-																	<a class="dropdown-item" id="sel_major1" href="#"
-																		onclick="ch_major();">${col.major1}</a>
+																		<a class="dropdown-item"  onclick="ch_major('${col.major1}');">${col.major1}</a>
 																</c:forEach>
-															</div>
-															<br /> <input type="text" id="result_major1"
-																name="major1" value="result_major1" />
+															</div><br /> 
+																<input type="text" id="major1" name="major1" value="" />
 														</div>
+														
 														<div class="list box02" class="dropdown">
-															<button type="button"
-																class="btn btn-default dropdown-toggle"
-																data-toggle="dropdown">대학분류 [중계열]</button>
-															<div class="menu dropdown-menu" id="major1">
-																<input id="major2" name="major2" type="hidden" value="">
-																<c:if test="major1 != null">
-																	<c:forEach var="col" items="${listsM1}">
-																		<a class="dropdown-item" id="major2"
-																			onclick="ch_major();">${col.major2}</a>
-																	</c:forEach>
-																	<input type="text" id="mojor2result"
-																		name="mojor2result" />
-																</c:if>
-															</div>
+															<button type="button" id="button2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [중계열]</button>
+															<div class="menu dropdown-menu" id="maj2div" ></div>
+															<br /> 
+																<input type="text" id="major2" name="major2" value="" />
 														</div>
+														
 														<div class="list box04" class="dropdown">
-															<button type="button"
-																class="btn btn-default dropdown-toggle"
-																data-toggle="dropdown">학과명</button>
-															<div class="menu dropdown-menu" id="major1">
-																<input id="major" name="major" type="hidden" value="">
-																<c:if test="major1 !=null && major2!==null">
-																	<c:forEach var="col" items="${listsM1}">
-																		<a class="dropdown-item" id="major"
-																			onclick="ch_major();">${col.major}</a>
-																	</c:forEach>
-																	<input type="text" id="mojorresult" name="mojorresult" />
-																</c:if>
-															</div>
+															<button type="button" id="button3" class="btn btn-default dropdown-toggle" data-toggle="dropdown">학과명</button>
+															<div class="menu dropdown-menu" id="maj3div"></div>	
+															<br/>
+																<input type="text" id="major3" name="major" value=""  />
 														</div>
-													</div> <!-- </form> -->
+														
+													</div> 
+													
 												</td>
 											</tr>
+											
 											<tr>
 												<th scope="row" rowspan="3"><label for="uv">지역</label>
 												</th>
 
 											</tr>
+											
 											<tr>
 												<td class="tt">지역</td>
-												<td><input type="checkbox" name="location"
-													id="chk_location_all" value="%" checked="checked"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_all">전체</label> <input type="checkbox"
-													name=location id="chk_location_1" value="강원"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_1">강원</label> <input type="checkbox"
-													name="location" id="chk_location_2" value="경기"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_2">경기</label> <input type="checkbox"
-													name="location" id="chk_location_3" value="경남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_3">경남</label> <input type="checkbox"
-													name="location" id="chk_location_4" value="경북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_4">경북</label> <input type="checkbox"
-													name="location" id="chk_location_5" value="광주"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_5">광주</label> <input type="checkbox"
-													name="location" id="chk_location_6" value="대구"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_6">대구</label> <input type="checkbox"
-													name="location" id="chk_location_7" value="대전"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_7">대전</label> <input type="checkbox"
-													name="location" id="chk_location_8" value="부산"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_8">부산</label> <br /> <input
-													type="checkbox" name="location" id="chk_location_9"
-													value="서울" onclick="locationList_onclick(this);"><label
-													for="chk_location_9">서울</label> <input type="checkbox"
-													name="location" id="chk_location_10" value="세종"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_10">세종</label> <input type="checkbox"
-													name="location" id="chk_location_11" value="울산"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_11">울산</label> <input type="checkbox"
-													name="location" id="chk_location_12" value="인천"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_12">인천</label> <input type="checkbox"
-													name="location" id="chk_location_13" value="전남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_13">전남</label> <input type="checkbox"
-													name="location" id="chk_location_14" value="전북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_14">전북</label> <input type="checkbox"
-													name="location" id="chk_location_15" value="제주"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_15">제주</label> <input type="checkbox"
-													name="location" id="chk_location_16" value="충남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_16">충남</label> <input type="checkbox"
-													name="location" id="chk_location_17" value="충북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_17">충북</label></td>
+												<td>
+													<input type="checkbox" name="location"id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
+													<label for="chk_location_all">전체</label> 
+													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);">
+													<label for="chk_location_1">강원</label> 
+													<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);">
+													<label for="chk_location_2">경기</label> 
+													<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);">
+													<label for="chk_location_3">경남</label> 
+													<input type="checkbox" name="location" id="chk_location_4" value="경북" onclick="locationList_onclick(this);">
+													<label for="chk_location_4">경북</label> 
+													<input type="checkbox" name="location" id="chk_location_5" value="광주" onclick="locationList_onclick(this);">
+													<label for="chk_location_5">광주</label> 
+													<input type="checkbox" name="location" id="chk_location_6" value="대구" onclick="locationList_onclick(this);">
+													<label for="chk_location_6">대구</label> 
+													<input type="checkbox" name="location" id="chk_location_7" value="대전" onclick="locationList_onclick(this);">
+													<label for="chk_location_7">대전</label>
+													<input type="checkbox" name="location" id="chk_location_8" value="부산" onclick="locationList_onclick(this);">
+													<label for="chk_location_8">부산</label> 
+													<br /> 
+													<input type="checkbox" name="location" id="chk_location_9" value="서울" onclick="locationList_onclick(this);">
+													<label for="chk_location_9">서울</label> 
+													<input type="checkbox" name="location" id="chk_location_10" value="세종" onclick="locationList_onclick(this);">
+													<label for="chk_location_10">세종</label> 
+													<input type="checkbox" name="location" id="chk_location_11" value="울산" onclick="locationList_onclick(this);">
+													<label for="chk_location_11">울산</label> 
+													<input type="checkbox" name="location" id="chk_location_12" value="인천" onclick="locationList_onclick(this);">
+													<label for="chk_location_12">인천</label> 
+													<input type="checkbox" name="location" id="chk_location_13" value="전남" onclick="locationList_onclick(this);">
+													<label for="chk_location_13">전남</label> 
+													<input type="checkbox" name="location" id="chk_location_14" value="전북" onclick="locationList_onclick(this);">
+													<label for="chk_location_14">전북</label> 
+													<input type="checkbox" name="location" id="chk_location_15" value="제주" onclick="locationList_onclick(this);">
+													<label for="chk_location_15">제주</label> 
+													<input type="checkbox" name="location" id="chk_location_16" value="충남" onclick="locationList_onclick(this);">
+													<label for="chk_location_16">충남</label> 
+													<input type="checkbox" name="location" id="chk_location_17" value="충북" onclick="locationList_onclick(this);">
+													<label for="chk_location_17">충북</label>
+												</td>
 											</tr>
 										</tbody>
 
@@ -403,7 +379,7 @@ function ch_major(maj){
 							<fieldset>
 								<!-- 학과 -->
 								<div class="tbl_wrap">
-									<input type="hidden" id="u_type" name="u_type" value="전문대" />
+				<!-- 전문대 -->		<input type="hidden" id="u_type" name="u_type" value="전문대" />
 									<table class="search_tbl01">
 										<%-- <caption>검색박스</caption> --%>
 										<colgroup>
@@ -414,13 +390,9 @@ function ch_major(maj){
 										<tbody id="tbsersDetail">
 											<tr>
 												<th scope="col"><label for="univ_nm">대학</label></th>
-												<td colspan="2"><input id="searchWord"
-													name="searchWord" title="대학명검색" placeholder="대학명을 입력해주세요."
-													type="text" value="" maxlength="30">
-													<button type="submit" title="검색"
-														class="btn btn-default btn-sm btn btn-outline-dark"
-														style="border-color: #783712"
-														onclick="javascript:btn_search_onclick_init()">
+												<td colspan="2">
+												<input id="searchWord" name="searchWord" title="대학명검색" placeholder="대학명을 입력해주세요." type="text" value="" maxlength="30">
+													<button type="submit" title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712" onclick="javascript:btn_search_onclick_init()">
 														<i class="fa fa-search" style="color: #783712"></i>&nbsp;<b>검색</b>
 													</button></td>
 											</tr>
@@ -428,83 +400,42 @@ function ch_major(maj){
 												<th scope="row" rowspan="2"><label for="uv">학과</label>
 												</th>
 
-												<td colspan="2"><input id="searchKeyword"
-													name="searchKeyword" title="학과검색어"
-													onkeypress="if(event.keyCode==13){btn_search_keyword_init();}"
-													style="ime-mode: active" placeholder="학과관련 키워드"
-													class="search_input" type="text" value="" maxlength="30">
-													<button title="검색"
-														class="btn btn-default btn-sm btn btn-outline-dark"
-														style="border-color: #783712">
+												<td colspan="2">
+													<input id="major" name="major" title="학과검색어"  onkeypress="if(event.keyCode==13){btn_search_keyword_init();}" 
+													style="ime-mode: active" placeholder="학과관련 키워드" class="search_input" type="text" value="" maxlength="30">
+													<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
 														<i class="fa fa-search" style="color: #783712"></i>&nbsp;<b>검색</b>
-													</button></td>
+													</button>
+												</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="list_wrap">
-													<!-- 계열 선택 전 문구 --> <!-- <div class="box_txt" id="box_keyword_txt" style="top:200px;">학과관련 키워드 혹은 해당 계열을 선택합니다.</div> -->
-													<!-- //계열 선택 전 문구 -->
 													<div class="box_wrap" id="searchBox">
-														<div class="list box01">
-															<h3>대계열</h3>
-
-															<div class="menu" id="major1">
-																<input id="major1" name="major1" type="hidden" value="">
-																<ul>
-																	<li>대계열</li>
-																	<li></li>
-																	<li></li>
-																	<li></li>
-																</ul>
+														<div class="list box01" class="dropdown">
+															<button type="submit" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [대계열]</button>
+															<div class="menu dropdown-menu" >
+																<c:forEach var="col" items="${listsM1}">
+																		<a class="dropdown-item"  onclick="ch_major('${col.major1}');">${col.major1}</a>
+																</c:forEach>
 															</div>
-
+																<input type="text" id="major1" name="major1" value="" />
 														</div>
-														<div class="list box02">
-															<h3>중계열</h3>
-															<div class="menu" id="major2">
-																<input id="major2" name="major2" type="hidden" value="">
-																<ul>
-																	<li>중계열</li>
-																	<li></li>
-																	<li></li>
-																	<li></li>
-																</ul>
-															</div>
+														
+														<div class="list box02" class="dropdown">
+															<button type="button" id="button2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [중계열]</button>
+															<div class="menu dropdown-menu" id="maj2div" ></div>
+															<br /> 
+																<input type="text" id="major2" name="major2" value="" />
 														</div>
-														<div class="list box04">
-															<h3>학과명</h3>
-															<div class="menu" id="major">
-																<input id="major" name="major" type="hidden" value="">
-																<ul>
-																	<li>학과명</li>
-																	<li></li>
-																	<li></li>
-																	<li></li>
-																</ul>
-															</div>
+														
+														<div class="list box04" class="dropdown">
+															<button type="button" id="button3" class="btn btn-default dropdown-toggle" data-toggle="dropdown">학과명</button>
+															<div class="menu dropdown-menu" id="maj3div"></div>	
+															<br/>
+																<input type="text" id="major3" name="major" value=""  />
 														</div>
-													</div> <%-- <!-- 키워드로 검색시 -->
-										<div class="box_wrap" id="keywordBox" style="display: none;">
-											<ul class="h3">
-												<li class="h3_01">대계열</li>
-												<li class="h3_02">중계열</li>
-												<li class="h3_03">소계열</li>
-												<li class="h3_04"><input type="checkbox" name="chk_keySubjct_all" id="chk_keySubjct_all" onclick="fn_chkKeywordSubjct_onclick()"><label for="chk_keySubjct_all">학과명</label></li>
-											</ul>
-											<div class="keyword_list_box">
-												<table class="search_tbl02">
-													<caption>검색박스</caption>
-													<colgroup>
-														<col style="width:20%;">
-														<col style="width:20%;">
-														<col style="width:26%;">
-														<col>
-													</colgroup>
-													<tbody id="tbKeyword">
-													</tbody>
-												</table>
-											</div>
-										</div>
-										<!-- //키워드로 검색시 --> --%>
+														
+													</div> 
 
 												</td>
 											</tr>
@@ -515,61 +446,45 @@ function ch_major(maj){
 											</tr>
 											<tr>
 												<td class="tt">지역</td>
-												<td><input type="checkbox" name="location"
-													id="chk_location_all" value="%" checked="checked"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_all">전체</label> <input type="checkbox"
-													name=location id="chk_location_1" value="강원"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_1">강원</label> <input type="checkbox"
-													name="location" id="chk_location_2" value="경기"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_2">경기</label> <input type="checkbox"
-													name="location" id="chk_location_3" value="경남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_3">경남</label> <input type="checkbox"
-													name="location" id="chk_location_4" value="경북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_4">경북</label> <input type="checkbox"
-													name="location" id="chk_location_5" value="광주"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_5">광주</label> <input type="checkbox"
-													name="location" id="chk_location_6" value="대구"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_6">대구</label> <input type="checkbox"
-													name="location" id="chk_location_7" value="대전"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_7">대전</label> <input type="checkbox"
-													name="location" id="chk_location_8" value="부산"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_8">부산</label> <br /> <input
-													type="checkbox" name="location" id="chk_location_9"
-													value="서울" onclick="locationList_onclick(this);"><label
-													for="chk_location_9">서울</label> <input type="checkbox"
-													name="location" id="chk_location_10" value="세종"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_10">세종</label> <input type="checkbox"
-													name="location" id="chk_location_11" value="울산"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_11">울산</label> <input type="checkbox"
-													name="location" id="chk_location_12" value="인천"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_12">인천</label> <input type="checkbox"
-													name="location" id="chk_location_13" value="전남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_13">전남</label> <input type="checkbox"
-													name="location" id="chk_location_14" value="전북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_14">전북</label> <input type="checkbox"
-													name="location" id="chk_location_15" value="제주"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_15">제주</label> <input type="checkbox"
-													name="location" id="chk_location_16" value="충남"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_16">충남</label> <input type="checkbox"
-													name="location" id="chk_location_17" value="충북"
-													onclick="locationList_onclick(this);"><label
-													for="chk_location_17">충북</label></td>
+												<td>
+													<input type="checkbox" name="location"id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
+													<label for="chk_location_all">전체</label> 
+													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);">
+													<label for="chk_location_1">강원</label> 
+													<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);">
+													<label for="chk_location_2">경기</label> 
+													<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);">
+													<label for="chk_location_3">경남</label> 
+													<input type="checkbox" name="location" id="chk_location_4" value="경북" onclick="locationList_onclick(this);">
+													<label for="chk_location_4">경북</label> 
+													<input type="checkbox" name="location" id="chk_location_5" value="광주" onclick="locationList_onclick(this);">
+													<label for="chk_location_5">광주</label> 
+													<input type="checkbox" name="location" id="chk_location_6" value="대구" onclick="locationList_onclick(this);">
+													<label for="chk_location_6">대구</label> 
+													<input type="checkbox" name="location" id="chk_location_7" value="대전" onclick="locationList_onclick(this);">
+													<label for="chk_location_7">대전</label>
+													<input type="checkbox" name="location" id="chk_location_8" value="부산" onclick="locationList_onclick(this);">
+													<label for="chk_location_8">부산</label> 
+													<br /> 
+													<input type="checkbox" name="location" id="chk_location_9" value="서울" onclick="locationList_onclick(this);">
+													<label for="chk_location_9">서울</label> 
+													<input type="checkbox" name="location" id="chk_location_10" value="세종" onclick="locationList_onclick(this);">
+													<label for="chk_location_10">세종</label> 
+													<input type="checkbox" name="location" id="chk_location_11" value="울산" onclick="locationList_onclick(this);">
+													<label for="chk_location_11">울산</label> 
+													<input type="checkbox" name="location" id="chk_location_12" value="인천" onclick="locationList_onclick(this);">
+													<label for="chk_location_12">인천</label> 
+													<input type="checkbox" name="location" id="chk_location_13" value="전남" onclick="locationList_onclick(this);">
+													<label for="chk_location_13">전남</label> 
+													<input type="checkbox" name="location" id="chk_location_14" value="전북" onclick="locationList_onclick(this);">
+													<label for="chk_location_14">전북</label> 
+													<input type="checkbox" name="location" id="chk_location_15" value="제주" onclick="locationList_onclick(this);">
+													<label for="chk_location_15">제주</label> 
+													<input type="checkbox" name="location" id="chk_location_16" value="충남" onclick="locationList_onclick(this);">
+													<label for="chk_location_16">충남</label> 
+													<input type="checkbox" name="location" id="chk_location_17" value="충북" onclick="locationList_onclick(this);">
+													<label for="chk_location_17">충북</label>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -638,7 +553,7 @@ function ch_major(maj){
 							</tbody>
 						</table>
 					</div>
-					<!-- //대학리스트 -->
+					<!-- //대학리스트 --> 
 
 				</div>
 				<!-- 전문대학교 끝 -->
@@ -660,4 +575,3 @@ function ch_major(maj){
 	<%@include file="../main/bottom.jsp"%>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
