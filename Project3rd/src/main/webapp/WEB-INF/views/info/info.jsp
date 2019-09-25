@@ -15,6 +15,7 @@ UInfoDTO dto = new UInfoDTO();
 <link rel="stylesheet" href="style/basic.css" />
 <link rel="stylesheet" href="style/info.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -110,53 +111,28 @@ function checkboxFrm(fn){
 	
 	var fn = document.checkFrm;
 	
-	var lst_location_list = [];
-	var lst_ptype_list = [];
-	
-	var locationlist = $("input[id^='chk_location']:checked").get();
-	var ptypelist = $("input[id^='chk_ptype']:checked").get();
-
 	
 
-	$.each(locationlist, function(index, item){
-		var location = item.value.toString();
-	
-		lst_location_list[index] = location;
-	});
-	
-	$.each(ptypelist, function(index, item){
-		var ptype = item.value.toString();
 
-		lst_ptype_list[index] = ptype;
-	});
-	
-	/* $(document).ready(function(){
-		if($("#checkFrm1").click(function(){
-			$("#checkFrm2").each(function(){
-				this.reset();
-			});
-		}));
-	}); */
-	
-	
-
-/* 	fn.action="./checkAction.do";
+	fn.action="./checkAction.do";
 	fn.method = "get";
-	fn.submit(); */
+	fn.submit(); 
 	
 }
 
 
 function utypeClick(){
 
-	$('.tbResult').empty();
+	$('#tbResult').empty();
+	$('#tbResult2').empty();
 	
  }
 
+function click_interest(){
+	$("#noheart").toggle();
+	$("#heart").toggle();
 
-
-
-
+}
 
 
 </script>
@@ -208,7 +184,7 @@ function utypeClick(){
 					<!-- 일반대학교 시작 -->
 				<div id="ilban" class="container tab-pane active"><br/>
 				
-			 <form id="checkFrm" name="checkFrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
+			 <form id="checkFrm" name="checkFrm" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -241,7 +217,7 @@ function utypeClick(){
 							
 									<tbody id="tbDetail" style="">
 										<tr>
-											<th scope="col" rowspan="5">
+											<th scope="col" rowspan="2">
 												<label for="uv">대학<br>조건</label>
 											</th>
 										
@@ -317,9 +293,8 @@ function utypeClick(){
 					
 		
 					<table class="list_tbl01">
-						<caption>대학 리스트</caption>
+						<caption>검색버튼을 눌러주세요</caption>
 						<colgroup>
-						
 							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -329,7 +304,6 @@ function utypeClick(){
 							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:40px;">
-							
 						</colgroup>
 						<thead style="border-bottom: 1px solid #ddd;">
 							<tr style="border-bottom: none;">
@@ -345,23 +319,37 @@ function utypeClick(){
 								<th scope="col" rowspan="2">관심설정</th>
 							</tr>
 						</thead>
-						<tbody id="tbResult">
+						<tbody id="tbResult" >
+					
 							<c:forEach items="${lists }" var="row">
-								<tr>
-								</tr>
-								<tr>
-									<td id="hidden" scope="col" rowspan="2">${row.u_type}</td>			
-									<td scope="col" rowspan="2">${row.uname}</td>
-									<td scope="col" rowspan="2">${row.location}</td>
-									<td scope="col" rowspan="2">${row.rate_univ}</td>
-									<td scope="col" rowspan="2">${row.totalman}</td>
-									<td scope="col" rowspan="2">${row.jobrate}</td>
-									<td scope="col" rowspan="2">${row.tuition}</td>
-									<td scope="col" rowspan="2">${row.major_num}</td>
-									<td scope="col" rowspan="2">${row.enter_num}</td>
-									<td scope="col" rowspan="2">${row.interest}</td>
-								</tr>
+									
+										<tr>
+										</tr>
+										<tr>
+											<td id="hidden" scope="col" rowspan="2">${row.u_type}</td>			
+											<td scope="col" rowspan="2">${row.uname}</td>
+											<td scope="col" rowspan="2">${row.location}</td>
+											<td scope="col" rowspan="2">${row.rate_univ}</td>
+											<td scope="col" rowspan="2">${row.totalman}</td>
+											<td scope="col" rowspan="2">${row.jobrate}</td>
+											<td scope="col" rowspan="2">${row.tuition}</td>
+											<td scope="col" rowspan="2">${row.major_num}</td>
+											<td scope="col" rowspan="2">${row.enter_num}</td>
+											<td scope="col" rowspan="2">
+												<c:choose>
+													<c:when test="${id ne null }">
+														<i onclick="click_interest(this)" id="noheart" class="far fa-star" style='font-size:24px'></i>
+													</c:when>
+													
+												</c:choose>
+												<i onclick="click_interest(this)" id="noheart" class="far fa-star" style='font-size:24px'></i>
+												<i onclick="click_interest(this)" id="heart" class="fas fa-star" style='display:none; font-size:24px'></i>
+											</td>
+										</tr>
+								
 							</c:forEach>
+					
+					
 						</tbody>
 					</table>
 	
@@ -477,8 +465,8 @@ function utypeClick(){
 					<br>
 					
 	
-					<table class="list_tbl01">
-						<caption>대학 리스트</caption>
+					<table class="list_tbl01" id="result_list">
+						<caption>검색버튼을 눌러주세요</caption>
 						<colgroup>
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -505,7 +493,7 @@ function utypeClick(){
 								<th scope="col" rowspan="2">관심설정</th>
 							</tr>
 						</thead>
-						<tbody id="tbResult" class="tbResult">
+						<tbody id="tbResult2" class="tbResult">
 							<c:forEach items="${lists }" var="row">
 								<tr>
 								</tr>
@@ -519,9 +507,13 @@ function utypeClick(){
 									<td scope="col" rowspan="2">${row.tuition}</td>
 									<td scope="col" rowspan="2">${row.major_num}</td>
 									<td scope="col" rowspan="2">${row.enter_num}</td>
-									<td scope="col" rowspan="2">${row.interest}</td>
+									<td scope="col" rowspan="2">
+										<i style='font-size:24px' class='far'>&#xf005;</i>
+									</td>
 								</tr>
 							</c:forEach>
+							<div class="col-lg-12" id="ex1_Result1" ></div> 
+							<div class="col-lg-12" id="ex1_Result2" ></div> 
 						</tbody>
 					</table>
 

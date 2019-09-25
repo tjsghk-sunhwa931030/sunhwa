@@ -18,7 +18,7 @@
  	</select>
  	
 <!--대학 검색 체크리스트  -->
- 	<select id="searchC" resultType="mybatis.UInfoDTO">
+ 	<select id="searchC" resultType="mybatis.UInfoDTO" >
 	SELECT * FROM info_univ WHERE u_type =#{param1,jdbcType=VARCHAR}
 		AND	uname LIKE '%'||#{param2}||'%'
 		AND location LIKE '%'||#{param3}||'%'
@@ -39,7 +39,7 @@
  	</select>
  
  <!-- 전형 검색 체크리스트 -->	
- 	<select  id="searchJ" resultType="mybatis.AllInfoDTO"  parameterType="mybatis.UInfoArrVO">
+ 	<select  id="searchJ" resultType="mybatis.AllInfoDTO" >
  		SELECT * FROM info_junh INNER JOIN info_univ ON info_junh.uname = info_univ.uname
  								INNER JOIN info_major On info_junh.idx = info_major.idx
  			WHERE u_type =#{param1,jdbcType=VARCHAR}
@@ -49,26 +49,31 @@
 			AND enter_name LIKE '%'||#{param5}||'%'
 			AND location LIKE '%'||#{param6}||'%'
 			AND enter_ele LIKE '%'||#{param7,jdbcType=VARCHAR}||'%'
-			AND enter_test LIKE '%'||#{param8}||'%'
-			AND major LIKE '%'||#{param9}||'%'
-			AND major1 LIKE '%'||#{param10}||'%'
-			AND major2 LIKE '%'||#{param11}||'%'
+			AND major LIKE '%'||#{param8}||'%'
+			AND major1 LIKE '%'||#{param9}||'%'
+			AND major2 LIKE '%'||#{param10}||'%'
  	</select>
  	
- 	
+ <!-- 대계열 검색 -->
  	<select id="listM1" resultType="mybatis.AllInfoDTO">
  		SELECT * FROM info_major
  	</select>
- 	
+ <!-- 중계열 검색 -->	
  	<select id="listMj2" resultType="mybatis.AllInfoDTO">
  		SELECT major2 from info_major WHERE major1 LIKE '%'||#{param1}||'%'
- 
  	</select>
+ <!-- 전공명 검색 -->	
  	<select id="listMj3" resultType="mybatis.AllInfoDTO">
  		SELECT major from info_major WHERE major1 LIKE '%'||#{param1}||'%' AND major2 LIKE '%'||#{param2}||'%'
- 
  	</select>
  	
+ 
+ 	<insert id="interest_chk">
+ 		INSERT INTO interest_univ(idx,id,uname,location,totalman,major_num,enter_num,u_type,interest_num,interest_chk)
+ 		 VALUES (interest_univ.nextval,#{_id},#{_uname},#{_location},#{totalman},#{major_num},#{enter_num},#{u_type},#{interest_num},#{interest_chk}) 
+ 	</insert>
+ 	
+ 
 	
  </mapper>
   

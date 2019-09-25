@@ -74,7 +74,8 @@ function checkboxFrm(fn){
 }
 
 function utypeClick(){
-	$('.tbResult').empty();
+	$('#tbResult').empty();
+	$('#tbResult').empty();
 }
  
  
@@ -178,7 +179,7 @@ function ch_major3(maj3){
 
 			<div class="tab-content">
 				<!-- 일반대학교 시작 -->
-				<div id="ilban" class="container tab-pane active">
+				<div id="ilban" class="container tab-pane active" onclick="javascript:utypeClick();">
 					<br />
 	<!-- 일반대 -->	<form id="checkFrm" name="checkFrm" action="./checkAction2.do"
 						method="get" onsubmit="return checkboxFrm();">
@@ -203,9 +204,8 @@ function ch_major3(maj3){
 														<i class="fa fa-search" style="color: #783712"></i>&nbsp;<b>검색</b>
 													</button></td>
 											</tr>
-											<tr class="bor_no">
-												<th scope="row" rowspan="2"><label for="uv">학과</label>
-												</th>
+											<tr>
+												<th scope="row" rowspan="2"><label for="uv">학과</label></th>
 
 												<td colspan="2">
 													<input id="major" name="major" title="학과검색어"  onkeypress="if(event.keyCode==13){btn_search_keyword_init();}" 
@@ -226,21 +226,21 @@ function ch_major3(maj3){
 																		<a class="dropdown-item"  onclick="ch_major('${col.major1}');">${col.major1}</a>
 																</c:forEach>
 															</div><br /> 
-																<input type="text" id="major1" name="major1" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" />
 														</div>
 														
 														<div class="list box02" class="dropdown">
 															<button type="button" id="button2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [중계열]</button>
 															<div class="menu dropdown-menu" id="maj2div" ></div>
 															<br /> 
-																<input type="text" id="major2" name="major2" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" />
 														</div>
 														
 														<div class="list box04" class="dropdown">
 															<button type="button" id="button3" class="btn btn-default dropdown-toggle" data-toggle="dropdown">학과명</button>
 															<div class="menu dropdown-menu" id="maj3div"></div>	
 															<br/>
-																<input type="text" id="major3" name="major" value=""  />
+																<input style="margin-top:5px; margin-left:5px; width: 98%" type="text" id="major3" name="major" value=""  />
 														</div>
 														
 													</div> 
@@ -249,13 +249,13 @@ function ch_major3(maj3){
 											</tr>
 											
 											<tr>
-												<th scope="row" rowspan="3"><label for="uv">지역</label>
+												<th scope="row" rowspan="2"><label for="uv">지역</label>
 												</th>
 
 											</tr>
-											
 											<tr>
-												<td class="tt">지역</td>
+												<td>
+												</td>
 												<td>
 													<input type="checkbox" name="location"id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
 													<label for="chk_location_all">전체</label> 
@@ -317,7 +317,7 @@ function ch_major3(maj3){
 					<div class="tbl_list">
 						<br>
 						<table class="list_tbl01">
-							<caption>대학 리스트</caption>
+							<caption>검색버튼을 눌러주세요</caption>
 							<colgroup>
 								<col>
 								<col style="width: 80px;">
@@ -418,21 +418,21 @@ function ch_major3(maj3){
 																		<a class="dropdown-item"  onclick="ch_major('${col.major1}');">${col.major1}</a>
 																</c:forEach>
 															</div>
-																<input type="text" id="major1" name="major1" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" />
 														</div>
 														
 														<div class="list box02" class="dropdown">
 															<button type="button" id="button2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [중계열]</button>
 															<div class="menu dropdown-menu" id="maj2div" ></div>
 															<br /> 
-																<input type="text" id="major2" name="major2" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" />
 														</div>
 														
 														<div class="list box04" class="dropdown">
 															<button type="button" id="button3" class="btn btn-default dropdown-toggle" data-toggle="dropdown">학과명</button>
 															<div class="menu dropdown-menu" id="maj3div"></div>	
 															<br/>
-																<input type="text" id="major3" name="major" value=""  />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major3" name="major" value=""  />
 														</div>
 														
 													</div> 
@@ -507,7 +507,7 @@ function ch_major3(maj3){
 
 
 						<table class="list_tbl01">
-							<caption>대학 리스트</caption>
+							<caption>검색버튼을 눌러주세요</caption>
 							<colgroup>
 								<col>
 								<col style="width: 80px;">
@@ -534,7 +534,7 @@ function ch_major3(maj3){
 								</tr>
 							</thead>
 
-							<tbody id="tbResult">
+							<tbody id="tbResult2">
 								<c:forEach items="${listsH }" var="rowh">
 									<tr>
 									</tr>

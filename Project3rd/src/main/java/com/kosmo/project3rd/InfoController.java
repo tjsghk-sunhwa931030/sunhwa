@@ -1,8 +1,7 @@
 package com.kosmo.project3rd;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,16 +10,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import mybatis.AllInfoDTO;
-import mybatis.HInfoDTO;
+import mybatis.UInfoArrVO;
 import mybatis.UInfoDAOImpl;
-import mybatis.UInfoDTO;
-import paging.util.PagingUtil;
+
 
 @Controller
 public class InfoController {
@@ -33,42 +30,60 @@ public class InfoController {
 	public String info(Model model, HttpServletRequest req) {
 				
 	
-		
 		return "info/info";
 	}
 	
 	//(대학 정보)체크된 폼값 전달받음 
 	@RequestMapping("/checkAction.do")
-	public String checkAction(HttpServletRequest req, Model model, HttpSession session) {
+	public String checkAction(HttpServletRequest req, 
+			Model model, HttpSession session) throws Exception {
 		
-		
-	
-		 ArrayList<AllInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
-				 req.getParameter("u_type"),
-				 req.getParameter("searchWord"),
-				 req.getParameter("location"), 
-				 req.getParameter("p_type")
-				
-			);
-		 
-	
-				 
-		 model.addAttribute("lists", lists);
-		 
-		 System.out.println(lists.size());
 
-		 System.out.println("u_type"+req.getParameter("u_type"));
-		 System.out.println("uname="+
-				 req.getParameter("searchWord"));
-		 System.out.println("location="+
-				 req.getParameter("location"));
-		 System.out.println("p_type="+
-				 req.getParameter("p_type"));
-	
-		 System.out.println(lists);
+		
+		/*
+		 * String location_str = ""; String[] location_arr =
+		 * req.getParameterValues("location"); for(String s : location_arr){
+		 * location_str += s+",";
+		 * 
+		 * } location_str = location_str.substring(0,location_str.length()-1);
+		 * 
+		 * System.out.println("s="+location_str);
+		 * System.out.println("arr"+location_arr[0]+location_arr[1]);
+		 */
+		
+		/*
+		 * UInfoArrVO uarr = new UInfoArrVO();
+		 * 
+		 * String[] ptype_arr = req.getParameterValues("p_type"); String utype =
+		 * req.getParameter("u_type"); String uname = req.getParameter("uname");
+		 * 
+		 * 
+		 * uarr.setLst_location_list(location_arr); uarr.setLst_ptype_list(ptype_arr);
+		 * uarr.setUtype(utype); uarr.setUinfoarr(uname);
+		 * 
+		 * ArrayList<AllInfoDTO> lists
+		 * =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
+		 * 
+		 * uarr
+		 * 
+		 * );
+		 */
+		
+		
+		
+		  ArrayList<AllInfoDTO> lists =sqlSession.getMapper(UInfoDAOImpl.class).searchC(
+				  req.getParameter("u_type"), 
+				  req.getParameter("searchWord"), 
+				  req.getParameter("location"),
+				  req.getParameter("p_type")
+		  
+		  );
+		  
+		  model.addAttribute("lists", lists);
+		 
 		 
 	
-		 
+		
 		return "info/info";
 		
 	}
@@ -209,7 +224,6 @@ public class InfoController {
 						 req.getParameter("enter_name"),
 						 req.getParameter("location"),
 						 req.getParameter("enter_ele"),
-						 req.getParameter("enter_test"),
 						 req.getParameter("major"),
 						 req.getParameter("major1"),
 						 req.getParameter("major2")
@@ -248,9 +262,7 @@ public class InfoController {
 				 
 				 System.out.println("enter_ele="+
 						 req.getParameter("enter_ele"));
-				 
-				 System.out.println("enter_test="+
-						 req.getParameter("enter_test"));	
+				
 				 
 				 System.out.println(listsJ);
 				 

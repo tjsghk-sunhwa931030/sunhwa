@@ -38,10 +38,27 @@ function fn_recruit_timeList_onclick(recruit_time){
 				$("#recruit_time_all").prop("checked",true);
 			}
 		}	
+		
+		//전문대
+		if($(recruit_time).attr("id") == "j_recruit_time_all"){
+			$("#j_recruit_time_all").prop("checked",true);
+			$("input[id^='j_recruit_time']:not(input[id='j_recruit_time_all'])").prop("checked",false);
+		}else{
+			
+			$("#j_recruit_time_all").prop("checked",false);
+			var recruit_time_list = $("input[id^='j_recruit_time']:checked").get();
+			
+			if(recruit_time_list.length < 1){
+				$("#j_recruit_time_all").prop("checked",true);
+			}
+		}	
+		
 }
+
+
 //지역 체크박스 처리
-	function locationList_onclick(lct){
-	
+function locationList_onclick(lct){
+
 	if($(lct).attr("id") == "chk_location_all"){
 		$("#chk_location_all").prop("checked",true);
 		$("input[id^='chk_location']:not(input[id='chk_location_all'])").prop("checked",false);
@@ -53,13 +70,29 @@ function fn_recruit_timeList_onclick(recruit_time){
 		if(chk_location_list.length < 1){
 			$("#chk_location_all").prop("checked",true);
 		}
+	}
+	
+	//전문대
+	if($(lct).attr("id") == "j_chk_location_all"){
+		$("#j_chk_location_all").prop("checked",true);
+		$("input[id^='j_chk_location']:not(input[id='j_chk_location_all'])").prop("checked",false);
+	}else{
+		
+		$("#j_chk_location_all").prop("checked",false);
+		var chk_location_list = $("input[id^='j_chk_location']:checked").get();
+		
+		if(chk_location_list.length < 1){
+			$("#j_chk_location_all").prop("checked",true);
+		}
 	}	
+		
+	
 }
 
 //전형요소 체크 처리
 function enterEle_onclick(ele){
 	
-	if($(ele).attr("id") == "enter_all"){
+	if($(ele).attr("id") == "enter_ele_all"){
 		$("#enter_ele_all").prop("checked",true);
 		$("input[id^='enter_ele']:not(input[id='enter_ele_all'])").prop("checked",false);
 	}else{
@@ -69,6 +102,20 @@ function enterEle_onclick(ele){
 		
 		if(enterEle_list.length < 1){
 			$("#enter_ele_all").prop("checked",true);
+		}
+	}	
+	
+	//전문대
+	if($(ele).attr("id") == "j_enter_ele_all"){
+		$("#j_enter_ele_all").prop("checked",true);
+		$("input[id^='j_enter_ele']:not(input[id='j_enter_ele_all'])").prop("checked",false);
+	}else{
+		
+		$("#j_enter_ele_all").prop("checked",false);
+		var enterEle_list = $("input[id^='j_enter_ele']:checked").get();
+		
+		if(enterEle_list.length < 1){
+			$("#j_enter_ele_all").prop("checked",true);
 		}
 	}	
 }
@@ -91,7 +138,23 @@ function fn_enter_typeList_onclick(enter_type){
 		}
 	}
 	
+	
+	if($(enter_type).attr("id") == "j_enter_type_all"){
+		$("#j_enter_type_all").prop("checked",true);
+		$("input[id^='j_enter_type']:not(input[id='j_enter_type_all'])").prop("checked",false);
+	}else{
+		
+		$("#j_enter_type_all").prop("checked",false);
+		var enter_type_list = $("input[id^='j_enter_type']:checked").get();
+		
+		if(enter_type_list.length < 1){
+			$("#j_enter_type_all").prop("checked",true);
+		}
+	}
+	
 }
+
+
 	
 //전형명 체크박스 처리
 function fn_enter_nameList_onclick(enter_name){
@@ -134,6 +197,46 @@ function fn_enter_nameList_onclick(enter_name){
 			$("#enter_name_all").prop("checked",true);
 		}
 	}
+	
+	//전문대
+	if($(enter_name).attr("id") == "j_enter_name_all"){
+		//전체선택해제
+		$("#j_enter_name_all").prop("checked",true);
+		//하위선택해제
+		$("input[id^='j_enter_name']:not(input[id='j_enter_name_all'])").prop("checked",false);
+	}else if ($(enter_name).attr("id").indexOf("all") > -1){
+		//전체 선택 해제
+		$("#j_enter_name_all").prop("checked",false);
+					
+		//하위 선택 해제
+		var group = $(enter_name).data("group");
+		console.log("this : " + group);
+		$("input[id^='j_enter_name']:not(input[id^='j_enter_name_all'])").each(function() {
+			console.log("target : " + $(this).data("group"));
+			if($(this).data("group") == group) {
+				console.log("checked" + $(this).data("group") );
+				$(this).prop("checked", false);
+			}
+		});
+
+		//없으면 전체
+		var enter_name_list = $("input[id^='j_enter_name']:checked").get();
+		if(enter_name_list.length < 1){
+			$("#j_enter_name_all").prop("checked",true);
+		}
+	} else {
+		//전체선택해제
+		$("#j_enter_name_all").prop("checked",false);
+		
+		//상위선택해제
+		$("input[id='j_enter_name_all_"+$(enter_name).data("group")+"']").prop("checked", false);
+
+		//없으면 전체
+		var enter_name_list = $("input[id^='j_enter_name']:checked").get();
+		if(enter_name_list.length < 1){
+			$("#j_enter_name_all").prop("checked",true);
+		}
+	}
 }
 	
 
@@ -145,62 +248,52 @@ function fn_selctnDtlBox_fold(){
 	$("#btn_selctnDtlBox_out").show();
 	$("#tbSelctnDtlDetail").hide();
 	$("#tbSelctnDtl").show();
+	
+	$("#btn_selctnDtlBox_fold2").hide();
+	$("#btn_selctnDtlBox_out2").show();
+	$("#tbSelctnDtlDetail2").hide();
+	$("#tbSelctnDtl2").show();
 }
 
+//전형상세 텍스트
 function fn_selctnDtlBox_text_set() {
 
 	//지역 텍스트
-	var location_list = $("input[id^='location']:checked").get();
+	var chk_location_list = $("input[id^='chk_location']:checked").get();
 	var location_list = "";
-	$.each(location_list, function(index, item){
+	$.each(chk_location_list, function(index, item){
 		var location_id = item.id.toString();
 		location_list += ","+$("#"+location_id).next("label").html();
 	});
 	
-	$("#span_location_view").html(location_list.substring(1));
+	$("#location_view").html(location_list.substring(1));
 	
 	//전형요소 텍스트
-	var chk_enter_ele_list = $("#tbenter_eleChk input[id^='enter_ele']:checked").get();
+	var chk_enter_ele_list = $("input[id^='enter_ele']:checked").get();
 	var enter_ele_list = "";
 	
 	$.each(chk_enter_ele_list, function(index, item){
 		var enter_ele_id = item.id.toString();
 		enter_ele_list += ","+$("#"+enter_ele_id).next("label").html();
 	});
-	
-	if(enter_ele_list == ""){
-		enter_ele_list = "전체";
-	}else{
-		enter_ele_list = enter_ele_list.substring(1);
-	}
-	
-	$("#span_enter_ele_view").html(enter_ele_list);
-	
-	
-	//수능반영영역 텍스트
-	var chk_enter_test_list = $("#tbenter_testRelm input[id^='enter_test']:checked").get();
-	var enter_test_list = "";
-	$.each(chk_enter_test_list, function(index, item){
-		var enter_test_id = item.id.toString();
-		enter_test_list += ","+$("#"+enter_test_id).next("label").html();
-	});
 
-	if(enter_test_list == ""){
-		enter_test_list = "전체";
-	}else{
-		enter_test_list = enter_test_list.substring(1);
-	}
+	$("#enter_ele_view").html(enter_ele_list.substring(1));
 	
-	$("#span_enter_test_view").html(enter_test_list);
-
+	
 }	
 
 //전형상세조건 펼치기
 function fn_selctnDtlBox_out(){
+	
 	$("#btn_selctnDtlBox_out").hide();
 	$("#btn_selctnDtlBox_fold").show();
 	$("#tbSelctnDtl").hide();
 	$("#tbSelctnDtlDetail").show();
+	
+	$("#btn_selctnDtlBox_out2").hide();
+	$("#btn_selctnDtlBox_fold2").show();
+	$("#tbSelctnDtl2").hide();
+	$("#tbSelctnDtlDetail2").show();
 }
 
 
@@ -212,6 +305,11 @@ function fn_sersBox_fold(){
 	$("#btn_sersBox_out").show();
 	$("#tbsersDetail").hide();
 	$("#tbSers").show();
+	//전문대
+	$("#btn_sersBox_fold2").hide();
+	$("#btn_sersBox_out2").show();
+	$("#tbsersDetail2").hide();
+	$("#tbSers2").show();
 }
 
 
@@ -221,6 +319,12 @@ function fn_sersBox_out(){
 	$("#btn_sersBox_fold").show();
 	$("#tbSers").hide();
 	$("#tbsersDetail").show();
+	
+	//전문대
+	$("#btn_sersBox_out2").hide();
+	$("#btn_sersBox_fold2").show();
+	$("#tbSers2").hide();
+	$("#tbsersDetail2").show();
 }
 
 //폼값 전달하기 
@@ -233,14 +337,14 @@ function checkboxFrm(fn){
 	var lst_enter_type_list = [];
 	var lst_enter_name_list = [];
 	var lst_enter_ele_list = [];
-	var lst_enter_test_list = [];
+
 	
 	var locationlist = $("input[id^='chk_location']:checked").get();
 	var recruit_list = $("input[id^='recruit_time']:checked").get();
 	var enter_type_list = $("input[id^='enter_type']:checked").get();
 	var enter_name_list = $("input[id^='enter_name']:checked").get();
 	var enter_ele_list = $("input[id^='enter_ele']:checked").get();
-	var enter_test_list = $("input[id^='enter_test']:checked").get();
+
 
 	
 
@@ -287,26 +391,10 @@ function checkboxFrm(fn){
 
 function utypeClick(){
 
-	$('.tbResult').empty();
+	$('#tbResult').empty();
+	$('#tbResult2').empty();
 	
  }
-
-//수능반영영역....
-function fn_entertest_onclick(use){
-
-	if($(enter_test).attr("id") == "enter_test_all"){
-		$("#enter_type_all").prop("checked",true);
-		$("input[id^='enter_test']:not(input[id='enter_test_all'])").prop("checked",false);
-	}else{
-		
-		$("#enter_test_all").prop("checked",false);
-		var enter_test_list = $("input[id^='enter_test']:checked").get();
-		
-		if(enter_test_list.length < 1){
-			$("#enter_test_all").prop("checked",true);
-		}
-	}
-}
 
 
 
@@ -415,7 +503,7 @@ function ch_major3(maj3){
 			
 			<div class="tab-content">
 					<!-- 일반대학교 시작 -->
-				<div id="ilban" class="container tab-pane active"><br/>
+				<div id="ilban" class="container tab-pane active" ><br/>
 			<form id="checkFrm" name="checkFrm" action="./checkAction3.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box">
 							<fieldset>
@@ -491,13 +579,13 @@ function ch_major3(maj3){
 																<input type="checkbox" name="enter_name" id="enter_name_3" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="재직자"><label for="enter_name_17">특성화고 등을 졸업한 재직자</label>
 																<br/>
 																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="기초생활차상위"><label for="enter_name_14">기초생활수급자 및 차상위</label>
-																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="고른기회"><label for="enter_name_14">고른기회전형</label>
-																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="장애인"><label for="enter_name_14">장애인등대상자</label>
+																<input type="checkbox" name="enter_name" id="enter_name_5" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="고른기회"><label for="enter_name_14">고른기회전형</label>
+																<input type="checkbox" name="enter_name" id="enter_name_6" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="장애인"><label for="enter_name_14">장애인등대상자</label>
 																<br/>
-																<input type="checkbox" name="enter_name" id="enter_name_5" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="저소득"><label for="enter_name_13">저소득가구학생</label>
-																<input type="checkbox" name="enter_name" id="enter_name_6" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특수교육"><label for="enter_name_18">특수교육대상자</label>
-																<input type="checkbox" name="enter_name" id="enter_name_7" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="지역"><label for="enter_name_08">지역인재 및 균형선발 전형</label>
-																<input type="checkbox" name="enter_name" id="enter_name_9" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," value="%" onclick="fn_enter_nameList_onclick(this);">
+																<input type="checkbox" name="enter_name" id="enter_name_7" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="저소득"><label for="enter_name_13">저소득가구학생</label>
+																<input type="checkbox" name="enter_name" id="enter_name_8" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특수교육"><label for="enter_name_18">특수교육대상자</label>
+																<input type="checkbox" name="enter_name" id="enter_name_9" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="지역"><label for="enter_name_08">지역인재 및 균형선발 전형</label>
+																<input type="checkbox" name="enter_name" id="enter_name_10" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," value="%" onclick="fn_enter_nameList_onclick(this);">
 																 <label for="enter_name_99" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," style="margin-left: -5px;">기타</label>
 															
 															</td>
@@ -522,7 +610,7 @@ function ch_major3(maj3){
 										</colgroup>
 										<tbody id="tbSelctnDtlDetail" style="display: none;">
 											<tr>
-												<th scope="row" rowspan="4">
+												<th scope="row" rowspan="2">
 													<label for="uv">전형<br>상세</label>
 												</th>
 												<td class="tt">지역</td>
@@ -551,74 +639,30 @@ function ch_major3(maj3){
 											</tr>
 											<tr>
 												<td class="tt">전형요소</td>
-												<td id="tbenter_eleChk">
-													<span><input type="checkbox" value="%" id="enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="chk_stdpt">전체</label></span>
-													<span><input type="checkbox" value="학생부" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_stdpt">학생부</label></span>
-													<span><input type="checkbox" value="수능" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_csat">수능</label></span>
-													<span><input type="checkbox" value="면접" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_oral_intrvw">면접/구술</label></span>
-													<span><input type="checkbox" value="논술" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_essy">논술</label></span>
-													<span><input type="checkbox" value="적성" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_aptd">적성</label></span>
-													<span><input type="checkbox" value="실기" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_prcttq">실기</label></span>
-													<span><input type="checkbox" value="서류" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_papers">서류</label></span>
-													<span><input type="checkbox" value="기타" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_etc">기타</label></span>
-													<span><input type="checkbox" value="1단계성적" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_one_step_scr">1단계성적</label></span>
-													<span><input type="checkbox" value="2단계성적" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_one_step_scr">2단계성적</label></span>
+												<td>
+													<input type="checkbox" value="%"  id="enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
+													<input type="checkbox" value="학생부"  id="enter_ele_1" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_1">학생부</label>
+													<input type="checkbox" value="수능"  id="enter_ele_2" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_2">수능</label>
+													<input type="checkbox" value="면접"  id="enter_ele_3" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_3">면접/구술</label>
+													<input type="checkbox" value="논술"  id="enter_ele_4" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_4">논술</label>
+													<input type="checkbox" value="적성"  id="enter_ele_5" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_5">적성</label>
+													<input type="checkbox" value="실기"  id="enter_ele_6" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_6">실기</label>
+													<input type="checkbox" value="서류"  id="enter_ele_7" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_7">서류</label>
+													<input type="checkbox" value="기타"  id="enter_ele_8" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_8">기타</label>
+													<input type="checkbox" value="1단계성적"  id="enter_ele_9" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_9">1단계성적</label>
+													<input type="checkbox" value="2단계성적"  id="enter_ele_10" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_10">2단계성적</label>
 												</td>
 													
 											</tr>
-											<tr>
-												<td class="tt">수능반영영역</td>
-												<td id="tbenter_testRelm">
-												<input type="hidden" id="enter_test" name="enter_test" />
-													<span><input type="checkbox" id="enter_test_all" name="enter_test" value="%" checked="checked" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_all">전체</label>
-													</span>
-													<span><input type="checkbox" id="enter_test_1" name="enter_test" value="국어" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_lang">국어</label>
-													</span>
-													<span><input type="checkbox" id="enter_test_2" name="enter_test" value="수학" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_math">수학</label>
-															<label class="tts" for="v_cho_math_sel">수학영역선택</label> 
-																<select class="w70" id="v_cho_math_sel" name="enter_test" disabled="disabled">
-																	<option value="ALL">선택</option>
-																	<option value="가">가</option>
-																	<option value="나">나</option>
-																</select>
-													</span>
-																	
-													<span><input type="checkbox" id="enter_test_3" name="enter_test" value="영어" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_fori">영어</label>
-													</span>
-														
-													<span><input type="checkbox" id="enter_test_4" name="enter_test" value="탐구" onclick="fn_entertest_onclick(this)">
-														<label for="v_cho_serch">탐구영역</label>
-															<label class="tts" for="v_cho_serch_sel">탐구영역선택</label>
-																 <select class="w70" id="v_cho_serch_sel" name="enter_test" disabled="disabled">
-																 	<option value="ALL">선택</option>
-																 	<option value="so">사회</option>
-																 	<option value="sc">과학</option>
-																 	<option value="oc">직업</option>
-																 </select>
-													</span>
-																 	
-													<span><input type="checkbox" id="enter_test_5" name="enter_test" value="제2외국어/한문" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_secLan_chi">제2외국어/한문</label>
-													</span>
-													
-													<span><input type="checkbox" id="enter_test_6" name="enter_test" value="한국사" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_his">한국사</label>
-													</span>
-												</td>
-											</tr>
+											
 										</tbody>
 										
 										<tbody id="tbSelctnDtl" class="tbl_fold">
 											<tr>
 												<th scope="row">전형<br>상세</th>
 												<td colspan="2" onclick="fn_selctnDtlBox_out()">
-													<span class="tt_fold first">지역</span><span id="span_location_view">전체</span>
-													<span class="tt_fold">전형요소</span><span id="span_enter_ele_view">전체</span>
-													<span class="tt_fold">수능반영영역</span><span id="span_enter_test_view">전체</span>
+													<span class="tt_fold first">지역</span><span id="location_view">전체</span>
+													<span class="tt_fold">전형요소</span><span id="enter_ele_view">전체</span>
 												</td>
 											</tr>
 										</tbody>
@@ -663,7 +707,7 @@ function ch_major3(maj3){
 																
 															</div>
 															<br /> 
-																<input type="text" id="major1" name="major1" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" />
 															
 													
 														</div>
@@ -673,7 +717,7 @@ function ch_major3(maj3){
 															
 															</div>
 															<br /> 
-																<input type="text" id="major2" name="major2" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" />
 															
 														</div>
 														
@@ -683,7 +727,7 @@ function ch_major3(maj3){
 																
 															</div>	
 															<br/>
-																<input type="text" id="major3" name="major" value=""  />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major3" name="major" value=""  />
 																
 															
 														</div>
@@ -720,7 +764,7 @@ function ch_major3(maj3){
 					
 					<div class="tbl_list" style="margin-top: 0px;">
 						<table class="list_tbl01" id="tbSelctnInfList">
-							<caption>대학 리스트</caption>
+							<caption>검색버튼을 눌러주세요</caption>
 							<colgroup>
 								<col style="width:13%;">
 								<col style="width:6%;">
@@ -771,14 +815,12 @@ function ch_major3(maj3){
 				</div><!-- 일반대학교 끝 -->
 				
 		<!-- 전문대학교 시작 -->
-				<div id="junmun" class="container tab-pane fade"><br/>
+				<div id="junmun" class="container tab-pane fade" ><br/>
 					<div class="search_tbl_box">
 							<fieldset>
 								<!-- 학과상세 -->
 								<div class="tbl_wrap">
-								<input type="hidden" id="u_type" name="u_type" value="전문대" />
-								<p class="box_btn" id="btn_selctnBox_fold"><a href="javascript:fn_selctnBox_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-									<p class="box_btn" id="btn_selctnBox_out" style="display: none;"><a href="javascript:fn_selctnBox_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
+								<input type="hidden" id="u_type2" name="u_type" value="전문대" />
 									<table class="search_tbl01">
 										<colgroup>
 											<col style="width:8%;">
@@ -791,9 +833,9 @@ function ch_major3(maj3){
 													<label for="univ_nm">대학</label>
 												</th>
 												<td colspan="2">
-													<input id="searchUnivKeyword" name="searchUnivKeyword" title="대학명검색" onkeypress="if(event.keyCode==13){btn_search_univ_init();}" style="ime-mode:active" placeholder="대학명을 입력해주세요." class="search_input" type="text" value="" maxlength="30">
-													<button title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
-														<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
+													<input id="searchWord2" name="searchWord" title="대학명검색" placeholder="대학명을 입력해주세요." type="text" value="" maxlength="30">
+													<button type="submit" title="검색" class="btn btn-default btn-sm btn btn-outline-dark" style="border-color: #783712">
+															<i class="fa fa-search" style="color:#783712 "></i>&nbsp;<b>검색</b>
 													</button>
 												</td>								
 											</tr>											
@@ -803,25 +845,25 @@ function ch_major3(maj3){
 												</th>
 												<td class="tt">모집시기</td>
 												<td>
-													<input type="checkbox" name="recruit_time" id="recruit_time_all" title="모집시기 검색조건" value="%" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
-							    					<input type="checkbox" name="recruit_time" id="recruit_time_1" title="모집시기 검색조건" value="수시" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_1">수시</label>
-													<input type="checkbox" name="recruit_time" id="recruit_time_2" title="모집시기 검색조건" value="정시(가)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_2">정시(가)</label>
-													<input type="checkbox" name="recruit_time" id="recruit_time_3" title="모집시기 검색조건" value="정시(나)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_3">정시(나)</label>
-													<input type="checkbox" name="recruit_time" id="recruit_time_4" title="모집시기 검색조건" value="정시(다)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_4">정시(다)</label>
-													<input type="checkbox" name="recruit_time" id="recruit_time_5" title="모집시기 검색조건" value="추가" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_5">추가</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_all" title="모집시기 검색조건" value="%" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
+							    					<input type="checkbox" name="recruit_time" id="j_recruit_time_1" title="모집시기 검색조건" value="수시" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_1">수시</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_2" title="모집시기 검색조건" value="정시(가)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_2">정시(가)</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_3" title="모집시기 검색조건" value="정시(나)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_3">정시(나)</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_4" title="모집시기 검색조건" value="정시(다)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_4">정시(다)</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_5" title="모집시기 검색조건" value="추가" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_5">추가</label>
 												</td>
 											</tr>
 											<tr>
 												<td class="tt">전형유형</td>
 												<td>
-													<input type="checkbox" name="enter_type" id="enter_type_all" title="전형유형 검색조건" value="%" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
-													<input type="checkbox" name="enter_type" id="enter_type_01" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(교과)"><label for="enter_type_01">학생부위주(교과)</label>
-													<input type="checkbox" name="enter_type" id="enter_type_02" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(종합)"><label for="enter_type_02">학생부위주(종합)</label>
-													<input type="checkbox" name="enter_type" id="enter_type_03" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="실기/실적위주"><label for="enter_type_03">실기/실적위주</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_all" title="전형유형 검색조건" value="%" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_1" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(교과)"><label for="enter_type_01">학생부위주(교과)</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_2" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(종합)"><label for="enter_type_02">학생부위주(종합)</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_3" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="실기/실적위주"><label for="enter_type_03">실기/실적위주</label>
 													<br/>
-													<input type="checkbox" name="enter_type" id="enter_type_04" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="논술위주"><label for="enter_type_04">논술위주</label>
-													<input type="checkbox" name="enter_type" id="enter_type_05" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="수능위주"><label for="enter_type_05">수능위주</label>
-													<input type="checkbox" name="enter_type" id="enter_type_06" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="기타"><label for="enter_type_06">기타</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_4" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="논술위주"><label for="enter_type_04">논술위주</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_5" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="수능위주"><label for="enter_type_05">수능위주</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_6" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="기타"><label for="enter_type_06">기타</label>
 												</td>
 											</tr>
 											<tr>
@@ -830,30 +872,30 @@ function ch_major3(maj3){
 													<table style="width:100%;">
 														<tbody><tr>
 															<td colspan="2">
-																<input type="checkbox" name="enter_name" id="enter_name_all" title="전형명 검색조건" value="%" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
+																<input type="checkbox" name="enter_name" id="j_enter_name_all" title="전형명 검색조건" value="%" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
 															</td>
 														</tr>
 														<tr>
 															<td style="width:170px;" colspan="2">
-																<input type="checkbox" name="enter_name" id="enter_name_1" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="01" value="일반전형"><label for="enter_name_01">일반전형</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_1" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="01" value="일반전형"><label for="enter_name_01">일반전형</label>
 															</td>
 															
 														</tr>
 														<tr>
 															
 															<td>
-																<input type="checkbox" name="enter_name" id="enter_name_1" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="농어촌"><label for="enter_name_10">농어촌 학생</label>
-																<input type="checkbox" name="enter_name" id="enter_name_2" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특성화고교"><label for="enter_name_12">특성화고교 졸업자</label>
-																<input type="checkbox" name="enter_name" id="enter_name_3" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="재직자"><label for="enter_name_17">특성화고 등을 졸업한 재직자</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_1" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="농어촌"><label for="enter_name_10">농어촌 학생</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_2" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특성화고교"><label for="enter_name_12">특성화고교 졸업자</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_3" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="재직자"><label for="enter_name_17">특성화고 등을 졸업한 재직자</label>
 																<br/>
-																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="기초생활차상위"><label for="enter_name_14">기초생활수급자 및 차상위</label>
-																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="고른기회"><label for="enter_name_14">고른기회전형</label>
-																<input type="checkbox" name="enter_name" id="enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="장애인"><label for="enter_name_14">장애인등대상자</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_4" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="기초생활차상위"><label for="enter_name_14">기초생활수급자 및 차상위</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_5" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="고른기회"><label for="enter_name_14">고른기회전형</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_6" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="장애인"><label for="enter_name_14">장애인등대상자</label>
 																<br/>
-																<input type="checkbox" name="enter_name" id="enter_name_5" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="저소득"><label for="enter_name_13">저소득가구학생</label>
-																<input type="checkbox" name="enter_name" id="enter_name_6" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특수교육"><label for="enter_name_18">특수교육대상자</label>
-																<input type="checkbox" name="enter_name" id="enter_name_7" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="지역"><label for="enter_name_08">지역인재 및 균형선발 전형</label>
-																<input type="checkbox" name="enter_name" id="enter_name_9" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," value="%" onclick="fn_enter_nameList_onclick(this);">
+																<input type="checkbox" name="enter_name" id="j_enter_name_7" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="저소득"><label for="enter_name_13">저소득가구학생</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_8" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="특수교육"><label for="enter_name_18">특수교육대상자</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_9" title="전형명 검색조건" onclick="fn_enter_nameList_onclick(this)" data-group="03" value="지역"><label for="enter_name_08">지역인재 및 균형선발 전형</label>
+																<input type="checkbox" name="enter_name" id="j_enter_name_10" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," value="%" onclick="fn_enter_nameList_onclick(this);">
 																 <label for="enter_name_99" title="산업대학위탁생(정원외),정부위탁생(정원외),제주특별자치도 특별법(정원외),416 세월호 특별법(정원외)," style="margin-left: -5px;">기타</label>
 															
 															</td>
@@ -868,113 +910,69 @@ function ch_major3(maj3){
 								<!-- //학과상세 -->
 								<!-- 전형상세 -->
 								<div class="tbl_wrap" id="tb_dtl_search">
-									<p class="box_btn" id="btn_selctnDtlBox_fold" style="display: none;"><a href="javascript:fn_selctnDtlBox_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-									<p class="box_btn" id="btn_selctnDtlBox_out"><a href="javascript:fn_selctnDtlBox_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
+									<p class="box_btn" id="btn_selctnDtlBox_fold2" style="display: none;"><a href="javascript:fn_selctnDtlBox_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
+									<p class="box_btn" id="btn_selctnDtlBox_out2"><a href="javascript:fn_selctnDtlBox_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 									<table class="search_tbl01">
 										<colgroup>
 											<col style="width:8%;">
 											<col>
 											<col style="width:80%;">
 										</colgroup>
-										<tbody id="tbSelctnDtlDetail" style="display: none;">
+										<tbody id="tbSelctnDtlDetail2" style="display: none;">
 											<tr>
-												<th scope="row" rowspan="4">
+												<th scope="row" rowspan="2">
 													<label for="uv">전형<br>상세</label>
 												</th>
 												<td class="tt">지역</td>
 												<td>
-													<input type="checkbox" name="location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
-													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
-													<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
-													<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
-													<input type="checkbox" name="location" id="chk_location_4" value="경북" onclick="locationList_onclick(this);"><label for="chk_location_4">경북</label>
-													<input type="checkbox" name="location" id="chk_location_5" value="광주" onclick="locationList_onclick(this);"><label for="chk_location_5">광주</label>
-													<input type="checkbox" name="location" id="chk_location_6" value="대구" onclick="locationList_onclick(this);"><label for="chk_location_6">대구</label>
-													<input type="checkbox" name="location" id="chk_location_7" value="대전" onclick="locationList_onclick(this);"><label for="chk_location_7">대전</label>
-													<input type="checkbox" name="location" id="chk_location_8" value="부산" onclick="locationList_onclick(this);"><label for="chk_location_8">부산</label>
+													<input type="checkbox" name="location" id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+													<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
+													<input type="checkbox" name="location" id="j_chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
+													<input type="checkbox" name="location" id="j_chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
+													<input type="checkbox" name="location" id="j_chk_location_4" value="경북" onclick="locationList_onclick(this);"><label for="chk_location_4">경북</label>
+													<input type="checkbox" name="location" id="j_chk_location_5" value="광주" onclick="locationList_onclick(this);"><label for="chk_location_5">광주</label>
+													<input type="checkbox" name="location" id="j_chk_location_6" value="대구" onclick="locationList_onclick(this);"><label for="chk_location_6">대구</label>
+													<input type="checkbox" name="location" id="j_chk_location_7" value="대전" onclick="locationList_onclick(this);"><label for="chk_location_7">대전</label>
+													<input type="checkbox" name="location" id="j_chk_location_8" value="부산" onclick="locationList_onclick(this);"><label for="chk_location_8">부산</label>
 													<br/>
-													<input type="checkbox" name="location" id="chk_location_9" value="서울" onclick="locationList_onclick(this);"><label for="chk_location_9">서울</label>
-													<input type="checkbox" name="location" id="chk_location_10" value="세종" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
-													<input type="checkbox" name="location" id="chk_location_11" value="울산" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
-													<input type="checkbox" name="location" id="chk_location_12" value="인천" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
-													<input type="checkbox" name="location" id="chk_location_13" value="전남" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
-													<input type="checkbox" name="location" id="chk_location_14" value="전북" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
-													<input type="checkbox" name="location" id="chk_location_15" value="제주" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
-													<input type="checkbox" name="location" id="chk_location_16" value="충남" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
-													<input type="checkbox" name="location" id="chk_location_17" value="충북" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
+													<input type="checkbox" name="location" id="j_chk_location_9" value="서울" onclick="locationList_onclick(this);"><label for="chk_location_9">서울</label>
+													<input type="checkbox" name="location" id="j_chk_location_10" value="세종" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
+													<input type="checkbox" name="location" id="j_chk_location_11" value="울산" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
+													<input type="checkbox" name="location" id="j_chk_location_12" value="인천" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
+													<input type="checkbox" name="location" id="j_chk_location_13" value="전남" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
+													<input type="checkbox" name="location" id="j_chk_location_14" value="전북" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
+													<input type="checkbox" name="location" id="j_chk_location_15" value="제주" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
+													<input type="checkbox" name="location" id="j_chk_location_16" value="충남" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
+													<input type="checkbox" name="location" id="j_chk_location_17" value="충북" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
 												</td>
 												
 											</tr>
 											<tr>
 												<td class="tt">전형요소</td>
-												<td id="tbenter_eleChk">
-													<span><input type="checkbox" value="%" id="enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="chk_stdpt">전체</label></span>
-													<span><input type="checkbox" value="학생부" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_stdpt">학생부</label></span>
-													<span><input type="checkbox" value="수능" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_csat">수능</label></span>
-													<span><input type="checkbox" value="면접" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_oral_intrvw">면접/구술</label></span>
-													<span><input type="checkbox" value="논술" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_essy">논술</label></span>
-													<span><input type="checkbox" value="적성" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_aptd">적성</label></span>
-													<span><input type="checkbox" value="실기" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_prcttq">실기</label></span>
-													<span><input type="checkbox" value="서류" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_papers">서류</label></span>
-													<span><input type="checkbox" value="기타" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_etc">기타</label></span>
-													<span><input type="checkbox" value="1단계성적" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_one_step_scr">1단계성적</label></span>
-													<span><input type="checkbox" value="2단계성적" id="enter_ele" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="chk_one_step_scr">2단계성적</label></span>
+												<td>
+													<input type="checkbox" value="%" id="j_enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
+													<input type="checkbox" value="학생부" id="j_enter_ele_1" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_1">학생부</label>
+													<input type="checkbox" value="수능" id="j_enter_ele_2" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_2">수능</label>
+													<input type="checkbox" value="면접" id="j_enter_ele_3" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_3">면접/구술</label>
+													<input type="checkbox" value="논술" id="j_enter_ele_4" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_4">논술</label>
+													<input type="checkbox" value="적성" id="j_enter_ele_5" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_5">적성</label>
+													<input type="checkbox" value="실기" id="j_enter_ele_6" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_6">실기</label>
+													<input type="checkbox" value="서류" id="j_enter_ele_7" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_7">서류</label>
+													<input type="checkbox" value="기타" id="j_enter_ele_8" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_8">기타</label>
+													<input type="checkbox" value="1단계성적" id="j_enter_ele_9" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_9">1단계성적</label>
+													<input type="checkbox" value="2단계성적" id="j_enter_ele_10" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_10">2단계성적</label>
 												</td>
 													
 											</tr>
-											<tr>
-												<td class="tt">수능반영영역</td>
-												<td id="tbenter_testRelm">
-												<input type="hidden" id="enter_test" name="enter_test" />
-													<span><input type="checkbox" id="enter_test_all" name="enter_test" value="%" checked="checked" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_all">전체</label>
-													</span>
-													<span><input type="checkbox" id="enter_test_1" name="enter_test" value="국어" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_lang">국어</label>
-													</span>
-													<span><input type="checkbox" id="enter_test_2" name="enter_test" value="수학" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_math">수학</label>
-															<label class="tts" for="v_cho_math_sel">수학영역선택</label> 
-																<select class="w70" id="v_cho_math_sel" name="enter_test" disabled="disabled">
-																	<option value="ALL">선택</option>
-																	<option value="가">가</option>
-																	<option value="나">나</option>
-																</select>
-													</span>
-																	
-													<span><input type="checkbox" id="enter_test_3" name="enter_test" value="영어" onclick="fn_entertest_onclick(this)"> 
-															<label for="v_cho_fori">영어</label>
-													</span>
-														
-													<span><input type="checkbox" id="enter_test_4" name="enter_test" value="탐구" onclick="fn_entertest_onclick(this)">
-														<label for="v_cho_serch">탐구영역</label>
-															<label class="tts" for="v_cho_serch_sel">탐구영역선택</label>
-																 <select class="w70" id="v_cho_serch_sel" name="enter_test" disabled="disabled">
-																 	<option value="ALL">선택</option>
-																 	<option value="so">사회</option>
-																 	<option value="sc">과학</option>
-																 	<option value="oc">직업</option>
-																 </select>
-													</span>
-																 	
-													<span><input type="checkbox" id="enter_test_5" name="enter_test" value="제2외국어/한문" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_secLan_chi">제2외국어/한문</label>
-													</span>
-													
-													<span><input type="checkbox" id="enter_test_6" name="enter_test" value="한국사" onclick="fn_entertest_onclick(this)"> 
-														<label for="v_cho_his">한국사</label>
-													</span>
-												</td>
-											</tr>
+											
 										</tbody>
 										
-										<tbody id="tbSelctnDtl" class="tbl_fold">
+										<tbody id="tbSelctnDtl2" class="tbl_fold">
 											<tr>
 												<th scope="row">전형<br>상세</th>
 												<td colspan="2" onclick="fn_selctnDtlBox_out()">
 													<span class="tt_fold first">지역</span><span id="span_location_view">전체</span>
 													<span class="tt_fold">전형요소</span><span id="span_enter_ele_view">전체</span>
-													<span class="tt_fold">수능반영영역</span><span id="span_enter_test_view">전체</span>
 													
 												</td>
 											</tr>
@@ -986,15 +984,15 @@ function ch_major3(maj3){
 								
 								<!-- 학과계열 -->
 								<div class="tbl_wrap">
-									<p class="box_btn" id="btn_sersBox_fold" style="display: none;"><a href="javascript:fn_sersBox_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-										<p class="box_btn" id="btn_sersBox_out"><a href="javascript:fn_sersBox_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
+									<p class="box_btn" id="btn_sersBox_fold2" style="display: none;"><a href="javascript:fn_sersBox_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
+										<p class="box_btn" id="btn_sersBox_out2"><a href="javascript:fn_sersBox_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 									<table class="search_tbl01">
 										<colgroup>
 											<col style="width:8%;">
 											<col>
 											<col style="width:80%;">
 										</colgroup>
-										<tbody id="tbsersDetail" style="display: none;">
+										<tbody id="tbsersDetail2" style="display: none;">
 											<tr class="bor_no">
 												<th scope="row" rowspan="2">
 													<label for="uv">학과</label>
@@ -1017,21 +1015,21 @@ function ch_major3(maj3){
 																		<a class="dropdown-item"  onclick="ch_major('${col.major1}');">${col.major1}</a>
 																</c:forEach>
 															</div><br /> 
-																<input type="text" id="major1" name="major1" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" />
 														</div>
 														
 														<div class="list box02" class="dropdown">
 															<button type="button" id="button2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">대학분류 [중계열]</button>
 															<div class="menu dropdown-menu" id="maj2div" ></div>
 															<br /> 
-																<input type="text" id="major2" name="major2" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" />
 														</div>
 														
 														<div class="list box04" class="dropdown">
 															<button type="button" id="button3" class="btn btn-default dropdown-toggle" data-toggle="dropdown">학과명</button>
 															<div class="menu dropdown-menu" id="maj3div"></div>	
 															<br/>
-																<input type="text" id="major3" name="major" value=""  />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major3" name="major" value=""  />
 														</div>
 														
 													</div> 
@@ -1040,7 +1038,7 @@ function ch_major3(maj3){
 											</tr>
 										</tbody>
 										
-										<tbody id="tbSers" class="tbl_fold">
+										<tbody id="tbSers2" class="tbl_fold">
 											<tr>
 												<th scope="row">
 													<label for="uv">학과</label>
@@ -1066,7 +1064,7 @@ function ch_major3(maj3){
 					
 					<div class="tbl_list" style="margin-top: 0px;">
 						<table class="list_tbl01" id="tbSelctnInfList">
-							<caption>대학 리스트</caption>
+							<caption>검색버튼을 눌러주세요</caption>
 							<colgroup>
 								<col style="width:13%;">
 								<col style="width:6%;">
@@ -1093,7 +1091,7 @@ function ch_major3(maj3){
 									<th scope="col">관심<br>설정</th>
 								</tr>
 							</thead>
-							<tbody id="tbResult">
+							<tbody id="tbResult2">
 							<c:forEach items="${listsJ }" var="rowj">
 								<tr>
 								</tr>
