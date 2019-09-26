@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.MybatisMemberImpl">
+	
+	<!-- 
+		매개변수를 받는 두번째 방법으로 #{0}, #{1}과 같이
+		인덱스로 받을수 있다. 
+	 -->
+	<insert id="register">
+	insert into coconut(NAME,ID,PASS1,EMAIL,PHONE,SMS_OK,EMAIL_OK) values
+	(
+		#{NAME},
+		#{ID},
+		#{PASS1},
+		#{EMAIL},
+		#{PHONE},
+		#{SMS_OK},
+		#{EMAIL_OK}
+	)
+	</insert>
+	
+	<select id="login" resultType="mybatis.CoconutDTO">
+		SELECT * FROM coconut WHERE ID=#{0} and PASS1=#{1}
+	</select>
+	
+	<select id="selectDupIdChk" resultType="int">
+	SELECT COUNT(1) FROM COCONUT WHERE 1=1 AND ID=#{ID} 
+	</select>
+	
+	<select id="findId" resultType="mybatis.CoconutDTO">
+	select ID from coconut where NAME=#{NAME} and EMAIL=#{EMAIL} and PHONE=#{PHONE}
+	</select>
+	
+	<select id="searchid" resultType="int" >
+	SELECT COUNT(1) FROM COCONUT WHERE 1=1 AND ID=#{ID} and NAME=#{NAME} and EMAIL=#{EMAIL} and PHONE=#{PHONE}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="update_pw" parameterType="mybatis.CoconutDTO">
+		UPDATE COCONUT SET
+		PASS1 = #{PASS1}
+		WHERE ID=#{ID} <!-- whdals10 -->
+		AND NAME=#{NAME} <!-- 자르반 -->
+		AND EMAIL=#{EMAIL} <!-- dlwhdals118@naver.com -->
+		AND PHONE=#{PHONE} <!-- 010 -->
+	</update>
+
+	<insert id="snslogin">
+	insert into COCONUT (NAME,ID,EMAIL) select #{NAME},#{ID},#{EMAIL} 
+from dual where not exists 
+( select ID from COCONUT where ID=#{ID})
+	
+	</insert>
+	
+ 	<insert id="snsnoemail">
+	insert into COCONUT (NAME,ID) select #{NAME},#{ID}
+from dual where not exists 
+( select ID from COCONUT where ID=#{ID})
+	
+	</insert> 
+<!-- insert into coconut(NAME,ID,EMAIL) values
+	(
+		#{NAME},
+		#{ID},
+		#{EMAIL}
+	) -->
+<!-- insert into COCONUT (NAME,ID,EMAIL) select #{NAME},#{ID},#{EMAIL} 
+from dual where not exists 
+( select ID from COCONUT where ID=#{ID}); -->
+
+	
+	<select id="all_member" resultType="mybatis.CoconutDTO">
+		SELECT * FROM coconut
+	</select>
+	
+	<select id="admin_login" resultType="mybatis.CoconutDTO">
+		SELECT * FROM coconut WHERE auth='admin' and ID=#{0} and PASS1=#{1}
+	</select>
+</mapper>     

@@ -1,0 +1,20 @@
+/* div{border:1px solid blue;} */
+.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
+.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
+.top{margin:0 auto;width:895px;height:50px;}
+.main{margin:0 auto;width:895px;height:650px;text-align:center;}
+.calendar_in td a{text-decoration:none;color:black;}
+.calendar_in td a:hover{color:black;font-weight:bold;}
+.calendar_in td a:visited{color:black;}
+.move a{color:black;text-decoration:none;}
+.move a:hover{text-decoration:none;}
+.move a:visited{color:black;text-decoration:none;}
+.calendar_in{margin:0 auto;width:895px;border:1px solid }
+.calendar_in th{border:1px solid #c0c0c0;}
+.calendar_in tr td{border:1px solid #c0c0c0;height:100px;}
+.today a{color:black;text-decoration:none;}
+.today a:hover{text-decoration:none;color:black;}
+.today a:visited{color:black:text-decoration:none;}
+.ui-timepicker-container {z-index: 3500 !important;} /* timepicker 모달창에서 보이게하기 */
+.list{margin:0 auto;height:500px;width:895px;text-align:center;}
+.modal-body{text-align:center;}

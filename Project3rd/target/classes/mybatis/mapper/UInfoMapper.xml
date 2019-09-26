@@ -8,21 +8,30 @@
  <mapper namespace="mybatis.UInfoDAOImpl">
  
  <!-- 리스트 출력수  -->
- 	<select id="getTotalCount" resultType="int">
- 		SELECT COUNT(*) from info_univ
- 	</select>
+	<select id="getTotalCount" resultType="int">
+  	SELECT COUNT(*) from info_univ
+  </select>
+
+ 
  	
  <!-- 출력  -->
- 	<select id="listPage" resultType="mybatis.HInfoDTO">
- 		SELECT * FROM info_major
- 	</select>
+ 	<select id="listPage" resultType="mybatis.MyBoardDTO">
+  	SELECT * FROM (
+  		SELECT Tb.*, rownum rNum FROM (
+  			SELECT * FROM myboard ORDER BY idx DESC
+  		) Tb
+  	)
+  	WHERE rNum BETWEEN #{param1} AND #{param2}
+  	 </select>
  	
 <!--대학 검색 체크리스트  -->
- 	<select id="searchC" resultType="mybatis.UInfoDTO" >
-	SELECT * FROM info_univ WHERE u_type =#{param1,jdbcType=VARCHAR}
-		AND	uname LIKE '%'||#{param2}||'%'
-		AND location LIKE '%'||#{param3}||'%'
-		AND p_type LIKE '%'||#{param4}||'%'
+ 	<select id="searchC" resultType="mybatis.AllInfoDTO" >
+	SELECT * FROM (SELECT Tb.*, ROWNUM rNum FROM (SELECT * FROM info_univ WHERE 
+		u_type =#{param1,jdbcType=VARCHAR}
+		AND	uname LIKE '%'||#{param2,jdbcType=VARCHAR}||'%'
+		AND location LIKE '%'||#{param3,jdbcType=VARCHAR}||'%'
+		AND p_type LIKE '%'||#{param4,jdbcType=VARCHAR}||'%'
+		ORDER BY idx DESC)Tb)WHERE rNum BETWEEN #{param5,jdbcType=INTEGER} AND #{param6,jdbcType=INTEGER}
 
  	</select>
 
@@ -69,8 +78,8 @@
  	
  
  	<insert id="interest_chk">
- 		INSERT INTO interest_univ(idx,id,uname,location,totalman,major_num,enter_num,u_type,interest_num,interest_chk)
- 		 VALUES (interest_univ.nextval,#{_id},#{_uname},#{_location},#{totalman},#{major_num},#{enter_num},#{u_type},#{interest_num},#{interest_chk}) 
+ 		INSERT INTO interest_univ(id,u_type,uname,location,totalman,major_num,enter_num,interest)
+ 		 VALUES (interest_univ.nextval,#{_id},#{_u_type},#{_uname},#{_location},#{totalman},#{major_num},#{enter_num},#{interest}) 
  	</insert>
  	
  

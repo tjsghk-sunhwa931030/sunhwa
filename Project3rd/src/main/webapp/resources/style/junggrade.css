@@ -1,0 +1,9 @@
+/* div{border:1px solid blue;} */
+.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
+.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
+.rightcontents{font-size:15px;}
+.table{margin:0 auto;text-align:center;width:880px;}
+.table input[type="text"]{width:100px;}
+.collapse{margin:0 auto;width:895px;}
+.button{text-align:center;padding-top:20px}
+.year{margin:0 auto;width:895px;text-align:right;height:30px;}

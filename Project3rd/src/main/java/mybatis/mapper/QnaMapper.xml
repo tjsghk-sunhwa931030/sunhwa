@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="common.QnaDAOImpl">
+
+	<!-- 총 게시물 개수 -->
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM qna WHERE 1=1
+			<if test="keyString != null">
+				AND ${keyField} like '%'||#{keyString}||'%'
+			</if>
+			<if test='grade != "" and grade != null' >
+				AND grade=#{grade}
+			</if>
+			<if test='subject != "" and subject != null'>	
+				AND subject=#{subject} 
+			</if> 
+	</select>
+	
+	<!-- 리스트 --> 
+	<select id="listPage" resultType="common.QnaDTO">				
+		SELECT * FROM (SELECT Tb.*, ROWNUM rNum FROM (SELECT * FROM qna where 1=1
+			<if test="keyString != null">
+				AND ${keyField} like '%'||#{keyString}||'%'
+			</if>
+			<if test='grade != "" and grade !=null'> 
+				AND grade=#{grade}
+			</if> 
+			<if test='subject != "" and subject !=null'>	 
+				AND subject=#{subject} 
+			</if> 
+			 
+		 ORDER BY idx DESC)Tb)WHERE rNum BETWEEN #{start} AND #{end}
+	</select> 
+	
+	<!-- 글쓰기 -->
+	<insert id="write">
+		INSERT INTO qna (idx, name, title, contents, id, attachedfile, grade, subject)
+		VALUES (board_seq.nextval, #{name}, #{title}, #{contents}, #{id}, #{attachedfile, jdbcType=VARCHAR}, #{grade}, #{subject})
+	</insert>
+	
+	<!-- 조회수 증가 -->
+	<update id="updatevisit">
+		UPDATE qna SET visitcount=visitcount+1 WHERE idx=#{idx}
+	</update>
+	
+	<!-- 상세보기 -->
+	<select id="view" resultType="common.QnaDTO">
+		SELECT * FROM qna WHERE idx = #{idx}
+	</select>	
+	
+	<!-- 수정하기 -->
+	<update id="edit">
+		UPDATE qna 
+			SET	title=#{param1}, contents=#{param2}, attachedfile=#{param3, jdbcType=VARCHAR}, grade=#{param5}, subject=#{param6} 
+			WHERE idx=#{param4}
+	</update>
+	
+	<!-- 삭제하기 -->
+	<delete id="delete">
+		DELETE FROM qna WHERE idx=#{idx}
+	</delete>
+</mapper>  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -30,10 +30,7 @@
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
-					<li class="nav-item1"><a class="nav-link" href="#">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="#">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="#">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="#">도서관추천<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+					<li class="nav-item1"><a class="nav-link" href="#">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 				</ul>
 			</nav>
 		</div>

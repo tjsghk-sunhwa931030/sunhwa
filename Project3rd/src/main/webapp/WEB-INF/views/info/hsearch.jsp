@@ -1,5 +1,4 @@
-<%@page import="mybatis.UInfoDTO"%>
-<%@page import="mybatis.HInfoDTO"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -57,6 +56,20 @@ function locationList_onclick(lct){
 		
 		if(chk_location_list.length < 1){
 			$("#chk_location_all").prop("checked",true);
+		}
+	}	
+	
+	
+	if($(lct).attr("id") == "j_chk_location_all"){
+		$("#j_chk_location_all").prop("checked",true);
+		$("input[id^='j_chk_location']:not(input[id='j_chk_location_all'])").prop("checked",false);
+	}
+	else{		
+		$("#j_chk_location_all").prop("checked",false);
+		var chk_location_list = $("input[id^='j_chk_location']:checked").get();
+		
+		if(chk_location_list.length < 1){
+			$("#j_chk_location_all").prop("checked",true);
 		}
 	}	
 }
@@ -156,7 +169,7 @@ function ch_major3(maj3){
 			<div class="righttoptext">학과 검색</div>
 		</div>
 	</div>
-	<div class="contents">
+	<div class="contents" style="height: 1500px;">
 		<div class="leftmenu">
 			<nav class="left1">
 				<ul class="navbar-nav1  bg-light ">
@@ -447,42 +460,42 @@ function ch_major3(maj3){
 											<tr>
 												<td class="tt">지역</td>
 												<td>
-													<input type="checkbox" name="location"id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location"id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
 													<label for="chk_location_all">전체</label> 
-													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);">
+													<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);">
 													<label for="chk_location_1">강원</label> 
-													<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_2" value="경기" onclick="locationList_onclick(this);">
 													<label for="chk_location_2">경기</label> 
-													<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_3" value="경남" onclick="locationList_onclick(this);">
 													<label for="chk_location_3">경남</label> 
-													<input type="checkbox" name="location" id="chk_location_4" value="경북" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_4" value="경북" onclick="locationList_onclick(this);">
 													<label for="chk_location_4">경북</label> 
-													<input type="checkbox" name="location" id="chk_location_5" value="광주" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_5" value="광주" onclick="locationList_onclick(this);">
 													<label for="chk_location_5">광주</label> 
-													<input type="checkbox" name="location" id="chk_location_6" value="대구" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_6" value="대구" onclick="locationList_onclick(this);">
 													<label for="chk_location_6">대구</label> 
-													<input type="checkbox" name="location" id="chk_location_7" value="대전" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_7" value="대전" onclick="locationList_onclick(this);">
 													<label for="chk_location_7">대전</label>
-													<input type="checkbox" name="location" id="chk_location_8" value="부산" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_8" value="부산" onclick="locationList_onclick(this);">
 													<label for="chk_location_8">부산</label> 
 													<br /> 
-													<input type="checkbox" name="location" id="chk_location_9" value="서울" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_9" value="서울" onclick="locationList_onclick(this);">
 													<label for="chk_location_9">서울</label> 
-													<input type="checkbox" name="location" id="chk_location_10" value="세종" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_10" value="세종" onclick="locationList_onclick(this);">
 													<label for="chk_location_10">세종</label> 
-													<input type="checkbox" name="location" id="chk_location_11" value="울산" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_11" value="울산" onclick="locationList_onclick(this);">
 													<label for="chk_location_11">울산</label> 
-													<input type="checkbox" name="location" id="chk_location_12" value="인천" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_12" value="인천" onclick="locationList_onclick(this);">
 													<label for="chk_location_12">인천</label> 
-													<input type="checkbox" name="location" id="chk_location_13" value="전남" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_13" value="전남" onclick="locationList_onclick(this);">
 													<label for="chk_location_13">전남</label> 
-													<input type="checkbox" name="location" id="chk_location_14" value="전북" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_14" value="전북" onclick="locationList_onclick(this);">
 													<label for="chk_location_14">전북</label> 
-													<input type="checkbox" name="location" id="chk_location_15" value="제주" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_15" value="제주" onclick="locationList_onclick(this);">
 													<label for="chk_location_15">제주</label> 
-													<input type="checkbox" name="location" id="chk_location_16" value="충남" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_16" value="충남" onclick="locationList_onclick(this);">
 													<label for="chk_location_16">충남</label> 
-													<input type="checkbox" name="location" id="chk_location_17" value="충북" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location" id="j_chk_location_17" value="충북" onclick="locationList_onclick(this);">
 													<label for="chk_location_17">충북</label>
 												</td>
 											</tr>

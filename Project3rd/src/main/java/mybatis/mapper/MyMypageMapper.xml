@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="mybatis.MybatisMypageDAOImpl">
+	
+	<!-- 수시성적 저장 -->
+	<insert id="sugrade">
+		insert into grade_su (idx,subject,subject_type,counts,rate,jumsu,avg,deviation,totalman,year,semester,id) values
+		(sugrade_seq.nextval,#{subject}, #{subject_type}, #{counts}, #{rate}, #{jumsu}, #{avg}, #{deviation}, #{totalman}, #{year}, #{semester}, #{id})
+	</insert>
+	<!-- 수시성적 출력 -->
+	<select id="SulistPage" resultType="mybatis.MySugradeDTO">
+		select * from grade_su where year=#{param1} and semester=#{param2} and id=#{param3}
+	</select>
+	<!-- 수시성적 수정 -->
+	<update id="editsugrade">
+		update grade_su set subject_type=#{param3}, counts=#{param4}, rate=#{param5}, jumsu=#{param6}, avg=#{param7}, deviation=#{param8}, totalman=#{param9} where idx=#{param1} and id=#{param2}
+	</update>
+	
+	<!-- 정시성적 저장 -->
+	<insert id="junggrade">
+		insert into grade_jung(idx,id,years,dates,ex_name,year,natives,native_standard,native_percent,native_rate,math,math_type,math_standard,math_percent,math_rate,eng,eng_rate
+			,study1,study1_type,study1_standard,study1_percent,study1_rate,study2,study2_type,study2_standard,study2_percent,study2_rate,foreign,foreign_type,foreign_standard,
+			foreign_percent,foreign_rate,history,history_rate) values (
+			junggrade_seq.nextval,#{id},#{years},#{dates},#{ex_name},#{year},#{natives},#{native_standard},#{native_percent},#{native_rate},#{math},#{math_type},#{math_standard},
+			#{math_percent},#{math_rate},#{eng},#{eng_rate},#{study1},#{study1_type},#{study1_standard},#{study1_percent},#{study1_rate},#{study2},#{study2_type},#{study2_standard},
+			#{study2_percent},#{study2_rate},#{foreign},#{foreign_type},#{foreign_standard},#{foreign_percent},#{foreign_rate},#{history},#{history_rate}
+			)
+	</insert>
+	<!-- 정시성적 갯수 -->
+	<select id="count" resultType="int">
+		select count(*) from grade_jung where years=#{param1} and dates=#{param2} and year=#{param3} and id=#{param4}
+	</select>
+	<!-- 정시성적 출력 -->
+	<select id="junglist" resultType="mybatis.MyJunggradeDTO">
+		select * from grade_jung where years=#{param1} and dates=#{param2} and year=#{param3} and id=#{param4}
+	</select>
+	<!-- 정시성적 수정시 이미 있다면 삭제 -->
+	<delete id="deletejung">
+		delete from grade_jung where id=#{param1} and years=#{param2} and year=#{param3} and dates=#{param4}
+	</delete>
+	
+	<!-- 관심대학일반출력 -->
+	<select id="interuniv1" resultType="mybatis.MyInterestunivDTO">
+		select * from interest_univ where u_type=#{param1} and id=#{param2}
+	</select>
+	<!-- 관심대학전문출력 -->
+	<select id="interuniv2" resultType="mybatis.MyInterestunivDTO">
+		select * from interest_univ where u_type=#{param1} and id=#{param2}
+	</select>
+	<!-- 관심대학삭제 -->
+	<delete id="deleteinteruniv">
+		delete from interest_univ where idx=#{param1}
+	</delete>
+	
+	
+	<!-- 출결사항저장 -->
+	<insert id="attensave">
+		insert into attendance(idx,id,absence1,late1,leave1,outcome1,absence2,late2,leave2,outcome2,absence3,late3,leave3,outcome3) values(
+			attendance_seq.nextval, #{id},#{absence1},#{late1},#{leave1},#{outcome1},#{absence2},#{late2},#{leave2},#{outcome2},#{absence3},#{late3},#{leave3},#{outcome3}
+		)
+	</insert>
+	<!-- 봉사활동저장 -->
+	<insert id="volunsave">
+		insert into voluntary(idx,id,hour1,hour2,hour3) values (voluntary_seq.nextval,#{id},#{hour1},#{hour2},#{hour3})
+	</insert>
+	<!-- 출결레코드갯수 -->
+	<select id="count1" resultType="int">
+		select count(*) from attendance where id=#{param1}
+	</select>
+	<!-- 봉사레코드갯수 -->
+	<select id="count2" resultType="int">
+		select count(*) from voluntary where id=#{param1}
+	</select>
+	<!-- 출결사항리스트 -->
+	<select id="attenlist" resultType="mybatis.MyAttendanceDTO">
+		select * from attendance where id=#{param1}
+	</select>
+	<!-- 봉사활동리스트 -->
+	<select id="volunlist" resultType="mybatis.MyVoluntaryDTO">
+		select * from voluntary where id=#{param1}
+	</select>
+	<!-- 출결 삭제 -->
+	<delete id="deleteatten">
+		delete from attendance where id=#{param1}
+	</delete>
+	<!-- 봉사 삭제 -->
+	<delete id="deletevolun">
+		delete from voluntary where id=#{param1}
+	</delete>
+	
+	<!-- 개인정보출력 -->
+	<select id="personallist" resultType="mybatis.PersonalDTO">
+		select * from coconut where id=#{param1}
+	</select>
+	<!-- 개인정보수정처리 -->
+	<update id="personalaction">
+		update coconut set name=#{param1}, email=#{param2}, phone=#{param3}, sms_ok=#{param4}, email_ok=#{param5} where id=#{param6}
+	</update>
+	
+	<!-- 관리자 페이지에서 수정 처리 -->
+	<update id="update_member">
+		update coconut set name=#{param1}, pass1=#{param2}, email=#{param3}, phone=#{param4}, sms_ok=#{param5}, email_ok=#{param6}, auth=#{param7} where id=#{param8}
+	</update>
+	
+	<!-- 회원 삭제 / 탈퇴 -->
+	<delete id="delete_member">
+		delete from coconut where id=#{param1}
+	</delete>
+	 
+	<!-- 현재비밀번호select -->
+	<select id="whatnowpass" resultType="String">
+		select pass1 from coconut where id=#{param1}
+	</select>
+	<!-- 비밀번호변경처리 -->
+	<update id="chpassaction">
+		update coconut set pass1=#{param1} where id=#{param2}
+	</update>
+	
+	<!-- 내가쓴게시물출력 -->
+	<select id="myboard" resultType="mybatis.MyBoardDTO">
+		select * from board where id=#{param1}
+	</select>
+	<!-- 내가쓴댓글출력 -->
+	<select id="myboardreply" resultType="mybatis.MyBoardReplyDTO">
+		select * from board_reply where id=#{param1}
+	</select>
+	<!-- 내가쓴질문출력 -->
+	<select id="myqna" resultType="mybatis.MyQnaDTO">
+		select * from qna where id=#{param1}
+	</select>
+	<!-- 내가쓴질문댓글출력 -->
+	<select id="myqnareply" resultType="mybatis.MyQnaReplyDTO">
+		select * from qna_reply where id=#{param1}
+	</select>
+	<!-- 내가쓴질문삭제 -->
+	<delete id="deleteqna">
+		delete from qna where idx=#{param1}
+	</delete>
+	<!-- 내가쓴댓글삭제 -->
+	<delete id="deletereply">
+		delete from board_reply where re_idx=#{param1}
+	</delete>
+	<!-- 내가쓴게시물삭제 -->
+	<delete id="deletewrite">
+		delete from board where idx=#{param1}
+	</delete>
+	<!-- 내가쓴질문댓글삭제 -->
+	<delete id="deleteqnareply">
+		delete from qna_reply where re_idx=#{param1}
+	</delete>
+	
+	
+	<!-- 달력 데이터가져오기 -->
+	<select id="selectcal" resultType="mybatis.CalexDTO">
+		select * from calex where userId=#{param1} or userId=(select id from coconut where auth=#{param2})
+	</select>
+	<!-- 달력 insert -->
+	<insert id="addcal">
+		insert into calex 
+		(id,userId,title,starts,ends,descriptions,types,username,backgroundColor,textColor,allDay)
+		values 
+		(#{_id},#{userId},#{title},#{start},#{end},#{description},#{type},
+		#{username},#{backgroundColor},#{textColor},#{allDay})
+	</insert>
+	<!-- 일정의 사용자아이디 가져오기 -->
+	<select id="whatId" resultType="String">
+		select userId from calex where id=#{param1}
+	</select>
+	<!-- 달력수정 -->
+	<update id="editcal">
+		update calex set title=#{param1},starts=#{param2},ends=#{param3},
+		descriptions=#{param4},types=#{param5},backgroundColor=#{param6},allDay=#{param7}  where id=#{param8}
+	</update>
+	<!-- 달력끌기로 날짜수정 -->
+	<update id="editDate">
+		update calex set starts=#{param1}, ends=#{param2} where id=#{param3}
+	</update>
+	
+	<!-- 달력삭제 -->
+	<delete id="deletecal">
+		delete from calex where id=#{param1}
+	</delete>
+	<!-- 시험일정 가져오기 -->
+	<select id="examdday" resultType="mybatis.CalexDTO">
+		select * from calex where types=#{param1} and userid=#{param2} and starts>sysdate
+	</select>
+</mapper>

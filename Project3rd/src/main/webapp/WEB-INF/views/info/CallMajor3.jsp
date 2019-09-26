@@ -1,8 +1,5 @@
 
 <%@page import="org.springframework.ui.Model"%>
-<%@page import="mybatis.UInfoDTO"%>
-<%@page import="mybatis.UInfoDAOImpl"%>
-<%@page import="mybatis.AllInfoDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>

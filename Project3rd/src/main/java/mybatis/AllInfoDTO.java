@@ -47,6 +47,7 @@ public class AllInfoDTO {
 	private String su_mini;  
 	private String beak_avg;  
 	private String beak_mini;
+	private String bname;
 	
 	public AllInfoDTO(int idx, String u_type, String uname, String location, String p_type, String rate_univ,
 			String jobrate, String tuition, String totalman, String major_num, String enter_num, String interest,
@@ -55,7 +56,7 @@ public class AllInfoDTO {
 			String enter_name, String enter_ele, String enter_test, String enter_test1, String enter_test2,
 			String enter_test3, String enter_test4, String enter_test5, String enter_test6, String rate_sj,
 			String recruit_num, String ganada, String suc_reg, String unreg_suc, String unreg_end, String hak_avg,
-			String hak_mini, String hak_max, String su_avg, String su_mini, String beak_avg, String beak_mini) {
+			String hak_mini, String hak_max, String su_avg, String su_mini, String beak_avg, String beak_mini,String bname) {
 		super();
 		this.idx = idx;
 		this.u_type = u_type;
@@ -102,6 +103,7 @@ public class AllInfoDTO {
 		this.su_mini = su_mini;
 		this.beak_avg = beak_avg;
 		this.beak_mini = beak_mini;
+		this.bname = bname;
 	}  
 	
 	public AllInfoDTO() {
@@ -466,6 +468,14 @@ public class AllInfoDTO {
 
 	public void setBeak_mini(String beak_mini) {
 		this.beak_mini = beak_mini;
+	}
+
+	public String getBname() {
+		return bname;
+	}
+
+	public void setBname(String bname) {
+		this.bname = bname;
 	}
 	
 	

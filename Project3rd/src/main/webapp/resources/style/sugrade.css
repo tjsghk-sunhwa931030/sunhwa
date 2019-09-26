@@ -1,0 +1,11 @@
+/* div{border:1px solid blue;} */
+.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
+.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
+.rightcontents{font-size:15px;}
+.row{text-align:center;} 
+.table{margin:0 auto;width:895px;text-align:center;}
+.tabletop{margin-top:40px;margin-left:10px;}
+.input{width:65px;font-size:12px;}
+.row{border:1px solid #c0c0c0}
+.col{border-right:1px solid #c0c0c0}
+.col:last-child{border:0px}

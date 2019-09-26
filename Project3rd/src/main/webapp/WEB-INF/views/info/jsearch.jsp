@@ -479,7 +479,7 @@ function ch_major3(maj3){
          <div class="righttoptext">전형 검색</div>
       </div>
 	</div>
-	<div class="contents">
+	<div class="contents" style="height: 1500px;">
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">

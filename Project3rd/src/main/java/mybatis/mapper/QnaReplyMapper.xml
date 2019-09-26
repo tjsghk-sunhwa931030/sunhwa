@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common.QnaReplyDAOImpl">
+	
+	<!-- 댓글 카운트 -->
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) from qna_reply where b_idx=#{param1}
+	</select>
+	
+	<!-- 댓글 리스트 -->
+	<select id="listPage" resultType="common.QnaReplyDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM qna_reply where b_idx=#{param1} ORDER BY rgroup DESC, replydate ASC
+			) Tb
+		)
+	</select>
+	
+	<!-- 댓글 쓰기 -->
+	<insert id="rewrite">
+		INSERT INTO qna_reply (re_idx, id, b_idx, contents, rgroup, name)
+		VALUES (reply_seq.nextval, #{id}, #{b_idx}, #{contents}, reply_seq.nextval, #{name})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<update id="redelete">
+		UPDATE qna_reply SET show='N' where re_idx=#{param1}
+	</update> 
+	
+	<!-- 댓글수정 -->
+	<update id="reedit">
+		UPDATE qna_reply SET contents=#{param2} where re_idx=#{param1}
+	</update>
+	
+	<!-- 대댓글 전에 레코드 업뎃 -->
+	<update id="replyPrevUpdate">
+		UPDATE qna_reply SET rstep=rstep+1 WHERE rgroup=#{param1} AND rstep>#{param2}
+	</update>
+	
+	<!-- 대댓글 쓰기 -->
+	<insert id="rerewrite">
+		INSERT INTO qna_reply (id, b_idx, contents, rgroup, rstep, re_idx, name)
+		VALUES (#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, reply_seq.nextval, #{param6})
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

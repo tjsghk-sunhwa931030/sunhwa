@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mybatis.GradeImpl">
+	<!-- 수시 -->
+	<!-- 모든 성적 가져오기 -->
+	<select id="all_grade" resultType="mybatis.GradeDTO">
+  		select * from grade_su order by year, semester
+  	</select>
+  	
+  	<!-- 아이디 별 모든 성적 가져오기 -->
+	<select id="all_grade_by_id" resultType="mybatis.GradeDTO">
+  		select * from grade_su where id=#{param1} order by year, semester
+  	</select>
+  	
+  	<!-- 학년, 학기별 성적 -->
+  	<select id="grade" resultType="mybatis.GradeDTO">
+  		select * from grade_su where year=#{year} AND semester=#{semester} and id=#{id}
+  	</select>
+  	
+  	<!-- 백분위 점수 -->
+  	<select id="jumsu" resultType="Integer">
+  		select jumsu from grade_su where subject like '%'||#{subject}||'%' and year like '%'||#{year}||'%' 
+  		and semester like '%'||#{semester}||'%' and id like '%'||#{id}||'%'
+  	</select>
+  	
+  	<!-- 내신 등급 -->
+  	<select id="rate" resultType="Integer">
+  		select rate from grade_su where subject like '%'||#{subject}||'%' and year like '%'||#{year}||'%' 
+  		and semester like '%'||#{semester}||'%' and id like '%'||#{id}||'%'
+  	</select>
+	
+	<!-- 정시 -->
+  	<!-- 정시성적 출력 -->
+	<select id="junglist" resultType="mybatis.MyJunggradeDTO">
+		select * from grade_jung where years=#{param1} and dates=#{param2} and year=#{param3} and id=#{param4}
+	</select>
+	
+	<!-- 시험 출력 -->
+  	<select id="test_schedule" resultType="mybatis.CalexDTO">
+		select * from calex where username='공통일정'
+	</select>
+	
+	<!-- 아이디 별 시험 출력 -->
+  	<select id="test_schedule_modify" resultType="mybatis.CalexDTO">
+		select * from calex where id=#{param1}
+	</select>
+	
+	<!-- 시험 일정 수정 -->
+	<update id="update_test_schedule">
+		update calex set title=#{param1}, descriptions=#{param2}, starts=#{param3},
+			ends=#{param4}, types=#{param5}, username=#{param6}, backgroundColor=#{param7},
+			textColor=#{param8}, allDay=#{param9}
+		 where id=#{param10}
+	</update>
+	
+	<!-- 시험 일정 삭제 -->
+	<delete id="delete_test_schedule">
+		delete from calex where id=#{param1}
+	</delete>
+	
+	<!-- 시험 일정 입력 -->
+	<insert id="insert_test_schedule">
+		insert into calex(id, title, descriptions, starts, ends, 
+		types, username, backgroundColor, textColor, allday, userId) values
+		(#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, 
+		#{param6}, #{param7}, #{param8}, #{param9}, #{param10}, #{param11}
+		)
+	</insert>
+	
+	<!-- 도서관 지도에 불러오기 -->
+	<select id="searchLibrary" resultType="mybatis.MyLibraryDTO">
+	SELECT 
+		l_name, sido, sigungu, l_type, rest_day, weekday_start, weekday_end,
+		saturday_start, saturday_end, holiday_start, holiday_end,
+		num_seats, num_books, addr, phone_num, l_url, hp_latitude, hp_longitude, l_like, 
+	    trunc(to_number(DISTNACE_WGS84(#{param2}, #{param3}, hp_latitude, hp_longitude)),5) AS disKM,
+  		ROWNUM AS rNum
+	FROM library 
+	WHERE 
+		trunc(to_number(DISTNACE_WGS84(#{param2}, #{param3}, 
+			hp_latitude, hp_longitude)),5)<![CDATA[<=]]>#{param1}
+		AND ROWNUM BETWEEN 1 and 200 
+	ORDER BY trunc(to_number(DISTNACE_WGS84(#{param2}, #{param3}, 
+		hp_latitude, hp_longitude)),5) ASC
+	</select>
+	
+	<!-- 관리자 페이지의 도서관 관리 -->
+	<select id="library" resultType="mybatis.MyLibraryDTO">
+		select * from library
+	</select>
+	<!-- 도서관 아이디에 따라 불러오기 -->
+	<select id="library_by_id" resultType="mybatis.MyLibraryDTO">
+		select * from library where l_num=#{param1}
+	</select>
+	<!-- 도서관 삭제 -->
+	<delete id="delete_library">
+		delete from library where l_num=#{param1}
+	</delete>
+	
+	<update id="update_library">
+		update library 
+		set l_name=#{param1},
+			sido=#{param2},
+			sigungu=#{param3},
+			rest_day=#{param4},
+			weekday_start=#{param5},
+			weekday_end=#{param6},
+			saturday_start=#{param7},
+			saturday_end=#{param8},
+			holiday_start=#{param9},
+			holiday_end=#{param10},
+			addr=#{param11},
+			phone_num=#{param12},
+			hp_latitude=#{param13},
+			hp_longitude=#{param14},
+			l_like=#{param15}
+		where l_num=#{param16}
+	</update>
+	
+	<!-- 시험 일정 입력 -->
+	<insert id="insert_library">
+		insert into library(
+			l_num,
+			l_name,
+			sido,
+			sigungu,
+			rest_day,
+			weekday_start,
+			weekday_end,
+			saturday_start,
+			saturday_end,
+			holiday_start,
+			holiday_end,
+			addr,
+			phone_num,
+			hp_latitude,
+			hp_longitude,
+			l_like
+		) values(
+			library_seq.nextval, 
+			#{l_name},
+			#{sido},
+			#{sigungu},
+			#{rest_day},
+			#{weekday_start},
+			#{weekday_end},
+			#{saturday_start},
+			#{saturday_end},
+			#{holiday_start},
+			#{holiday_end},
+			#{addr},
+			#{phone_num},
+			#{hp_latitude},
+			#{hp_longitude},
+			#{l_like}
+		
+		)
+	</insert>
+	
+	<!-- 방문자수 업데이트 -->
+	<insert id="update_visit">
+		insert into visit (idx, visit_year, visit_month, visit_day) 
+		values(visit_seq.nextval, #{visit_year}, #{visit_month}, #{visit_day})
+	</insert>
+	
+	<!-- 월별 방문자수 조회 -->
+	<select id="select_visit" resultType="int">
+		select count(*) from visit where visit_year=#{param1} and visit_month=#{param2}
+	</select>
+	
+</mapper>

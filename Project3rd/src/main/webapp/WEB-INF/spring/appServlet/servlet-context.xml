@@ -16,6 +16,14 @@
 	<resources mapping="/style/**" location="/resources/style/"/>
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/images/**" location="/resources/images/" />
+	<resources mapping="/admin/**" location="/resources/admin/" />
+	<resources mapping="/vendor/**" location="/resources/vendorcal/" />
+	<resources mapping="/css/**" location="/resources/csscal/" />
+	<resources mapping="/image/**" location="/resources/imagecal/" />
+	<resources mapping="/js/**" location="/resources/jscal/" />
+	<resources mapping="/icon/**" location="/resources/icon/" />
+	<resources mapping="/smarteditor/**" location="/resources/smarteditor/" />
+	<resources mapping="/upload/**" location="/resources/upload/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -24,23 +32,48 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.kosmo.project3rd" />
+	<beans:bean id="naverLoginBO" class="com.kosmo.project3rd.NaverLoginBO" />
 	
 	<!-- DB연결 -->
-	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+	<beans:bean name="dataSource" 
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="oracle.jdbc.OracleDriver" />
 		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
-		<beans:property name="username" value="kosmo" />
-		<beans:property name="password" value="1234" />
+		<beans:property name="username" value="kosmo"/>
+		<beans:property name="password" value="1234"/>
 	</beans:bean>
-	
 	<!-- Mybatis 빈 생성 -->
-	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<beans:bean  id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource"/>
 		<beans:property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
 	</beans:bean>
 	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-		<beans:constructor-arg index="0" ref="sqlSessionFactory" />
+		<beans:constructor-arg index="0" ref="sqlSessionFactory"/>
 	</beans:bean>
 	
+	
+	<beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <beans:property name="host" value="smtp.gmail.com" />
+    <beans:property name="port" value="8080" />
+    <beans:property name="username" value="dlwhdals118118@gmail.com" />
+    <beans:property name="password" value="vkzm3710" />
+    <beans:property name="javaMailProperties">
+    <beans:props>
+      <beans:prop key="mail.smtp.auth">true</beans:prop>
+      <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+    </beans:props>
+    </beans:property>
+  </beans:bean>
+  
+  <!-- 파일업로드 빈 생성 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+		<beans:property name="maxUploadSize" value="1000000" />	
+	</beans:bean>
+	<!-- 파일다운로드 빈 생성 -->
+	<beans:bean id="fileDownloadView" class="util.FileDownLoadView" />
+	<beans:bean id="fileViewResolver" 
+		class="org.springframework.web.servlet.view.BeanNameViewResolver" >
+		<beans:property name="order" value="0" />
+	</beans:bean>
 	
 </beans:beans>

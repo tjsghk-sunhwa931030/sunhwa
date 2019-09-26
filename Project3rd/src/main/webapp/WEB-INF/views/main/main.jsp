@@ -8,236 +8,223 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Insert title here</title>
-<link rel="stylesheet" href="style/mainstyle.css" />
+<link rel="stylesheet" href="style/schedule.css" />
+<link rel="stylesheet" href="style/leftmenustyle.css" />
+<link rel="stylesheet" href="style/basic.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<!-- 가져온것 -->
+
+    <link rel="stylesheet" href="vendor/css/fullcalendar.min.css" />
+	<link rel="stylesheet" href="vendor/css/bootstrap.min.css">
+    <link rel="stylesheet" href='vendor/css/select2.min.css' />
+	<link rel="stylesheet" href='vendor/css/bootstrap-datetimepicker.min.css' />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="css/main.css">
+<style>
+*{margin:0;padding:0;font-family:verdana;}
+.dropdown-menu a{color:black;text-decoration:none;}
+.dropdown-menu a:hover{color:black;font-weight:bold;}
+.dropdown-menu a:visited{color:black;}
+#contextMenu{border:1px solid black;}
+#contextMenu ul{text-align:center;}
+#eventModal{z-index:100000 !important;}
+/* div{border:1px solid blue;} */
+</style>
+<script>
+/* window.onload = function(){
+		
+	alert('${sessionScope.siteUserInfo }');
+		
+}
+ */
+</script>
 </head>
 <body>
-<%@include file="./head.jsp" %> 
-	<div class="contents1">
-		<div class="calendar">
-			<div class="cal_top">
-				<table cellpadding="0" cellspacing="0" border="0">
-					<colgroup>
-						<col width="13px;" />
-						<col width="*" />
-						<col width="13px;" />
-					</colgroup>
-					<tr>
-						<td><a href=""><img src="images/cal_a01.gif" style="margin-top:3px;" width="20px" height="20px"/></a></td>
-						<td>&nbsp;&nbsp;2019년&nbsp;&nbsp;9월&nbsp;&nbsp;</td>
-						<td><a href=""><img src="images/cal_a02.gif" style="margin-top:3px;" width="20px" height="20px"/></a></td>
-					</tr>
-				</table>
-			</div>
-			<div class="cal_bottom">
-				<table   border="0" class="calendar_in">
-					<colgroup>
-						<col width="14%"/>
-						<col width="14%" />
-						<col width="14%" />
-						<col width="14%" />
-						<col width="14%" />
-						<col width="14%" />
-						<col width="14%" />
-					</colgroup>
-					<tr>
-						<th><img src="./images/day01.gif" alt="S" /></th>
-						<th><img src="./images/day02.gif" alt="M" /></th>
-						<th><img src="./images/day03.gif" alt="T" /></th>
-						<th><img src="./images/day04.gif" alt="W" /></th>
-						<th><img src="./images/day05.gif" alt="T" /></th>
-						<th><img src="./images/day06.gif" alt="F" /></th>
-						<th><img src="./images/day07.gif" alt="S" /></th>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">1</a></td>
-						<td align=left valign=top height=73><a href="">2</a></td>
-						<td align=left valign=top height=73><a href="">3</a></td>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">4</a></td>
-						<td align=left valign=top height=73><a href="">5</a></td>
-						<td align=left valign=top height=73><a href="">6</a></td>
-						<td align=left valign=top height=73><a href="">7</a></td>
-						<td align=left valign=top height=73><a href="">8</a></td>
-						<td align=left valign=top height=73><a href="">9</a></td>
-						<td align=left valign=top height=73><a href="">10</a></td>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">11</a></td>
-						<td align=left valign=top height=73><a href="">12</a></td>
-						<td align=left valign=top height=73><a href="">13</a></td>
-						<td align=left valign=top height=73><a href="">14</a></td>
-						<td align=left valign=top height=73><a href="">15</a></td>
-						<td align=left valign=top height=73><a href="">16</a></td>
-						<td align=left valign=top height=73><a href="">17</a></td>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">18</a></td>
-						<td align=left valign=top height=73><a href="">19</a></td>
-						<td align=left valign=top height=73><a href="">20</a></td>
-						<td align=left valign=top height=73><a href="">21</a></td>
-						<td align=left valign=top height=73><a href="">22</a></td>
-						<td align=left valign=top height=73><a href="">23</a></td>
-						<td align=left valign=top height=73><a href="">24</a></td>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">25</a></td>
-						<td align=left valign=top height=73><a href="">26</a></td>
-						<td align=left valign=top height=73><a href="">27</a></td>
-						<td align=left valign=top height=73><a href="">28</a></td>
-						<td align=left valign=top height=73><a href="">29</a></td>
-						<td align=left valign=top height=73><a href="">30</a></td>
-						<td align=left valign=top height=73><a href="">31</a></td>
-					</tr>
-					<tr>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-						<td align=left valign=top height=73><a href="">&nbsp;</a></td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="timetable"> 
-			<table>
-				<tr class="timetr">
-					<td>00:00-01:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>01:00-02:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>02:00-03:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>03:00-04:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>04:00-05:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>05:00-06:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>06:00-07:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>07:00-08:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>08:00-09:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>09:00-10:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>10:00-11:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>11:00-12:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>12:00-13:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>13:00-14:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>14:00-15:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>15:00-16:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>16:00-17:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>17:00-18:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>18:00-19:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>19:00-20:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>20:00-21:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>21:00-22:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>22:00-23:00</td>
-					<td></td>
-				</tr>
-				<tr>
-					<td>23:00-00:00</td>
-					<td></td>
-				</tr>
-			</table>
-		</div>
-		<div class="todolist">
-			<p class="main_title" style="text-align:center;">[오늘의할일]</p>
-			<table class="dolistcheck">
-				<tr>
-					<td>
-						<input type="checkbox" value="" id="a1"/><label for="a1" class="dolistvalue"></label><span class="dowrite">면접준비하기</span>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<div class="divide">
-		 <!-- 영역구분선 --> 
-	</div>
-	<div class="contents2">
-	 	<div class="graph" >
-	 		&lt;그래프영역&gt;
-	 	</div>
-	 	<div class="result">
-	 		&lt;대학추천결과&gt;
-	 	</div>
-	 	<div class="myqa">
-	 		<p class="main_title" style="text-align:center">[내질문사항]</p>
-	 		<ul class="main_board_list">
-	 			<li><p><a href="">내질문사항</a><span>2019.08.31</span></p></li>
-	 			<li><p><a href="">내질문사항</a><span>2019.08.31</span></p></li>
-	 		</ul>
-	 	</div>
-	</div>
-	<%@include file="./bottom.jsp" %>
+	<%@include file="../main/head.jsp" %> 
+	
+	<div class="contents" style="width:80%;height:1000px;">
+			<div class="rightcontents" style="float:left">
+				<!-- 일자 클릭시 메뉴오픈 -->
+		        <div id="contextMenu" class="dropdown clearfix">
+		            <ul class="dropdown-menu dropNewEvent" role="menu" aria-labelledby="dropdownMenu"
+		                style="display:block;position:static;margin-bottom:5px;">
+		                <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#eventModal">개인일정</a></li>
+		                <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#eventModal">면접일정</a></li>
+		                <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#eventModal">서류일정</a></li>
+		                <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#eventModal">시험일정</a></li>
+		                
+		                <li class="divider"></li>
+		                <li><a tabindex="-1" href="#" data-role="close">Close</a></li>
+		            </ul>
+		        </div>
+		
+				<!-- 달력나오는 부분 -->
+		        <div id="wrapper">
+		            <div id="loading"></div>
+		            <div id="calendar"></div>
+		        </div>
+		
+		
+		        <!-- 일정 추가 MODAL -->
+		        <div class="modal fade" tabindex="-1" role="dialog" id="eventModal" >
+		            <div class="modal-dialog" role="document">
+		                <div class="modal-content">
+		                    <div class="modal-header">
+		                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+		                                aria-hidden="true">&times;</span></button>
+		                        <h4 class="modal-title"></h4>
+		                    </div>
+		                    <div class="modal-body">
+								<input type="hidden" name="edit-id" id="edit-id"/> <!-- 출력시 일정의 고유아이디를 저장할곳 -->
+		        				<input type="hidden" name="userId" id="userId" value="${sessionScope.siteUserInfo }" />
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-allDay">하루종일</label>
+		                                <input class='allDayNewEvent' id="edit-allDay" type="checkbox">
+		                            </div>
+		                        </div>
+		
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-title">일정명</label>
+		                                <input class="inputModal" type="text" name="edit-title" id="edit-title"
+		                                    required="required" />
+		                            </div>
+		                        </div>
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-start">시작</label>
+		                                <input class="inputModal" type="text" name="edit-start" id="edit-start" />
+		                            </div>
+		                        </div>
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-end">끝</label>
+		                                <input class="inputModal" type="text" name="edit-end" id="edit-end" />
+		                            </div>
+		                        </div>
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-type">구분</label>
+		                                <select class="inputModal" type="text" name="edit-type" id="edit-type">
+		                                   <option value="개인일정">개인일정</option>
+		                                   <option value="면접일정">면접일정</option>
+		                                   <option value="서류일정">서류일정</option>
+		                                   <option value="시험일정">시험일정</option>
+		                                </select>
+		                            </div>
+		                        </div>
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-color">색상</label>
+		                                <select class="inputModal" name="color" id="edit-color">
+		                                    <option value="#D25565" style="color:#D25565;">빨간색</option>
+		                                    <option value="#9775fa" style="color:#9775fa;">보라색</option>
+		                                    <option value="#ffa94d" style="color:#ffa94d;">주황색</option>
+		                                    <option value="#74c0fc" style="color:#74c0fc;">파란색</option>
+		                                    <option value="#f06595" style="color:#f06595;">핑크색</option>
+		                                    <option value="#63e6be" style="color:#63e6be;">연두색</option>
+		                                    <option value="#a9e34b" style="color:#a9e34b;">초록색</option>
+		                                    <option value="#4d638c" style="color:#4d638c;">남색</option>
+		                                    <option value="#495057" style="color:#495057;">검정색</option>
+		                                </select>
+		                            </div>
+		                        </div>
+		                        <div class="row">
+		                            <div class="col-xs-12">
+		                                <label class="col-xs-4" for="edit-desc">설명</label>
+		                                <textarea rows="4" cols="50" class="inputModal" name="edit-desc"
+		                                    id="edit-desc"></textarea>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="modal-footer modalBtnContainer-addEvent">
+		                        <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+		                        <button type="button" class="btn btn-primary" id="save-event">저장</button>
+		                    </div>
+		                    <div class="modal-footer modalBtnContainer-modifyEvent">
+		                        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+		                        <button type="button" class="btn btn-danger" id="deleteEvent">삭제</button>
+		                        <button type="button" class="btn btn-primary" id="updateEvent">저장</button>
+		                    </div>
+		                </div><!-- /.modal-content -->
+		            </div><!-- /.modal-dialog -->
+		        </div><!-- /.modal -->
+		
+		        <div class="panel panel-default">
+		
+		            <div class="panel-heading">
+		                <h3 class="panel-title">필터</h3>
+		            </div>
+		
+		            <div class="panel-body">
+		
+		                <div class="col-lg-6">
+		                    <label for="calendar_view">구분별</label>
+		                    <div class="input-group">
+		                        <select class="filter" id="type_filter" multiple="multiple">
+		                            <option value="개인일정">개인일정</option>
+		                            <option value="면접일정">면접일정</option>
+		                            <option value="서류일정">서류일정</option>
+		                            <option value="시험일정">시험일정</option>
+		                        </select>
+		                    </div>
+		                </div>
+		
+		                 <div class="col-lg-6">
+		                    <label for="calendar_view">등록자별</label>
+		                    <div class="input-group">
+		                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="공통일정"
+		                                checked>공통일정</label>
+		                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="관심대학일정"
+		                                checked>관심대학일정</label>
+		                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="me"
+		                                checked>me</label>
+		                        <!-- <label class="checkbox-inline"><input class='filter' type="checkbox" value="사나"
+		                                checked>사나</label>
+		                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="나연"
+		                                checked>나연</label>
+		                        <label class="checkbox-inline"><input class='filter' type="checkbox" value="지효"
+		                                checked>지효</label> -->
+		                    </div>
+		                </div> 
+		            </div>
+		        </div>
+		        <!-- /.filter panel -->
+	        </div>
+	        <!-- 그래프1 -->
+	        <div style="border:1px solid blue;float:left;width:500px;margin-top:20px;margin-left:15px;height:480px;">
+	        </div>
+	        <!-- 그래프2 -->
+	        <div style="border:1px solid blue;float:left;width:500px;margin-left:15px;height:470px;margin-top:10px;">
+	        </div>
+        </div>
+    <!-- /.container -->
+			
+	
+	<%@include file="../main/bottom.jsp" %>	
+	
+	<script src="vendor/js/jquery.min.js"></script>
+	<script src="vendor/js/bootstrap.min.js"></script>
+    <script src="vendor/js/moment.min.js"></script>
+    <script src="vendor/js/fullcalendar.min.js"></script>
+    <script src="vendor/js/ko.js"></script>
+    <script src="vendor/js/select2.min.js"></script>
+    <script src="vendor/js/bootstrap-datetimepicker.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/addEvent.js"></script>
+    <script src="js/editEvent.js"></script>
+    <script src="js/etcSetting.js"></script>
 </body>
 </html>

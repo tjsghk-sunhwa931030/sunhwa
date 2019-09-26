@@ -7,6 +7,7 @@
 <body>
 <script>
 window.onload = function(){
+
 	location.href="main.do";
 }
 </script>

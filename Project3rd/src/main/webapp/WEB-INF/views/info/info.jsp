@@ -1,10 +1,7 @@
-<%@page import="mybatis.UInfoDTO"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-UInfoDTO dto = new UInfoDTO();
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,52 +20,6 @@ UInfoDTO dto = new UInfoDTO();
 <script type="text/javascript">
 
 
-//체크박스 접었을때 (접었을때 전체가 디폴트로 나오는거 수정해야함 )
-function fn_box_text_set() {
-	
-	//지역 텍스트
-	var chk_location_list = $("input[id^='chk_location']:checked").get();
-	var location_list = "";
-	$.each(chk_location_list, function(index, item){
-		var location_id = item.id.toString();
-		location_list += ","+$("#"+location_id).next("label").html();
-	});
-	
-	$("#location_view").html(location_list.substring(1));
-
-	//설립유형 텍스트
-	var chk_ptype_list = $("input[id^='chk_ptype']:checked").get();
-	var ptype_list = "";
-	$.each(chk_ptype_list, function(index, item){
-		var ptype_id = item.id.toString();
-		ptype_list += ","+$("#"+ptype_id).next("label").html();
-	});
-	
-	$("#ptype_view").html(ptype_list.substring(1));
-
-
-}//체크박스 접기
-
-
-
-//일반대학조건 접기
-function fn_box_fold(){
-	fn_box_text_set();
-	
-	$("#btn_box_fold").hide();
-	$("#btn_box_out").show();
-	$("#tbDetail").hide();
-	$("#tbSimple").show();
-}
-
-//일반대학조건 펼치기
-function fn_box_out(){
-	$("#btn_box_out").hide();
-	$("#btn_box_fold").show();
-	$("#tbSimple").hide();
-	$("#tbDetail").show();
-}
-
 
 //체크박스 동작 구현 (전체 선택 <--> 개별선택)
 //지역
@@ -86,10 +37,25 @@ function locationList_onclick(lct){
 			$("#chk_location_all").prop("checked",true);
 		}
 	}	
+	
+	//전문대
+	if($(lct).attr("id") == "j_chk_location_all"){
+		$("#j_chk_location_all").prop("checked",true);
+		$("input[id^='j_chk_location']:not(input[id='j_chk_location_all'])").prop("checked",false);
+	}else{
+		
+		$("#j_chk_location_all").prop("checked",false);
+		var chk_location_list = $("input[id^='j_chk_location']:checked").get();
+		
+		if(chk_location_list.length < 1){
+			$("#j_chk_location_all").prop("checked",true);
+		}
+	}	
 }
 
 //설립유형
 function ptypeList_onclick(ptype){
+	//일반대
 	if($(ptype).attr("id") == "chk_ptype_all"){
 		$("#chk_ptype_all").prop("checked",true);
 		$("input[id^='chk_ptype']:not(input[id='chk_ptype_all'])").prop("checked",false);
@@ -100,6 +66,20 @@ function ptypeList_onclick(ptype){
 		
 		if(chk_ptype_list.length < 1){
 			$("#chk_ptype_all").prop("checked",true);
+		}
+	}		
+	
+	//전문대
+	if($(ptype).attr("id") == "j_chk_ptype_all"){
+		$("#j_chk_ptype_all").prop("checked",true);
+		$("input[id^='j_chk_ptype']:not(input[id='j_chk_ptype_all'])").prop("checked",false);
+	}else{
+		
+		$("#j_chk_ptype_all").prop("checked",false);
+		var chk_ptype_list = $("input[id^='j_chk_ptype']:checked").get();
+		
+		if(chk_ptype_list.length < 1){
+			$("#j_chk_ptype_all").prop("checked",true);
 		}
 	}			
 }
@@ -128,10 +108,45 @@ function utypeClick(){
 	
  }
 
-function click_interest(){
+function click_interest(idx){
 	$("#noheart").toggle();
 	$("#heart").toggle();
+	
+	$.ajax({
+		url : "./interest_chk.do",
+		type : 'POST',
+		dataType : "html",
+		data :{
+			idx : idx
+		},
+		success : function(){
+			alert("관심대학 설정되었습니다.")
+			console.log("allData: "+idx);
+		},
+		error : function(e){
+			alert("실패"+e.status)
+			console.log("allData: "+idx);
+		}
+	});
 
+}
+
+
+function click_nointerest(){
+	$("#heart").toggle();
+	$("#noheart").toggle();
+
+	$.ajax({
+		url : "./interest_chk.do",
+		dataType : "html",
+		success : function(){
+			alert("관심대학 설정 취소되었습니다.")
+		},
+		error : function(e){
+			alert("실패"+e.status)
+		}
+	});
+	
 }
 
 
@@ -139,7 +154,6 @@ function click_interest(){
 <style type="text/css">
 	.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
 	.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
-	.contents{height: 1000px;}
 	#hidden{display: none;}
 </style>
 
@@ -158,7 +172,7 @@ function click_interest(){
 	</div>
 
 
-	<div class="contents">
+	<div class="contents" style="height: 1000px;">
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
@@ -190,8 +204,6 @@ function click_interest(){
 							<!-- 대학 -->
 							<div class="tbl_wrap">
 								<input type="hidden" id="u_type" name="u_type" value="일반대" />
-								<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-								<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 								<table class="search_tbl01">
 									<colgroup>
 										<col style="width:8%;">
@@ -303,10 +315,12 @@ function click_interest(){
 							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
+							<col style="width:70px;">
 							<col style="width:40px;">
 						</colgroup>
 						<thead style="border-bottom: 1px solid #ddd;">
 							<tr style="border-bottom: none;">
+								<th id="hid-den" scope="col" rowspan="2">IDX</th>
 								<th id="hidden" scope="col" rowspan="2">대학</th>
 								<th scope="col" rowspan="2">대학명</th>
 								<th scope="col" rowspan="2">지역</th>
@@ -326,6 +340,7 @@ function click_interest(){
 										<tr>
 										</tr>
 										<tr>
+											<td id="hid-den" scope="col" rowspan="2">${row.idx}</td>			
 											<td id="hidden" scope="col" rowspan="2">${row.u_type}</td>			
 											<td scope="col" rowspan="2">${row.uname}</td>
 											<td scope="col" rowspan="2">${row.location}</td>
@@ -336,25 +351,25 @@ function click_interest(){
 											<td scope="col" rowspan="2">${row.major_num}</td>
 											<td scope="col" rowspan="2">${row.enter_num}</td>
 											<td scope="col" rowspan="2">
-												<c:choose>
-													<c:when test="${id ne null }">
-														<i onclick="click_interest(this)" id="noheart" class="far fa-star" style='font-size:24px'></i>
-													</c:when>
-													
-												</c:choose>
-												<i onclick="click_interest(this)" id="noheart" class="far fa-star" style='font-size:24px'></i>
-												<i onclick="click_interest(this)" id="heart" class="fas fa-star" style='display:none; font-size:24px'></i>
+												<i onclick="click_interest('${row.idx}');" id="noheart${row.idx }" class="far fa-star" style='font-size:24px'></i>
+												<i onclick="click_nointerest('${row.idx}');" id="heart${row.idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
 											</td>
 										</tr>
-								
 							</c:forEach>
-					
+							
+								<div style="width:100%;">
+									  <ul class="pagination pagination-sm" style="color: black;">
+									   ${pagingImg }
+									  </ul>
+								</div>
+								
 					
 						</tbody>
 					</table>
-	
 				</div>
 				<!-- //대학리스트 -->
+				
+				
 		
 			</div><!-- 일반대학교 끝 -->
 			
@@ -368,8 +383,6 @@ function click_interest(){
 							<!-- 대학 -->
 							<div class="tbl_wrap">
 						<input type="hidden" id="u_type" name="u_type" value="전문대" />
-								<p class="box_btn" id="btn_box_fold" style=""><a href="javascript:fn_box_fold()" title="접기"><img src="./resources/images/btn_box_fold.png" alt="접기"></a></p>
-								<p class="box_btn" id="btn_box_out" style="display: none;"><a href="javascript:fn_box_out()" title="펼치기"><img src="./resources/images/btn_box_out.png" alt="펼치기"></a></p>
 								<table class="search_tbl01">
 									<colgroup>
 										<col style="width:8%;">
@@ -400,25 +413,25 @@ function click_interest(){
 										
 											<td class="tt">지역</td>
 												<td>
-												<input type="checkbox" name="location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
-												<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
-												<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
-												<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
-												<input type="checkbox" name="location" id="chk_location_4" value="경북" onclick="locationList_onclick(this);"><label for="chk_location_4">경북</label>
-												<input type="checkbox" name="location" id="chk_location_5" value="광주" onclick="locationList_onclick(this);"><label for="chk_location_5">광주</label>
-												<input type="checkbox" name="location" id="chk_location_6" value="대구" onclick="locationList_onclick(this);"><label for="chk_location_6">대구</label>
-												<input type="checkbox" name="location" id="chk_location_7" value="대전" onclick="locationList_onclick(this);"><label for="chk_location_7">대전</label>
-												<input type="checkbox" name="location" id="chk_location_8" value="부산" onclick="locationList_onclick(this);"><label for="chk_location_8">부산</label>
+												<input type="checkbox" name="location" id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
+												<input type="checkbox" name="location" id="j_chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
+												<input type="checkbox" name="location" id="j_chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
+												<input type="checkbox" name="location" id="j_chk_location_4" value="경북" onclick="locationList_onclick(this);"><label for="chk_location_4">경북</label>
+												<input type="checkbox" name="location" id="j_chk_location_5" value="광주" onclick="locationList_onclick(this);"><label for="chk_location_5">광주</label>
+												<input type="checkbox" name="location" id="j_chk_location_6" value="대구" onclick="locationList_onclick(this);"><label for="chk_location_6">대구</label>
+												<input type="checkbox" name="location" id="j_chk_location_7" value="대전" onclick="locationList_onclick(this);"><label for="chk_location_7">대전</label>
+												<input type="checkbox" name="location" id="j_chk_location_8" value="부산" onclick="locationList_onclick(this);"><label for="chk_location_8">부산</label>
 												<br/>
-												<input type="checkbox" name="location" id="chk_location_9" value="서울" onclick="locationList_onclick(this);"><label for="chk_location_9">서울</label>
-												<input type="checkbox" name="location" id="chk_location_10" value="세종" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
-												<input type="checkbox" name="location" id="chk_location_11" value="울산" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
-												<input type="checkbox" name="location" id="chk_location_12" value="인천" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
-												<input type="checkbox" name="location" id="chk_location_13" value="전남" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
-												<input type="checkbox" name="location" id="chk_location_14" value="전북" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
-												<input type="checkbox" name="location" id="chk_location_15" value="제주" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
-												<input type="checkbox" name="location" id="chk_location_16" value="충남" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
-												<input type="checkbox" name="location" id="chk_location_17" value="충북" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
+												<input type="checkbox" name="location" id="j_chk_location_9" value="서울" onclick="locationList_onclick(this);"><label for="chk_location_9">서울</label>
+												<input type="checkbox" name="location" id="j_chk_location_10" value="세종" onclick="locationList_onclick(this);"><label for="chk_location_10">세종</label>
+												<input type="checkbox" name="location" id="j_chk_location_11" value="울산" onclick="locationList_onclick(this);"><label for="chk_location_11">울산</label>
+												<input type="checkbox" name="location" id="j_chk_location_12" value="인천" onclick="locationList_onclick(this);"><label for="chk_location_12">인천</label>
+												<input type="checkbox" name="location" id="j_chk_location_13" value="전남" onclick="locationList_onclick(this);"><label for="chk_location_13">전남</label>
+												<input type="checkbox" name="location" id="j_chk_location_14" value="전북" onclick="locationList_onclick(this);"><label for="chk_location_14">전북</label>
+												<input type="checkbox" name="location" id="j_chk_location_15" value="제주" onclick="locationList_onclick(this);"><label for="chk_location_15">제주</label>
+												<input type="checkbox" name="location" id="j_chk_location_16" value="충남" onclick="locationList_onclick(this);"><label for="chk_location_16">충남</label>
+												<input type="checkbox" name="location" id="j_chk_location_17" value="충북" onclick="locationList_onclick(this);"><label for="chk_location_17">충북</label>
 											
 											</td>
 										</tr>
@@ -427,9 +440,9 @@ function click_interest(){
 											<td class="tt">설립유형</td>
 											<td>
 											
-		            							<input type="checkbox" name="p_type" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
-												<input type="checkbox" name="p_type" id="chk_ptype_1" value="국공립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
-												<input type="checkbox" name="p_type" id="chk_ptype_2" value="사립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
+		            							<input type="checkbox" name="p_type" id="j_chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+												<input type="checkbox" name="p_type" id="j_chk_ptype_1" value="국공립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
+												<input type="checkbox" name="p_type" id="j_chk_ptype_2" value="사립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
 		            							
 		            					
 											</td>
@@ -522,9 +535,11 @@ function click_interest(){
 			
 				
 				<!-- 페이징 -->
-		    	<div class="paging" id="paginationholder"> 
-		        	<ul id="pagination" class="pages"></ul>
-		    	</div>
+		    	<div style="width:100%;">
+					<ul class="pagination" style="margin-left:40%;">
+					${pagingImg }
+					</ul>
+				</div>
 				<!-- //페이징 -->
 				
 			</div>
