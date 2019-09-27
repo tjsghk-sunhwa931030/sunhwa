@@ -346,44 +346,6 @@ function checkboxFrm(fn){
 	var enter_ele_list = $("input[id^='enter_ele']:checked").get();
 
 
-	
-
-	/* $.each(locationlist, function(index, item){
-		var location = item.value.toString();
-	
-		lst_location_list[index] = location;
-	});
-	
-	$.each(recruit_list, function(index, item){
-		var recruit_time = item.value.toString();
-
-		lst_recruit_list[index] = recruit_time;
-	});
-	
-	$.each(enter_type_list, function(index, item){
-		var enter_type = item.value.toString();
-
-		lst_enter_type_list[index] = enter_type;
-	});
-	
-	$.each(enter_name_list, function(index, item){
-		var enter_name = item.value.toString();
-
-		lst_enter_name_list[index] = enter_name;
-	});
-	
-	$.each(enter_ele_list, function(index, item){
-		var enter_ele_list = item.value.toString();
-
-		lst_enter_ele_list[index] = enter_ele_list;
-	});
-	
-	$.each(enter_test_list, function(index, item){
-		var enter_test = item.value.toString();
-
-		lst_enter_test_list[index] = enter_test;
-	}); */
-	
 
 }
 
@@ -429,6 +391,7 @@ function ch_major(maj){
 
 }
 
+//중계열 선택
 function ch_major2(maj2){
 		
 	document.getElementById('major2').value =maj2;
@@ -453,6 +416,7 @@ function ch_major2(maj2){
 	});
 }
 
+//학과명 선택
 function ch_major3(maj3){
 	
 	document.getElementById('major3').value =maj3;
@@ -463,7 +427,67 @@ function ch_major3(maj3){
 
 }
 
+//관심전형 선택
+function click_interestJ(){
 
+	$.ajax({
+		url : "./interest_chkJ.do",
+		type : 'POST',
+		dataType : "html",
+		data :{
+			major_idx : major_idx,
+			   id : id
+		},
+		success : function(){
+			$("#noheart"+major_idx).toggle();
+			$("#heart"+major_idx).toggle();
+	
+			alert("관심대학 설정되었습니다.")
+			alert("대학정보"+uname)
+			alert("id"+id)
+	
+		
+		},
+		error : function(e){
+			alert("실패"+e.status)
+			alert("대학정보"+uname)
+			alert("id"+id)
+			
+		
+		}
+	});
+
+}
+
+
+function click_nointerestJ(major_idx,id){
+
+$.ajax({
+	url : "./interest_unchkJ.do",
+	type : 'GET',
+	dataType : "html",
+	data :{
+		major_idx : major_idx,
+		   id : id
+	},
+	success : function(){
+		
+		$("#heart"+major_idx).toggle();
+		$("#noheart"+major_idx).toggle();
+
+		alert("관심대학 설정이 취소되었습니다.")
+		alert("major_idx="+major_idx)
+		alert("id"+id)
+	},
+	error : function(e){
+		alert("실패"+e.status)
+		alert("major_idx="+major_idx)
+		alert("id"+id)
+	
+	}
+});
+
+}
 
 
 </script>
@@ -767,6 +791,7 @@ function ch_major3(maj3){
 							<caption>검색버튼을 눌러주세요</caption>
 							<colgroup>
 								<col style="width:13%;">
+								<col style="width:13%;">
 								<col style="width:6%;">
 								<col style="width:8%;">
 								<col><!-- 전형명 -->
@@ -779,6 +804,7 @@ function ch_major3(maj3){
 							</colgroup>
 							<thead style="border-bottom: 1px solid #ddd;">
 								<tr>
+									<th id="hid-den" scope="col">IDX</th>
 									<th scope="col">대학</th>
 									<th scope="col">모집<br>시기</th>
 									<th scope="col">학과</th>
@@ -796,6 +822,7 @@ function ch_major3(maj3){
 								<tr>
 								</tr>
 								<tr>
+									<td id="hid-den" scope="col" rowspan="2">${rowj.major_idx}</td>			
 									<td id="hidden" scope="col" rowspan="2">${rowj.u_type}</td>			
 									<td scope="col" rowspan="2">${rowj.uname}</td>
 									<td scope="col" rowspan="2">${rowj.recruit_time}</td>
@@ -804,7 +831,10 @@ function ch_major3(maj3){
 									<td scope="col" rowspan="2">${rowj.recruit_num}</td>
 									<td scope="col" rowspan="2">${rowj.rate_sj}</td>
 									<td scope="col" rowspan="2">학습진단</td>
-									<td scope="col" rowspan="2">관심설정</td>
+									<td scope="col" rowspan="2">
+											<i onclick="click_interestJ('${rowj.major_idx}','${siteUserInfo }');" id="noheart${rowj.major_idx }" class="far fa-star" style='font-size:24px'></i>
+											<i onclick="click_nointerestJ('${rowj.major_idx}','${siteUserInfo }');" id="heart${rowj.major_idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
+									</td>
 								</tr>
 							</c:forEach>
 							</tbody>
@@ -816,6 +846,7 @@ function ch_major3(maj3){
 				
 		<!-- 전문대학교 시작 -->
 				<div id="junmun" class="container tab-pane fade" ><br/>
+				<form id="checkFrm" name="checkFrm" action="./checkAction3.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box">
 							<fieldset>
 								<!-- 학과상세 -->
@@ -1058,7 +1089,7 @@ function ch_major3(maj3){
 					<div class="search_box_btn">
 						<button type="submit" title="검색" class="btn_searchAll btn btn-dark" >검색</button>
 					</div>
-			
+			</form>
 			
 		<!-- 대학리스트 -->
 					

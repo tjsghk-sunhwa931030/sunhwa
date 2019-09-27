@@ -91,8 +91,6 @@ function checkboxFrm(fn){
 	
 	var fn = document.checkFrm;
 	
-	
-
 
 	fn.action="./checkAction.do";
 	fn.method = "get";
@@ -108,42 +106,65 @@ function utypeClick(){
 	
  }
 
-function click_interest(idx){
-	$("#noheart").toggle();
-	$("#heart").toggle();
-	
-	$.ajax({
-		url : "./interest_chk.do",
-		type : 'POST',
-		dataType : "html",
-		data :{
-			idx : idx
-		},
-		success : function(){
-			alert("관심대학 설정되었습니다.")
-			console.log("allData: "+idx);
-		},
-		error : function(e){
-			alert("실패"+e.status)
-			console.log("allData: "+idx);
-		}
-	});
+function click_interest(uname,id){
+
+		$.ajax({
+			url : "./interest_chk.do",
+			type : 'POST',
+			dataType : "html",
+			data :{
+				   univ_uname : uname,
+				   id : id
+			},
+			success : function(){
+				$("#noheart"+uname).toggle();
+				$("#heart"+uname).toggle();
+		
+				alert("관심대학 설정되었습니다.")
+				alert("대학정보"+uname)
+				alert("id"+id)
+		
+			
+			},
+			error : function(e){
+				alert("실패"+e.status)
+				alert("대학정보"+uname)
+				alert("id"+id)
+				
+			
+			}
+		});
 
 }
 
 
-function click_nointerest(){
-	$("#heart").toggle();
-	$("#noheart").toggle();
+function click_nointerest(uname,id){
 
 	$.ajax({
-		url : "./interest_chk.do",
+		url : "./interest_unchk.do",
+		type : 'GET',
 		dataType : "html",
+		data :{
+			univ_uname : uname,
+			   id : id
+		},
 		success : function(){
-			alert("관심대학 설정 취소되었습니다.")
+			
+			$("#heart"+uname).toggle();
+			$("#noheart"+uname).toggle();
+			
+
+			alert("관심대학 설정이 취소되었습니다.")
+			alert("대학정보"+uname)
+			alert("id"+id)
+	
+		
 		},
 		error : function(e){
 			alert("실패"+e.status)
+			alert("대학정보"+uname)
+				alert("id"+id)
+		
 		}
 	});
 	
@@ -306,8 +327,8 @@ function click_nointerest(){
 		
 					<table class="list_tbl01">
 						<caption>검색버튼을 눌러주세요</caption>
+						<input type="hid-den" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 						<colgroup>
-							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -320,7 +341,7 @@ function click_nointerest(){
 						</colgroup>
 						<thead style="border-bottom: 1px solid #ddd;">
 							<tr style="border-bottom: none;">
-								<th id="hid-den" scope="col" rowspan="2">IDX</th>
+							
 								<th id="hidden" scope="col" rowspan="2">대학</th>
 								<th scope="col" rowspan="2">대학명</th>
 								<th scope="col" rowspan="2">지역</th>
@@ -335,12 +356,11 @@ function click_nointerest(){
 						</thead>
 						<tbody id="tbResult" >
 					
-							<c:forEach items="${lists }" var="row">
+							<c:forEach items="${lists }" var="row"  >
 									
 										<tr>
 										</tr>
 										<tr>
-											<td id="hid-den" scope="col" rowspan="2">${row.idx}</td>			
 											<td id="hidden" scope="col" rowspan="2">${row.u_type}</td>			
 											<td scope="col" rowspan="2">${row.uname}</td>
 											<td scope="col" rowspan="2">${row.location}</td>
@@ -351,8 +371,8 @@ function click_nointerest(){
 											<td scope="col" rowspan="2">${row.major_num}</td>
 											<td scope="col" rowspan="2">${row.enter_num}</td>
 											<td scope="col" rowspan="2">
-												<i onclick="click_interest('${row.idx}');" id="noheart${row.idx }" class="far fa-star" style='font-size:24px'></i>
-												<i onclick="click_nointerest('${row.idx}');" id="heart${row.idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
+												<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart${row.uname }" class="far fa-star" style='font-size:24px'></i>
+												<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart${row.uname }" class="fas fa-star" style='display:none; font-size:24px'></i>
 											</td>
 										</tr>
 							</c:forEach>
@@ -480,7 +500,9 @@ function click_nointerest(){
 	
 					<table class="list_tbl01" id="result_list">
 						<caption>검색버튼을 눌러주세요</caption>
+						<input type="hid-den" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 						<colgroup>
+							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -506,7 +528,7 @@ function click_nointerest(){
 								<th scope="col" rowspan="2">관심설정</th>
 							</tr>
 						</thead>
-						<tbody id="tbResult2" class="tbResult">
+						<tbody id="tbResult2">
 							<c:forEach items="${lists }" var="row">
 								<tr>
 								</tr>
@@ -521,12 +543,11 @@ function click_nointerest(){
 									<td scope="col" rowspan="2">${row.major_num}</td>
 									<td scope="col" rowspan="2">${row.enter_num}</td>
 									<td scope="col" rowspan="2">
-										<i style='font-size:24px' class='far'>&#xf005;</i>
+										<%-- <i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart2${row.uname }" class="far fa-star" style='font-size:24px'></i>
+										<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart2${row.uname }" class="fas fa-star" style='display:none; font-size:24px'></i> --%>
 									</td>
 								</tr>
 							</c:forEach>
-							<div class="col-lg-12" id="ex1_Result1" ></div> 
-							<div class="col-lg-12" id="ex1_Result2" ></div> 
 						</tbody>
 					</table>
 
@@ -536,9 +557,9 @@ function click_nointerest(){
 				
 				<!-- 페이징 -->
 		    	<div style="width:100%;">
-					<ul class="pagination" style="margin-left:40%;">
-					${pagingImg }
-					</ul>
+					<ul class="pagination pagination-sm" style="color: black;">
+						 ${pagingImg }
+					 </ul>
 				</div>
 				<!-- //페이징 -->
 				

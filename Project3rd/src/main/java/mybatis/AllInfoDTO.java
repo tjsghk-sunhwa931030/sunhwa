@@ -3,6 +3,7 @@ package mybatis;
 public class AllInfoDTO {
 
 	private int idx;
+	private int major_idx;
 	private String u_type;
 	private String uname;
 	private String location;
@@ -49,16 +50,20 @@ public class AllInfoDTO {
 	private String beak_mini;
 	private String bname;
 	
-	public AllInfoDTO(int idx, String u_type, String uname, String location, String p_type, String rate_univ,
-			String jobrate, String tuition, String totalman, String major_num, String enter_num, String interest,
-			String found, String major1, String major2, String major, String majorman, String mjobrate,
+	
+	
+	public AllInfoDTO(int idx, int major_idx, String u_type, String uname, String location, String p_type,
+			String rate_univ, String jobrate, String tuition, String totalman, String major_num, String enter_num,
+			String interest, String found, String major1, String major2, String major, String majorman, String mjobrate,
 			String lastminis, String lastminij, String ibresult, String recruit_time, String enter_type,
 			String enter_name, String enter_ele, String enter_test, String enter_test1, String enter_test2,
 			String enter_test3, String enter_test4, String enter_test5, String enter_test6, String rate_sj,
 			String recruit_num, String ganada, String suc_reg, String unreg_suc, String unreg_end, String hak_avg,
-			String hak_mini, String hak_max, String su_avg, String su_mini, String beak_avg, String beak_mini,String bname) {
+			String hak_mini, String hak_max, String su_avg, String su_mini, String beak_avg, String beak_mini,
+			String bname) {
 		super();
 		this.idx = idx;
+		this.major_idx = major_idx;
 		this.u_type = u_type;
 		this.uname = uname;
 		this.location = location;
@@ -104,10 +109,19 @@ public class AllInfoDTO {
 		this.beak_avg = beak_avg;
 		this.beak_mini = beak_mini;
 		this.bname = bname;
-	}  
-	
+	}
+
 	public AllInfoDTO() {
 		
+	}
+	
+
+	public int getMajor_idx() {
+		return major_idx;
+	}
+
+	public void setMajor_idx(int major_idx) {
+		this.major_idx = major_idx;
 	}
 
 	public int getIdx() {

@@ -31,14 +31,14 @@
 		AND	uname LIKE '%'||#{param2,jdbcType=VARCHAR}||'%'
 		AND location LIKE '%'||#{param3,jdbcType=VARCHAR}||'%'
 		AND p_type LIKE '%'||#{param4,jdbcType=VARCHAR}||'%'
-		ORDER BY idx DESC)Tb)WHERE rNum BETWEEN #{param5,jdbcType=INTEGER} AND #{param6,jdbcType=INTEGER}
+		)Tb)WHERE rNum BETWEEN #{param5,jdbcType=INTEGER} AND #{param6,jdbcType=INTEGER}
 
  	</select>
 
 <!-- 학과 검색 체크리스트 -->
 	
  	<select  id="searchH" resultType="mybatis.AllInfoDTO" >
- 		SELECT * FROM info_major INNER JOIN info_univ ON info_major.uname = info_univ.uname
+ 		SELECT * FROM info_major INNER JOIN info_univ ON info_major.univ_uname = info_univ.uname
  			WHERE  u_type =#{param1,jdbcType=VARCHAR}
  			AND	info_univ.uname LIKE '%'||#{param2}||'%'
 			AND major LIKE '%'||#{param3}||'%'
@@ -49,18 +49,19 @@
  
  <!-- 전형 검색 체크리스트 -->	
  	<select  id="searchJ" resultType="mybatis.AllInfoDTO" >
- 		SELECT * FROM info_junh INNER JOIN info_univ ON info_junh.uname = info_univ.uname
- 								INNER JOIN info_major On info_junh.idx = info_major.idx
- 			WHERE u_type =#{param1,jdbcType=VARCHAR}
- 			AND	info_univ.uname LIKE '%'||#{param2}||'%'
-			AND recruit_time LIKE '%'||#{param3}||'%'
-			AND enter_type LIKE '%'||#{param4}||'%'
-			AND enter_name LIKE '%'||#{param5}||'%'
-			AND location LIKE '%'||#{param6}||'%'
-			AND enter_ele LIKE '%'||#{param7,jdbcType=VARCHAR}||'%'
-			AND major LIKE '%'||#{param8}||'%'
-			AND major1 LIKE '%'||#{param9}||'%'
-			AND major2 LIKE '%'||#{param10}||'%'
+ 		SELECT * FROM info_junh INNER JOIN info_univ ON info_junh.univ_uname = info_univ.uname
+ 								INNER JOIN info_major On info_junh.major_idx = info_major.idx
+ 			WHERE major_idx = #{param1}
+ 			AND	u_type =#{param2,jdbcType=VARCHAR}
+ 			AND	info_univ.uname LIKE '%'||#{param3}||'%'
+			AND recruit_time LIKE '%'||#{param4}||'%'
+			AND enter_type LIKE '%'||#{param5}||'%'
+			AND enter_name LIKE '%'||#{param6}||'%'
+			AND location LIKE '%'||#{param7}||'%'
+			AND enter_ele LIKE '%'||#{param8,jdbcType=VARCHAR}||'%'
+			AND major LIKE '%'||#{param9}||'%'
+			AND major1 LIKE '%'||#{param10}||'%'
+			AND major2 LIKE '%'||#{param11}||'%'
  	</select>
  	
  <!-- 대계열 검색 -->
@@ -76,11 +77,27 @@
  		SELECT major from info_major WHERE major1 LIKE '%'||#{param1}||'%' AND major2 LIKE '%'||#{param2}||'%'
  	</select>
  	
- 
+ <!-- 관심대학 추가 -->
  	<insert id="interest_chk">
- 		INSERT INTO interest_univ(id,u_type,uname,location,totalman,major_num,enter_num,interest)
- 		 VALUES (interest_univ.nextval,#{_id},#{_u_type},#{_uname},#{_location},#{totalman},#{major_num},#{enter_num},#{interest}) 
+ 		INSERT INTO interest_univ(idx,id,univ_uname)
+ 		 VALUES (interest_seq.nextval,#{param1},#{param2,jdbcType=VARCHAR}) 
  	</insert>
+ 	
+ <!-- 관심대학 삭제 -->
+ 	<delete id="interest_unchk">
+ 		DELETE FROM interest_univ WHERE id=#{param1} AND univ_uname=#{param2,jdbcType=VARCHAR}
+ 	</delete>
+ 	
+ <!-- 관심전형 추가 -->
+ 	<insert id="interest_chkJ">
+ 		INSERT INTO interest_junh(idx,id,major_idx)
+ 		 VALUES (interest_seq.nextval,#{param1},#{param2,jdbcType=VARCHAR}) 
+ 	</insert>
+ 	
+ <!-- 관심전형 삭제 -->
+ 	<delete id="interest_unchkJ">
+ 		DELETE FROM interest_junh WHERE id=#{param1} AND major_idx=#{param2,jdbcType=VARCHAR}
+ 	</delete>
  	
  
 	
