@@ -1,8 +1,13 @@
 package mybatis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+
+import common.BoardDTO;
+import common.BoardReplyDTO;
 
 /*Project3rd의 DAO파일*/
 public interface MybatisMypageDAOImpl {
@@ -136,27 +141,21 @@ public interface MybatisMypageDAOImpl {
 	public int chpassaction(String chpass, String id);
 	
 	//내가쓴게시물출력
-	public ArrayList<MyBoardDTO> myboard(String id);
+	public ArrayList<BoardDTO> myboard(String id);
 	//내가쓴댓글출력
-	public ArrayList<MyBoardReplyDTO> myboardreply(String id);
-	//내가쓴질문출력
-	public ArrayList<MyQnaDTO> myqna(String id);
-	//내가쓴질문댓글출력
-	public ArrayList<MyQnaReplyDTO> myqnareply(String id);
-	//내가쓴질문삭제
-	public int deleteqna(int idx);
+	public ArrayList<BoardReplyDTO> myboardreply(String id);
 	//내가쓴댓글삭제
 	public int deletereply(int idx);
 	//내가쓴게시물삭제
 	public int deletewrite(int idx);
-	//내가쓴질문댓글삭제
-	public int deleteqnareply(int idx);
-	
-	
 	
 	
 	//달력일정가져오기
-	public ArrayList<CalexDTO> selectcal(String userid,String auth);
+	public ArrayList<CalexDTO> selectcal(String userid,String username);
+	//관심대학포함 일정 가져오기
+	//public ArrayList<CalexDTO> selectcal2 (String userid,String username, ArrayList<MyInterestunivDTO> uname);
+	//public ArrayList<CalexDTO> selectcal2 (String userid,String username, HashMap<String,Object> uname);
+	public ArrayList<CalexDTO> selectcal2 (HashMap<String,Object> uname);
 	//달력일정추가하기
 	public void addcal(
 			@Param("_id") String _id,
@@ -181,6 +180,10 @@ public interface MybatisMypageDAOImpl {
 	public int deletecal(String id);
 	//시험일정가져오기
 	public ArrayList<CalexDTO> examdday(String type,String id);
+	//관심대학 대학명들 가져오기
+	public ArrayList<String> univname(String id);
+	
+	
 	
 
 }

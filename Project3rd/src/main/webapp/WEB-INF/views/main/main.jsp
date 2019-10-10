@@ -18,6 +18,27 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+	function recommend_ajax(value){
+		$.ajax({
+			type: "POST",
+			url: "get_graph.do",
+			dataType: "html",
+			data: {value, value},
+			success: function(result){
+				$("#recommend").html(result);
+			},
+			error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       }
+		});
+	}
+	
+	function load(value){
+		alert("hi?");
+	}
+	
+</script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <!-- 가져온것 -->
@@ -129,7 +150,6 @@
 		                            <div class="col-xs-12">
 		                                <label class="col-xs-4" for="edit-color">색상</label>
 		                                <select class="inputModal" name="color" id="edit-color">
-		                                    <option value="#D25565" style="color:#D25565;">빨간색</option>
 		                                    <option value="#9775fa" style="color:#9775fa;">보라색</option>
 		                                    <option value="#ffa94d" style="color:#ffa94d;">주황색</option>
 		                                    <option value="#74c0fc" style="color:#74c0fc;">파란색</option>
@@ -204,10 +224,33 @@
 		        <!-- /.filter panel -->
 	        </div>
 	        <!-- 그래프1 -->
-	        <div style="border:1px solid blue;float:left;width:500px;margin-top:20px;margin-left:15px;height:480px;">
+	        <div style="border:1px solid red; float:left;width:500px;margin-top:20px;margin-left:15px;height:480px; text-align: center;">
+	        	<c:choose>
+				<c:when test="${not empty sessionScope.siteUserInfo }">
+					<h2>로그인 후</h2>
+				</c:when>
+				<c:otherwise>
+					<img src="images/login_2.PNG" alt="" style="display: inline-block; float:none; width:80%; height: 80%; border-radius: 25px;"/>
+				</c:otherwise>
+				</c:choose>
 	        </div>
 	        <!-- 그래프2 -->
-	        <div style="border:1px solid blue;float:left;width:500px;margin-left:15px;height:470px;margin-top:10px;">
+	        <div style="border:1px solid red; float:left;width:500px;margin-top:20px;margin-left:15px;height:480px; text-align: center;">
+	        	<c:choose>
+				<c:when test="${not empty sessionScope.siteUserInfo }">
+				<span style="font-weight: bold !important;">${sessionScope.siteUserInfo }</span>님의 
+						<select name="exam" id="exam" onchange="recommend_ajax(this.value);" onload="load(this.value);" >
+						<c:forEach items="${lists }" var="row">
+							<option value="${row.idx }" selected="selected">${row.years }년 ${row.dates} ${row.ex_name }</option>
+						</c:forEach>
+						</select>
+				를 바탕으로 <br /> 추천한 대학입니다. <br />
+				<div id="recommend"></div>
+				</c:when>
+				<c:otherwise>
+					<img src="images/login_1.PNG" alt="" style="display: inline-block; float:none; width:80%; height: 80%; border-radius: 25px;"/>
+				</c:otherwise>
+				</c:choose>
 	        </div>
         </div>
     <!-- /.container -->

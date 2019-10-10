@@ -62,10 +62,13 @@ function fileDelete(){
 	    <c:when test="${bname eq 'unient' }">
 	   		<div class="righttoptext">대입제도</div>
 	  	</c:when>
+	  	<c:when test="${bname eq 'qna' }">
+	   		<div class="righttoptext">질문있어요!</div>
+	  	</c:when>
       </c:choose>
       </div>
    	</div> 
-	<div class="contents" style="height:780px;">
+	<div class="contents" style="height:900px;">
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
@@ -77,9 +80,9 @@ function fileDelete(){
 					    </c:when> 
 						<c:otherwise>					 
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=free">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./qna.do">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=qna">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=group">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./room.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./library.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>
@@ -110,10 +113,37 @@ function fileDelete(){
 							<input type="text" class="form-control" id="title" name="title" value="${dto.title }"/>
 						</td>
 					</tr>
+					<c:if test="${bname eq 'qna' }">
+					<tr>
+						<th class="text-center" style="vertical-align:middle;">학년</th>
+						<td>
+							<select name="grade" id="grade" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="1학년"<c:if test="${dto.grade eq '1학년' }">selected</c:if>>1학년</option> 
+							    <option value="2학년"<c:if test="${dto.grade eq '2학년' }">selected</c:if>>2학년</option>
+							    <option value="3학년"<c:if test="${dto.grade eq '3학년' }">selected</c:if>>3학년</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center" style="vertical-align:middle;">과목</th>
+						<td>
+							<select name="subject" id="subject" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="국어"<c:if test="${dto.subject eq '국어' }">selected</c:if>>국어</option> 
+							    <option value="영어"<c:if test="${dto.subject eq '영어' }">selected</c:if>>영어</option>
+							    <option value="수학"<c:if test="${dto.subject eq '수학' }">selected</c:if>>수학</option>
+							    <option value="사회"<c:if test="${dto.subject eq '사회' }">selected</c:if>>사회</option>
+							    <option value="과학"<c:if test="${dto.subject eq '과학' }">selected</c:if>>과학</option>
+							    <option value="기타"<c:if test="${dto.subject eq '기타' }">selected</c:if>>기타</option>
+							</select>
+						</td>
+					</tr> 
+					</c:if>
 					<tr>
 						<th class="text-center" style="vertical-align:middle;">내용</th>
 						<td>
-							<textarea id="contents" name="contents" cols="85" rows="15">${dto.contents }</textarea>
+							<textarea id="contents" name="contents" cols="82" rows="15">${dto.contents }</textarea>
 						</td>
 					</tr>
 					<tr>

@@ -4,8 +4,8 @@ public class MyInterestunivDTO {
 	
 	private int idx;
     private String id ;
-    private String uname ;
-    private String locations;
+    private String univ_uname ;
+    private String location;
     private String totalman ;
     private String major_num;
     private String enter_num;
@@ -31,7 +31,7 @@ public class MyInterestunivDTO {
     
     public MyInterestunivDTO() {}
 
-	public MyInterestunivDTO(int idx, String id, String uname, String locations, String totalman, String major_num,
+	public MyInterestunivDTO(int idx, String id, String univ_uname, String location, String totalman, String major_num,
 			String enter_num, String u_type, String recruit_time, String enter_type, String enter_name,
 			String enter_ele, String enter_test, String enter_test1, String enter_test2, String enter_test3,
 			String enter_test4, String rate_s, String suc_reg, String unreg_suc, String unreg_end, String hak_avg,
@@ -39,8 +39,8 @@ public class MyInterestunivDTO {
 		super();
 		this.idx = idx;
 		this.id = id;
-		this.uname = uname;
-		this.locations = locations;
+		this.univ_uname = univ_uname;
+		this.location = location;
 		this.totalman = totalman;
 		this.major_num = major_num;
 		this.enter_num = enter_num;
@@ -81,20 +81,20 @@ public class MyInterestunivDTO {
 		this.id = id;
 	}
 
-	public String getUname() {
-		return uname;
+	public String getUniv_uname() {
+		return univ_uname;
 	}
 
-	public void setUname(String uname) {
-		this.uname = uname;
+	public void setUniv_uname(String univ_uname) {
+		this.univ_uname = univ_uname;
 	}
 
-	public String getLocations() {
-		return locations;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setLocations(String locations) {
-		this.locations = locations;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getTotalman() {

@@ -17,10 +17,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-function deleteRow(idx,id){
+function deleteRow(idx){
+	
+	var idx = idx;
+	
 	if(confirm('삭제하시겠습니까?')){
-		location.href="./deleteinteruniv.do?idx="+idx+"&id="+id;
+		location.href="./deleteinteruniv.do?idx="+idx;
 	}
+}
+
+function alertcall(){
+	alert("로그인후 이용해주세요.");
+	location.href="./login.do";
 }
 </script>
 </head>
@@ -39,13 +47,27 @@ function deleteRow(idx,id){
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
-					<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+					<c:choose>
+						<c:when test="${not empty sessionScope.siteUserInfo }">
+							<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:otherwise>
+					</c:choose>
+					
 				</ul>
 			</nav>
 		</div>
@@ -77,12 +99,12 @@ function deleteRow(idx,id){
 					    </tr> -->
 					    <tr>
 					      <td>${row1.uname}</td>
-					      <td>${row1.locations}</td>
+					      <td>${row1.location}</td>
 					      <td>${row1.totalman}</td>
 					      <td>${row1.major_num}</td>
 					      <td>${row1.enter_num}</td>
 					      <td>
-					      	<button type="button" class="btn btn-secondary btn-sm" style="border:0px;" onclick="javascript:deleteRow(${row1.idx},${row1.id });">삭제</button>&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" style="background-color:#783712;border:0px;">비교</button>
+					      	<button type="button" class="btn btn-secondary btn-sm" style="border:0px;" onclick="javascript:deleteRow(${row1.idx});">삭제</button>&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" style="background-color:#783712;border:0px;">비교</button>
 					      </td>
 					    </tr>
 				    </c:forEach>
@@ -116,12 +138,12 @@ function deleteRow(idx,id){
 					    </tr> -->
 					    <tr>
 					      <td>${row2.uname}</td>
-					      <td>${row2.locations}</td>
+					      <td>${row2.location}</td>
 					      <td>${row2.totalman}</td>
 					      <td>${row2.major_num}</td>
 					      <td>${row2.enter_num}</td>
 					      <td>
-					      	<button type="button" class="btn btn-secondary btn-sm" style="border:0px;" onclick="javascript:deleteRow(${row2.idx},${row2.id });">삭제</button>&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" style="background-color:#783712;border:0px;">비교</button>
+					      	<button type="button" class="btn btn-secondary btn-sm" style="border:0px;" onclick="javascript:deleteRow(${row2.idx});">삭제</button>&nbsp;&nbsp;<button type="button" class="btn btn-info btn-sm" style="background-color:#783712;border:0px;">비교</button>
 					      </td>
 					    </tr>
 				    </c:forEach>

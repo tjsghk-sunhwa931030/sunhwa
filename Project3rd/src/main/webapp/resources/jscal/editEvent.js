@@ -1,8 +1,10 @@
 /* ****************
  *  일정 편집
- * ************** */
-var editEvent = function (event, element, view) {
 
+ * ************** */
+
+var editEvent = function (event, element, view) {
+	
     $('.popover.fade.top').remove();
     $(element).popover("hide");
 
@@ -83,6 +85,7 @@ var editEvent = function (event, element, view) {
         $.ajax({
             type: "get",
             url: "editcal.do",
+            dataType : "json",
             data: {
             	id : event.id,
             	title: event.title,
@@ -94,7 +97,14 @@ var editEvent = function (event, element, view) {
                 allDay: event.allDay
             },
             success: function (response) {
-                alert('수정되었습니다.')
+            	
+            	//var message = "<c:out value='${msg}'/>";
+            	//alert("수정이 완료되었습니다.");
+            	alert(response.message);
+            	if(response.message=='수정할 수 없습니다.'){
+            		location.reload();
+            	}
+                
             }
         });
 

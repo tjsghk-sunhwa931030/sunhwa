@@ -2,7 +2,7 @@ package mybatis;
 
 public class MyJunggradeDTO {
 
-	private int idx;
+	private String idx;
     private String id ;
     private String years;
     private String dates ;
@@ -39,7 +39,7 @@ public class MyJunggradeDTO {
     
     public MyJunggradeDTO() {}
 
-	public MyJunggradeDTO(int idx, String id, String years, String dates, String ex_name, String natives,
+	public MyJunggradeDTO(String idx, String id, String years, String dates, String ex_name, String natives,
 			int native_standard, int native_percent, int native_rate, String math, String math_type, int math_standard,
 			int math_percent, int math_rate, String eng, int eng_rate, String study1, String study1_type,
 			int study1_standard, int study1_percent, int study1_rate, String study2, String study2_type,
@@ -82,12 +82,14 @@ public class MyJunggradeDTO {
 		this.history_rate = history_rate;
 		this.year = year;
 	}
+	
+	
 
-	public int getIdx() {
+	public String getIdx() {
 		return idx;
 	}
 
-	public void setIdx(int idx) {
+	public void setIdx(String idx) {
 		this.idx = idx;
 	}
 

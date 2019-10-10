@@ -18,7 +18,7 @@
 <style type="text/css">
 	.lefttoptext{margin:0 auto;font-size:25px;font-weight:bold;margin-top:10px;}
 	.righttoptext{margin:0 auto;font-size:40px;font-weight:bold;}
-	.contents{height: 1500px;}
+	.contents{position:relative; height: 1500px;}
 	#hidden{display: none;}
 </style>
 <script type="text/javascript">
@@ -331,20 +331,10 @@ function fn_sersBox_out(){
 function checkboxFrm(fn){
 	
 	var fn = document.checkFrm;
-	
-	var lst_location_list = [];
-	var lst_recruit_list = [];
-	var lst_enter_type_list = [];
-	var lst_enter_name_list = [];
-	var lst_enter_ele_list = [];
 
-	
-	var locationlist = $("input[id^='chk_location']:checked").get();
-	var recruit_list = $("input[id^='recruit_time']:checked").get();
-	var enter_type_list = $("input[id^='enter_type']:checked").get();
-	var enter_name_list = $("input[id^='enter_name']:checked").get();
-	var enter_ele_list = $("input[id^='enter_ele']:checked").get();
-
+	fn.action="./checkAction3.do";
+	fn.method = "get";
+	fn.submit(); 
 
 
 }
@@ -374,21 +364,14 @@ function ch_major(maj){
 				major1 : maj
 			},
 			success : function(maj2){
-				
-				$('#maj2div').append(maj2);
-				
+				 $('#maj2div').append(maj2);
 				document.getElementById('major2').value = maj2;
-				
-				
 			},
 			error : function(e){
 				alert("실패"+e.status)
 			}
-		
 		});
 	});
-		
-
 }
 
 //중계열 선택
@@ -428,62 +411,49 @@ function ch_major3(maj3){
 }
 
 //관심전형 선택
-function click_interestJ(){
+function click_interestJ(idx,id){
 
 	$.ajax({
 		url : "./interest_chkJ.do",
 		type : 'POST',
 		dataType : "html",
 		data :{
-			major_idx : major_idx,
-			   id : id
+			 idx : idx,
+			 id:id
 		},
 		success : function(){
-			$("#noheart"+major_idx).toggle();
-			$("#heart"+major_idx).toggle();
-	
+			$("#noheart"+idx).toggle();
+			$("#heart"+idx).toggle();
+			$("#noheart2"+idx).toggle();
+			$("#heart2"+idx).toggle();
 			alert("관심대학 설정되었습니다.")
-			alert("대학정보"+uname)
-			alert("id"+id)
-	
-		
 		},
 		error : function(e){
 			alert("실패"+e.status)
-			alert("대학정보"+uname)
-			alert("id"+id)
-			
-		
 		}
 	});
-
 }
 
-
-function click_nointerestJ(major_idx,id){
+//관심전형 선택 취소
+function click_nointerestJ(idx,id){
 
 $.ajax({
 	url : "./interest_unchkJ.do",
 	type : 'GET',
 	dataType : "html",
 	data :{
-		major_idx : major_idx,
+		   idx : idx,
 		   id : id
 	},
 	success : function(){
-		
-		$("#heart"+major_idx).toggle();
-		$("#noheart"+major_idx).toggle();
-
+		$("#heart"+idx).toggle();
+		$("#noheart"+idx).toggle();
+		$("#heart2"+idx).toggle();
+		$("#noheart2"+idx).toggle();
 		alert("관심대학 설정이 취소되었습니다.")
-		alert("major_idx="+major_idx)
-		alert("id"+id)
 	},
 	error : function(e){
 		alert("실패"+e.status)
-		alert("major_idx="+major_idx)
-		alert("id"+id)
-	
 	}
 });
 
@@ -559,7 +529,7 @@ $.ajax({
 												</th>
 												<td class="tt">모집시기</td>
 												<td>
-													<input type="checkbox" name="recruit_time" id="recruit_time_all" title="모집시기 검색조건" value="%" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
+													<input type="checkbox" name="recruit_time" id="recruit_time_all" title="모집시기 검색조건" value="" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
 							    					<input type="checkbox" name="recruit_time" id="recruit_time_1" title="모집시기 검색조건" value="수시" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_1">수시</label>
 													<input type="checkbox" name="recruit_time" id="recruit_time_2" title="모집시기 검색조건" value="정시(가)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_2">정시(가)</label>
 													<input type="checkbox" name="recruit_time" id="recruit_time_3" title="모집시기 검색조건" value="정시(나)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_3">정시(나)</label>
@@ -570,7 +540,7 @@ $.ajax({
 											<tr>
 												<td class="tt">전형유형</td>
 												<td>
-													<input type="checkbox" name="enter_type" id="enter_type_all" title="전형유형 검색조건" value="%" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
+													<input type="checkbox" name="enter_type" id="enter_type_all" title="전형유형 검색조건" value="" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
 													<input type="checkbox" name="enter_type" id="enter_type_01" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(교과)"><label for="enter_type_01">학생부위주(교과)</label>
 													<input type="checkbox" name="enter_type" id="enter_type_02" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(종합)"><label for="enter_type_02">학생부위주(종합)</label>
 													<input type="checkbox" name="enter_type" id="enter_type_03" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="실기/실적위주"><label for="enter_type_03">실기/실적위주</label>
@@ -586,7 +556,7 @@ $.ajax({
 													<table style="width:100%;">
 														<tbody><tr>
 															<td colspan="2">
-																<input type="checkbox" name="enter_name" id="enter_name_all" title="전형명 검색조건" value="%" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
+																<input type="checkbox" name="enter_name" id="enter_name_all" title="전형명 검색조건" value="" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
 															</td>
 														</tr>
 														<tr>
@@ -639,7 +609,7 @@ $.ajax({
 												</th>
 												<td class="tt">지역</td>
 												<td>
-													<input type="checkbox" name="location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+													<input type="checkbox" name="location" id="chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
 													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
 													<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
 													<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
@@ -664,7 +634,7 @@ $.ajax({
 											<tr>
 												<td class="tt">전형요소</td>
 												<td>
-													<input type="checkbox" value="%"  id="enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
+													<input type="checkbox" value=""  id="enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
 													<input type="checkbox" value="학생부"  id="enter_ele_1" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_1">학생부</label>
 													<input type="checkbox" value="수능"  id="enter_ele_2" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_2">수능</label>
 													<input type="checkbox" value="면접"  id="enter_ele_3" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_3">면접/구술</label>
@@ -731,7 +701,7 @@ $.ajax({
 																
 															</div>
 															<br /> 
-																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major1" name="major1" value="" placeholder="대계열선택하세요" />
 															
 													
 														</div>
@@ -741,7 +711,7 @@ $.ajax({
 															
 															</div>
 															<br /> 
-																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major2" name="major2" value="" placeholder="중계열선택하세요"/>
 															
 														</div>
 														
@@ -751,7 +721,7 @@ $.ajax({
 																
 															</div>	
 															<br/>
-																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major3" name="major" value=""  />
+																<input style="margin-top:5px; margin-left:4px; width: 98%" type="text" id="major3" name="major" value="" placeholder="학과명선택하세요"  />
 																
 															
 														</div>
@@ -789,32 +759,30 @@ $.ajax({
 					<div class="tbl_list" style="margin-top: 0px;">
 						<table class="list_tbl01" id="tbSelctnInfList">
 							<caption>검색버튼을 눌러주세요</caption>
+								<input type="hidden" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 							<colgroup>
+								<col style="width:15%;">
 								<col style="width:13%;">
-								<col style="width:13%;">
-								<col style="width:6%;">
-								<col style="width:8%;">
-								<col><!-- 전형명 -->
-								<col style="width:6%;"><!-- 모집인원 -->
-								<col style="width:12%;"><!-- 경쟁률 -->
-								
-								<col style="width:7%;">
-								
+								<col style="width:17%;">
+								<col style="width:20%;">
+								<col style="width:9%;">
+								<col style="width:10%;">
+								<col style="width:10%;">
 								<col style="width:6%;">
 							</colgroup>
 							<thead style="border-bottom: 1px solid #ddd;">
 								<tr>
-									<th id="hid-den" scope="col">IDX</th>
+									<th id="hidden" scope="col">IDX</th>
 									<th scope="col">대학</th>
 									<th scope="col">모집<br>시기</th>
 									<th scope="col">학과</th>
 									<th scope="col">전형명</th>
 									<th scope="col">모집<br>인원</th>
 									<th scope="col"><span id="cmpet_head"></span>경쟁률</th>
-									
 									<th scope="col">학습<br>진단</th>
-									
-									<th scope="col">관심<br>설정</th>
+									<c:if test="${sessionScope.siteUserInfo ne null}">
+									<th scope="col" rowspan="2">관심설정</th>
+									</c:if>
 								</tr>
 							</thead>
 							<tbody id="tbResult">
@@ -822,7 +790,7 @@ $.ajax({
 								<tr>
 								</tr>
 								<tr>
-									<td id="hid-den" scope="col" rowspan="2">${rowj.major_idx}</td>			
+									<td id="hidden" scope="col" rowspan="2">${rowj.idx}</td>			
 									<td id="hidden" scope="col" rowspan="2">${rowj.u_type}</td>			
 									<td scope="col" rowspan="2">${rowj.uname}</td>
 									<td scope="col" rowspan="2">${rowj.recruit_time}</td>
@@ -831,12 +799,31 @@ $.ajax({
 									<td scope="col" rowspan="2">${rowj.recruit_num}</td>
 									<td scope="col" rowspan="2">${rowj.rate_sj}</td>
 									<td scope="col" rowspan="2">학습진단</td>
-									<td scope="col" rowspan="2">
-											<i onclick="click_interestJ('${rowj.major_idx}','${siteUserInfo }');" id="noheart${rowj.major_idx }" class="far fa-star" style='font-size:24px'></i>
-											<i onclick="click_nointerestJ('${rowj.major_idx}','${siteUserInfo }');" id="heart${rowj.major_idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
-									</td>
+									<c:if test="${sessionScope.siteUserInfo ne null}">
+										<td scope="col" rowspan="2">
+										<c:choose>
+											<c:when test="${rowj.junh_idx !=0 and  siteUserInfo ==rowj.id}">
+												<i onclick="click_nointerestJ('${rowj.idx}','${siteUserInfo }');" id="heart${rowj.idx }" class="fas fa-star" style='font-size:24px'></i>
+												<i onclick="click_interestJ('${rowj.idx}','${siteUserInfo }');" id="noheart${rowj.idx }" class="far fa-star" style='display:none; font-size:24px'></i>
+											</c:when>
+											<c:otherwise>
+												<i onclick="click_interestJ('${rowj.idx}','${siteUserInfo }');" id="noheart${rowj.idx }" class="far fa-star" style='font-size:24px'></i>
+												<i onclick="click_nointerestJ('${rowj.idx}','${siteUserInfo }');" id="heart${rowj.idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
+											</c:otherwise>
+										</c:choose>
+										</td>
+									</c:if>
 								</tr>
 							</c:forEach>
+							
+							<!-- 페이징 -->
+					    	<div style="width:100%;">
+								<ul class="pagination pagination-sm" style="color: black;">
+									 ${pagingImg }
+								 </ul>
+							</div>
+							<!-- //페이징 -->
+							
 							</tbody>
 						</table>
 					</div>
@@ -876,7 +863,7 @@ $.ajax({
 												</th>
 												<td class="tt">모집시기</td>
 												<td>
-													<input type="checkbox" name="recruit_time" id="j_recruit_time_all" title="모집시기 검색조건" value="%" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
+													<input type="checkbox" name="recruit_time" id="j_recruit_time_all" title="모집시기 검색조건" value="" checked="checked" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_all">전체</label>
 							    					<input type="checkbox" name="recruit_time" id="j_recruit_time_1" title="모집시기 검색조건" value="수시" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_1">수시</label>
 													<input type="checkbox" name="recruit_time" id="j_recruit_time_2" title="모집시기 검색조건" value="정시(가)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_2">정시(가)</label>
 													<input type="checkbox" name="recruit_time" id="j_recruit_time_3" title="모집시기 검색조건" value="정시(나)" onclick="fn_recruit_timeList_onclick(this)"><label for="chk_recruit_time_3">정시(나)</label>
@@ -887,7 +874,7 @@ $.ajax({
 											<tr>
 												<td class="tt">전형유형</td>
 												<td>
-													<input type="checkbox" name="enter_type" id="j_enter_type_all" title="전형유형 검색조건" value="%" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
+													<input type="checkbox" name="enter_type" id="j_enter_type_all" title="전형유형 검색조건" value="" checked="checked" onclick="fn_enter_typeList_onclick(this);"><label for="enter_type_all">전체</label>
 													<input type="checkbox" name="enter_type" id="j_enter_type_1" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(교과)"><label for="enter_type_01">학생부위주(교과)</label>
 													<input type="checkbox" name="enter_type" id="j_enter_type_2" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="학생부위주(종합)"><label for="enter_type_02">학생부위주(종합)</label>
 													<input type="checkbox" name="enter_type" id="j_enter_type_3" title="전형유형 검색조건" onclick="fn_enter_typeList_onclick(this)" value="실기/실적위주"><label for="enter_type_03">실기/실적위주</label>
@@ -903,7 +890,7 @@ $.ajax({
 													<table style="width:100%;">
 														<tbody><tr>
 															<td colspan="2">
-																<input type="checkbox" name="enter_name" id="j_enter_name_all" title="전형명 검색조건" value="%" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
+																<input type="checkbox" name="enter_name" id="j_enter_name_all" title="전형명 검색조건" value="" checked="checked" onclick="fn_enter_nameList_onclick(this);"><label for="enter_name_all">전체</label>									
 															</td>
 														</tr>
 														<tr>
@@ -956,7 +943,7 @@ $.ajax({
 												</th>
 												<td class="tt">지역</td>
 												<td>
-													<input type="checkbox" name="location" id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+													<input type="checkbox" name="location" id="j_chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
 													<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
 													<input type="checkbox" name="location" id="j_chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
 													<input type="checkbox" name="location" id="j_chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
@@ -981,7 +968,7 @@ $.ajax({
 											<tr>
 												<td class="tt">전형요소</td>
 												<td>
-													<input type="checkbox" value="%" id="j_enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
+													<input type="checkbox" value="" id="j_enter_ele_all" name="enter_ele" checked="checked" onclick="enterEle_onclick(this);"> <label for="enter_ele_all">전체</label>
 													<input type="checkbox" value="학생부" id="j_enter_ele_1" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_1">학생부</label>
 													<input type="checkbox" value="수능" id="j_enter_ele_2" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_2">수능</label>
 													<input type="checkbox" value="면접" id="j_enter_ele_3" name="enter_ele" onclick="enterEle_onclick(this);"> <label for="enter_ele_3">면접/구술</label>
@@ -1096,20 +1083,20 @@ $.ajax({
 					<div class="tbl_list" style="margin-top: 0px;">
 						<table class="list_tbl01" id="tbSelctnInfList">
 							<caption>검색버튼을 눌러주세요</caption>
+							<input type="hidden" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 							<colgroup>
+								<col style="width:15%;">
 								<col style="width:13%;">
-								<col style="width:6%;">
-								<col style="width:8%;">
-								<col><!-- 전형명 -->
-								<col style="width:6%;"><!-- 모집인원 -->
-								<col style="width:12%;"><!-- 경쟁률 -->
-								
-								<col style="width:7%;">
-								
+								<col style="width:17%;">
+								<col style="width:20%;">
+								<col style="width:9%;">
+								<col style="width:10%;">
+								<col style="width:10%;">
 								<col style="width:6%;">
 							</colgroup>
 							<thead style="border-bottom: 1px solid #ddd;">
 								<tr>
+									<th id="hidden" scope="col">IDX</th>
 									<th scope="col">대학</th>
 									<th scope="col">모집<br>시기</th>
 									<th scope="col">학과</th>
@@ -1127,6 +1114,7 @@ $.ajax({
 								<tr>
 								</tr>
 								<tr>
+									<td id="hidden" scope="col" rowspan="2">${rowj.idx}</td>
 									<td id="hidden" scope="col" rowspan="2">${rowj.u_type}</td>			
 									<td scope="col" rowspan="2">${rowj.uname}</td>
 									<td scope="col" rowspan="2">${rowj.recruit_time}</td>
@@ -1135,9 +1123,31 @@ $.ajax({
 									<td scope="col" rowspan="2">${rowj.recruit_num}</td>
 									<td scope="col" rowspan="2">${rowj.rate_sj}</td>
 									<td scope="col" rowspan="2">학습진단</td>
-									<td scope="col" rowspan="2">관심설정</td>
+									<c:if test="${sessionScope.siteUserInfo ne null}">
+										<td scope="col" rowspan="2">
+										<c:choose>
+											<c:when test="${rowj.junh_idx !=0 and siteUserInfo ==rowj.id }">
+												<i onclick="click_nointerestJ('${rowj.idx}','${siteUserInfo }');" id="heart2${rowj.idx }" class="fas fa-star" style='font-size:24px'></i>
+												<i onclick="click_interestJ('${rowj.idx}','${siteUserInfo }');" id="noheart2${rowj.idx }" class="far fa-star" style='display:none; font-size:24px'></i>
+											</c:when>
+											<c:otherwise>
+												<i onclick="click_interestJ('${rowj.idx}','${siteUserInfo }');" id="noheart2${rowj.idx }" class="far fa-star" style='font-size:24px'></i>
+												<i onclick="click_nointerestJ('${rowj.idx}','${siteUserInfo }');" id="heart2${rowj.idx }" class="fas fa-star" style='display:none; font-size:24px'></i>
+											</c:otherwise>
+										</c:choose>
+										</td>
+									</c:if>
 								</tr>
 							</c:forEach>
+							
+							<!-- 페이징 -->
+					    	<div style="width:100%;">
+								<ul class="pagination pagination-sm" style="color: black;">
+									 ${pagingImg }
+								 </ul>
+							</div>
+							<!-- //페이징 -->
+							
 							</tbody>
 						</table>
 					</div>

@@ -102,6 +102,9 @@ function Delete(){
 	    <c:when test="${bname eq 'unient' }">
 	   		<div class="righttoptext">대입제도</div>
 	  	</c:when>
+	  	<c:when test="${bname eq 'qna' }">
+	   		<div class="righttoptext">질문있어요!</div>
+	  	</c:when>
       </c:choose>
       </div>
    	</div>  
@@ -109,7 +112,6 @@ function Delete(){
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light "> 
-				<!-- bname이 notice거나 unient일 때 -->
 					<c:choose>
 					    <c:when test="${bname eq 'notice' or bname eq 'unient'}">
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=notice">공지사항<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
@@ -117,9 +119,9 @@ function Delete(){
 					    </c:when> 
 						<c:otherwise>					 
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=free">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./qna.do">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=qna">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=group">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./room.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./library.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>  
@@ -136,7 +138,13 @@ function Delete(){
 			</colgroup>
 			<tbody>
 				<tr>
-					<td colspan="4" style="background-color:#F9F9F9; border-top:2px gray solid; font-weight:bold;">${viewRow.title }</td>
+					<td colspan="4" style="background-color:#F9F9F9; border-top:2px gray solid; font-weight:bold;">
+						<c:if test="${bname eq 'qna' }">
+						<span style="color:#783712;">${viewRow.grade }</span>
+						<span style="color:green;">${viewRow.subject }</span>
+						</c:if>
+						${viewRow.title }
+					</td>
 				</tr>
 				<tr>
 					<td class="second_text" colspan="2">작성자:${viewRow.name }</td>

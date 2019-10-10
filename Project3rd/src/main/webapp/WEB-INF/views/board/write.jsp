@@ -53,10 +53,13 @@
 	    <c:when test="${bname eq 'unient' }">
 	   		<div class="righttoptext">대입제도</div>
 	  	</c:when>
+	  	<c:when test="${bname eq 'qna' }">
+	   		<div class="righttoptext">질문있어요!</div>
+	  	</c:when>
       </c:choose>
       </div>
    	</div>
-	<div class="contents">
+	<div class="contents" style="height:900px;">
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
@@ -67,7 +70,7 @@
 					    </c:when> 
 						<c:otherwise>					 
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=free">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./qna.do">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=qna">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=group">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./room.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 						</c:otherwise>
@@ -92,6 +95,33 @@
 							<input type="text" class="form-control" id="name" name="name" style="width:200px;" value=${name } readonly /> 
 						</td>
 					</tr>
+					<c:if test="${bname eq 'qna' }">
+					<tr>
+						<th class="text-center" style="vertical-align:middle;">학년</th>
+						<td>
+							<select name="grade" id="grade" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="1학년">1학년</option> 
+							    <option value="2학년">2학년</option>
+							    <option value="3학년">3학년</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center" style="vertical-align:middle;">과목</th>
+						<td>
+							<select name="subject" id="subject" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="국어">국어</option> 
+							    <option value="영어">영어</option>
+							    <option value="수학">수학</option>
+							    <option value="사회">사회</option>
+							    <option value="과학">과학</option>
+							    <option value="기타">기타</option>
+							</select>
+						</td>
+					</tr> 
+					</c:if>
 					<tr> 
 						<th class="text-center" style="vertical-align:middle;">제목</th>
 						<td>
@@ -101,7 +131,7 @@
 					<tr>
 						<th class="text-center" style="vertical-align:middle;">내용</th>
 						<td>
-							<textarea id="contents" name="contents" cols="85" rows="15"></textarea>
+							<textarea id="contents" name="contents" cols="82" rows="15"></textarea>
 						</td>
 					</tr>
 					<tr>

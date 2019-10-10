@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import common.BoardDAOImpl;
 import common.BoardDTO;
+import common.BoardReplyDTO;
+import common.ReplyDAOImpl;
 import mybatis.CalexDTO;
 import mybatis.CoconutDTO;
 import mybatis.GradeDTO;
@@ -73,7 +75,6 @@ public class AdminController {
 		session.setAttribute("month_10", visit_per_month[9]);
 		session.setAttribute("month_11", visit_per_month[10]);
 		session.setAttribute("month_12", visit_per_month[11]);
-		
 		
 		return "admin/index";
 	}
@@ -434,7 +435,7 @@ public class AdminController {
 		session.setAttribute("lists", lists);
 		
 		return "admin/board_temp";
-	}
+	} 
 	
 	//게시판 수정
 	@RequestMapping("/admin_board_modify")
@@ -481,10 +482,10 @@ public class AdminController {
 			String title = mhsr.getParameter("title");
 			String contents= mhsr.getParameter("contents");
 			String id = mhsr.getParameter("id");
-			String visitcount = mhsr.getParameter("visitcount");
 			String bname = mhsr.getParameter("bname");
-			bname = mhsr.getParameter("bname");
 			int idx = Integer.parseInt(mhsr.getParameter("idx"));
+			String grade = mhsr.getParameter("grade");
+			String subject = mhsr.getParameter("subject");
 			
 			
 			/*
@@ -531,7 +532,7 @@ public class AdminController {
 			}
 			
 			sqlSession.getMapper(BoardDAOImpl.class).admin_edit
-			(title, contents, id, saveFileName, visitcount, bname, idx);
+			(title, contents, id, saveFileName, bname, idx, grade, subject);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -559,8 +560,10 @@ public class AdminController {
 	@RequestMapping("write_board_admin")
 	public String write_board_admin(HttpServletRequest req, Model model, HttpSession session) {
 		
-		String id = (String) session.getAttribute("id");
-		session.setAttribute("id", id);
+		String id = req.getParameter("id");
+		
+		String name = sqlSession.getMapper(BoardDAOImpl.class).selectName(id);
+		model.addAttribute("name",name);
 		
 		return "admin/board_admin_write";
 	}
@@ -592,8 +595,8 @@ public class AdminController {
 			String contents= mhsr.getParameter("contents");
 			String id = mhsr.getParameter("id");
 			String bname = mhsr.getParameter("bname");
-			String visitcount = mhsr.getParameter("visitcount");
-
+			String grade = mhsr.getParameter("grade");
+			String subject = mhsr.getParameter("subject");
 			
 			model.addAttribute("bname", bname);
 			
@@ -634,7 +637,7 @@ public class AdminController {
 				mfile.transferTo(serverFullName);
 			}
 			
-			sqlSession.getMapper(BoardDAOImpl.class).admin_write(title, contents, id, saveFileName, visitcount, bname);
+			sqlSession.getMapper(BoardDAOImpl.class).admin_write(title, contents, id, saveFileName, bname, name, grade, subject);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -646,4 +649,116 @@ public class AdminController {
 		return "redirect:admin_board.do";
 	}
 	
-}
+	
+
+
+	@RequestMapping("/admin_reply.do")
+	public String admin_reply(HttpSession session, HttpServletRequest req) {
+		
+		String bname = "all";
+		
+		ArrayList<BoardReplyDTO> lists = sqlSession.getMapper(ReplyDAOImpl.class).admin_reply();
+		session.setAttribute("lists", lists); 
+		 
+		return "admin/admin_reply";
+	}
+	
+	
+	@RequestMapping("/admin_reply2.do")
+	public String admin_reply2(HttpSession session, HttpServletRequest req) {
+		
+		String bname = req.getParameter("param"); 
+
+		
+		System.out.println("bname="+bname);
+		
+		ArrayList<BoardReplyDTO> lists;
+		if(bname.equals("all")) {
+			lists = sqlSession.getMapper(ReplyDAOImpl.class).admin_reply();
+		}
+		else {
+			lists = sqlSession.getMapper(ReplyDAOImpl.class).admin_reply_by_bname(bname);
+		}
+		
+		return "admin/reply_temp";
+	}
+	
+	
+	@RequestMapping("/admin_reply_modify.do")
+	public String admin_reply_modify(HttpSession session, HttpServletRequest req) {
+		
+		int idx = Integer.parseInt(req.getParameter("idx"));
+		
+		ArrayList<BoardReplyDTO> lists = sqlSession.getMapper(ReplyDAOImpl.class).admin_reply_by_idx(idx);
+		session.setAttribute("lists", lists);
+		
+		return "admin/reply_modify";
+	}
+	
+	@RequestMapping("/reply_modify_action.do")
+	public String reply_modify_action(Model model, HttpServletRequest req) {
+		
+		int idx = Integer.parseInt(req.getParameter("idx"));
+		String contents = req.getParameter("contents");
+		
+		sqlSession.getMapper(ReplyDAOImpl.class).admin_reply_edit(contents, idx);
+		
+		return "redirect:admin_reply.do";
+	}
+	
+	
+	@RequestMapping("/delete_reply_admin.do")
+	public String delete_reply_admin(Model model, HttpServletRequest req) {
+		
+		int idx = Integer.parseInt(req.getParameter("idx"));
+		
+		sqlSession.getMapper(ReplyDAOImpl.class).delete_reply_admin(idx);
+		
+		return "redirect:admin_reply.do";
+	}
+	
+}	
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

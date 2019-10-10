@@ -16,6 +16,10 @@
   		select * from grade_su where id=#{param1} order by year, semester
   	</select>
   	
+  	<select id="count_all_grade_by_id" resultType="int">
+  		select count(*) from grade_su where id=#{param1}
+  	</select>
+  	
   	<!-- 학년, 학기별 성적 -->
   	<select id="grade" resultType="mybatis.GradeDTO">
   		select * from grade_su where year=#{year} AND semester=#{semester} and id=#{id}
@@ -37,6 +41,22 @@
   	<!-- 정시성적 출력 -->
 	<select id="junglist" resultType="mybatis.MyJunggradeDTO">
 		select * from grade_jung where years=#{param1} and dates=#{param2} and year=#{param3} and id=#{param4}
+	</select>
+	
+	<select id="jung_exam_by_id_idx" resultType="mybatis.MyJunggradeDTO">
+		select * from grade_jung where id=#{param1} and idx=#{param2}
+	</select>
+	
+	<select id="get_major_name" resultType="String">
+		select major from info_major where idx=#{param1}
+	</select>
+	
+	<select id="all_junglist" resultType="mybatis.MyJunggradeDTO">
+		select * from grade_jung where id=#{param1}
+	</select>
+	
+	<select id="select_one" resultType="mybatis.MyJunggradeDTO">
+		select * from grade_jung where idx=#{param1}
 	</select>
 	
 	<!-- 시험 출력 -->
@@ -76,7 +96,7 @@
 	SELECT 
 		l_name, sido, sigungu, l_type, rest_day, weekday_start, weekday_end,
 		saturday_start, saturday_end, holiday_start, holiday_end,
-		num_seats, num_books, addr, phone_num, l_url, hp_latitude, hp_longitude, l_like, 
+		num_seats, num_books, addr, phone_num, l_url, hp_latitude, hp_longitude, l_like, l_num,
 	    trunc(to_number(DISTNACE_WGS84(#{param2}, #{param3}, hp_latitude, hp_longitude)),5) AS disKM,
   		ROWNUM AS rNum
 	FROM library 
@@ -119,6 +139,18 @@
 			hp_longitude=#{param14},
 			l_like=#{param15}
 		where l_num=#{param16}
+	</update>
+	
+	<insert id="like_action">
+		insert into like_it (id, l_num) values(#{param1}, #{param2})
+	</insert>
+	
+	<select id="like_count" resultType="int">
+		SELECT COUNT(*) FROM like_it WHERE l_num=#{param1}
+	</select>
+	 
+	<update id="like_update">
+		UPDATE library SET l_like=#{param2} WHERE l_num=#{param1}
 	</update>
 	
 	<!-- 시험 일정 입력 -->
@@ -171,5 +203,15 @@
 	<select id="select_visit" resultType="int">
 		select count(*) from visit where visit_year=#{param1} and visit_month=#{param2}
 	</select>
+	
+	 <!-- 좋아요 중복 체크 -->
+   <select id="like_check" resultType="int">
+      SELECT COUNT(*) FROM like_it WHERE l_num=#{param2} and id=#{param1}
+   </select>
+   
+   <!-- 좋아요 취소 -->
+   <delete id="unlike">
+      DELETE from like_it WHERE id=#{param1} and l_num=#{param2}
+   </delete>
 	
 </mapper>

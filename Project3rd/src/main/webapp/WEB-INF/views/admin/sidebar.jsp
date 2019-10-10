@@ -31,6 +31,7 @@
 	        <c:choose>
 	        <c:when test="${not empty sessionScope.siteUserInfo }">
           		<a class="dropdown-item" href="admin_board.do">게시판</a>
+          		<a class="dropdown-item" href="admin_reply.do">댓글</a>
           	</c:when>
           	<c:otherwise>
           		<a class="dropdown-item" href="admin_login.do">Login</a>

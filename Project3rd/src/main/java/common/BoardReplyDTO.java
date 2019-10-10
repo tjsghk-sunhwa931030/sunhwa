@@ -12,10 +12,11 @@ public class BoardReplyDTO {
     private int rstep;
     private String name;
     private String show;
+    private String bname;
     
     public BoardReplyDTO() {}
     
-	public BoardReplyDTO(int re_idx, int b_idx, String id, String contents, Date replydate, int rgroup, int rstep, String name, String show) {
+	public BoardReplyDTO(int re_idx, int b_idx, String id, String contents, Date replydate, int rgroup, int rstep, String name, String show, String bname) {
 		super();
 		this.re_idx = re_idx;
 		this.b_idx = b_idx;
@@ -26,6 +27,7 @@ public class BoardReplyDTO {
 		this.rstep = rstep;
 		this.name = name;
 		this.show = show;
+		this.bname = bname;
 	}
 
 	public int getRe_idx() {
@@ -99,6 +101,15 @@ public class BoardReplyDTO {
 	public void setShow(String show) {
 		this.show = show;
 	}
+
+	public String getBname() {
+		return bname;
+	}
+
+	public void setBname(String bname) {
+		this.bname = bname;
+	}
+	
 	
 	
 }

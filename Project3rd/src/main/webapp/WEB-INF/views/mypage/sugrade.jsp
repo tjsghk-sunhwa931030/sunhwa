@@ -166,6 +166,11 @@ function editRow(idx){
 		location.href="./suedit.do?idx="+idx+"&id="+id+"&subject_type="+subject_type+"&counts="+counts+"&rate="+rate+"&jumsu="+jumsu+"&avg="+avg+"&deviation="+deviation+"&totalman="+totalman;
 	}
 }
+
+function alertcall(){
+	alert("로그인후 이용해주세요.");
+	location.href="./login.do";
+}
 </script>
 </head>
 <body>
@@ -183,13 +188,26 @@ function editRow(idx){
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
-					<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+					<c:choose>
+						<c:when test="${not empty sessionScope.siteUserInfo }">
+							<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</nav>
 		</div>
@@ -248,9 +266,9 @@ function editRow(idx){
 				}
 				%>
 				<p class="tabletop" id="distinction"><strong id="hak"><%=year %></strong>&nbsp;<strong id="gi"><%=semester %></strong></p>
-				<input type="hid-den" name="year" value="<%=year %>" id="year"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
-				<input type="hid-den" name="semester" value="<%=semester %>" id="semester"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
-				<input type="hid-den" name="id" value="<%=id %>" id="id"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
+				<input type="hidden" name="year" value="<%=year %>" id="year"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
+				<input type="hidden" name="semester" value="<%=semester %>" id="semester"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
+				<input type="hidden" name="id" value="<%=id %>" id="id"/><!-- 저장을 누를때 넘겨줄값이 들어있는곳 -->
 				<table class="table">
 					<thead>
 						<tr>

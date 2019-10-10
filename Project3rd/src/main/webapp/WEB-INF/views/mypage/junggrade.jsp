@@ -44,7 +44,7 @@ function insertinto(dates,ex_name){
 	
 	var id = '<c:out value="${sessionScope.siteUserInfo }"/>';		/* 로그인후 고친부분 */
 	
-	location.href="./junggrade.do?years="+years+"&dates="+dates+"&year="+year+"&id="+id; /* 로그인후 고친부분 */
+	location.href="./junggrade.do?years="+years+"&dates="+dates+"&year="+year+"&id="+id+"&ex_name="+ex_name; /* 로그인후 고친부분 */
 }
 
 function analyze(dates,ex_name){
@@ -419,6 +419,11 @@ function jungValidate(){
 	}
 	
 }
+
+function alertcall(){
+	alert("로그인후 이용해주세요.");
+	location.href="./login.do";
+}
 </script>
 </head>
 <body>
@@ -437,13 +442,26 @@ function jungValidate(){
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
-					<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+					<c:choose>
+						<c:when test="${not empty sessionScope.siteUserInfo }">
+							<li class="nav-item1"><a class="nav-link" href="./interuniv.do?id=${sessionScope.siteUserInfo }">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./sugrade.do?id=${sessionScope.siteUserInfo }">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./junggrade.do?id=${sessionScope.siteUserInfo }&years=2019&dates=2019-11-20&year=1year">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./attenvolun.do?id=${sessionScope.siteUserInfo }">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./mylist.do?id=${sessionScope.siteUserInfo }">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./personaldata.do?id=${sessionScope.siteUserInfo }">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./chpassword.do?id=${sessionScope.siteUserInfo }">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">관심대학<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">수시성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">모의고사성적<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">출결사항/봉사활동<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">나의글<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">개인정보수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="javascript:void(0);" class="menu_link" onclick="alertcall();">비밀번호수정<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</nav>
 		</div>
@@ -571,18 +589,33 @@ function jungValidate(){
 				    	else{
 				    		years=request.getParameter("years"); 
 				    	}
+				    	
+				    	
 				    	if(request.getParameter("dates")==null){
 				    		dates="2019-11-20";
 				    	}
 				    	else{
 				    		dates=request.getParameter("dates");
 				    	}
+				    	
+				    	
 				    	if(request.getParameter("ex_name")==null){
 				    		ex_name="학력평가";
+				    	}
+				    	else if(request.getParameter("ex_name").equals("??????")){
+				    		ex_name="수능모의평가";
+				    	}
+						else if(request.getParameter("ex_name").equals("????")){
+							ex_name="학력평가";
+				    	}
+						else if(request.getParameter("ex_name").equals("??")){
+							ex_name="수능";
 				    	}
 				    	else{
 				    		ex_name=request.getParameter("ex_name");
 				    	}
+				    	
+				    	
 				    	if(request.getParameter("year")==null){
 				    		year="1year";
 				    	}
@@ -595,7 +628,8 @@ function jungValidate(){
 				    	String year_int =  temp2[0];
 				    
 				    	%>
-				    	<h3 style="padding-top:20px;"><%=year_int %>학년 <%=dates %> <%=ex_name %></h3>
+				    	<h3 style="padding-top:20px;"><%=year_int %>학년 <%=dates %> <span id="ex_name"><%=ex_name %></span>
+				    	</h3>
 			    		<input type="hidden" value="<%=id %>" name="id"/>
 			    		<input type="hidden" value="<%=years %>" name="years" id="years"/>
 			    		<input type="hidden" value="<%=dates %>" name="dates" id="dates"/>

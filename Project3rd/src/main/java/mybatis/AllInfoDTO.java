@@ -3,7 +3,9 @@ package mybatis;
 public class AllInfoDTO {
 
 	private int idx;
-	private int major_idx;
+	private int junh_idx;
+	private String id;
+	private String univ_uname;
 	private String u_type;
 	private String uname;
 	private String location;
@@ -52,7 +54,7 @@ public class AllInfoDTO {
 	
 	
 	
-	public AllInfoDTO(int idx, int major_idx, String u_type, String uname, String location, String p_type,
+	public AllInfoDTO(int idx, int junh_idx,String id,String univ_uname,String u_type, String uname, String location, String p_type,
 			String rate_univ, String jobrate, String tuition, String totalman, String major_num, String enter_num,
 			String interest, String found, String major1, String major2, String major, String majorman, String mjobrate,
 			String lastminis, String lastminij, String ibresult, String recruit_time, String enter_type,
@@ -63,7 +65,9 @@ public class AllInfoDTO {
 			String bname) {
 		super();
 		this.idx = idx;
-		this.major_idx = major_idx;
+		this.junh_idx = junh_idx;
+		this.id = id;
+		this.univ_uname = univ_uname;
 		this.u_type = u_type;
 		this.uname = uname;
 		this.location = location;
@@ -109,6 +113,7 @@ public class AllInfoDTO {
 		this.beak_avg = beak_avg;
 		this.beak_mini = beak_mini;
 		this.bname = bname;
+		
 	}
 
 	public AllInfoDTO() {
@@ -116,12 +121,12 @@ public class AllInfoDTO {
 	}
 	
 
-	public int getMajor_idx() {
-		return major_idx;
+	public int getJunh_idx() {
+		return junh_idx;
 	}
 
-	public void setMajor_idx(int major_idx) {
-		this.major_idx = major_idx;
+	public void setJunh_idx(int junh_idx) {
+		this.junh_idx = junh_idx;
 	}
 
 	public int getIdx() {
@@ -130,6 +135,22 @@ public class AllInfoDTO {
 
 	public void setIdx(int idx) {
 		this.idx = idx;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getUniv_uname() {
+		return univ_uname;
+	}
+
+	public void setUniv_uname(String univ_uname) {
+		this.univ_uname = univ_uname;
 	}
 
 	public String getU_type() {

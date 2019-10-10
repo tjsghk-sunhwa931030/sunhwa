@@ -18,7 +18,7 @@ public interface MybatisMemberImpl{
 			@Param("EMAIL") String EMAIL,
 			@Param("PHONE") String PHONE,
 			@Param("SMS_OK") String SMS_OK,
-			@Param("EMAIL_OK") String EMAL_OK
+			@Param("EMAIL_OK") String EMAIL_OK
 			);
 
 	public CoconutDTO login(String ID, String PASS1);

@@ -12,7 +12,13 @@
 		SELECT COUNT(*) FROM board WHERE bname=#{bname}     
 		<if test="keyString != null"> 
 			AND ${keyField} LIKE '%'||#{keyString}||'%' 
-		</if> 
+		</if>
+		<if test='grade != "" and grade != null' >
+			AND grade=#{grade}
+		</if>
+		<if test='subject != "" and subject != null'>	
+			AND subject=#{subject} 
+		</if>  
 	</select>  
 
 	<!-- 리스트 --> 
@@ -21,13 +27,20 @@
 		<if test= "keyString != null"> 
 			AND ${keyField} LIKE '%'||#{keyString}||'%'  
 		</if>
+		<if test='grade != "" and grade != null' >
+				AND grade=#{grade}
+		</if>
+		<if test='subject != "" and subject != null'>	
+			AND subject=#{subject} 
+		</if> 
 		 ORDER BY idx DESC)Tb)WHERE rNum BETWEEN #{start} AND #{end}
 	</select>   
 	 
 	<!-- 글쓰기 -->  
 	<insert id="write">
-		INSERT INTO board (idx, id, name, title, contents, attachedfile, bname) 
-		Values (board_seq.nextval, #{_id}, #{_name}, #{_title }, #{_contents}, #{_attachedfile, jdbcType=VARCHAR }, #{_bname})
+		INSERT INTO board (idx, id, name, title, contents, attachedfile, bname, grade, subject) 
+		Values (board_seq.nextval, #{_id}, #{_name}, #{_title }, #{_contents}, #{_attachedfile, jdbcType=VARCHAR }, #{_bname},
+		#{_grade, jdbcType=VARCHAR}, #{_subject, jdbcType=VARCHAR} )
 	</insert>
 	
 	<!-- 상세보기 -->
@@ -43,7 +56,7 @@
 	<!-- 수정하기 -->
 	<update id="edit">
 		UPDATE board 
-			SET	title=#{param1}, contents=#{param2}, attachedfile=#{param3, jdbcType=VARCHAR} 
+			SET	title=#{param1}, contents=#{param2}, attachedfile=#{param3, jdbcType=VARCHAR}, grade=#{param5, jdbcType=VARCHAR}, subject=#{param6, jdbcType=VARCHAR} 
 			WHERE idx=#{param4}
 	</update>
 	
@@ -72,14 +85,14 @@
 	<update id="admin_edit">
 		UPDATE board 
 			SET	title=#{param1}, contents=#{param2}, id=#{param3}, 
-			attachedfile=#{param4, jdbcType=VARCHAR}, 
-			visitcount=#{param5}, bname=#{param6}
-			WHERE idx=#{param7}
+			attachedfile=#{param4, jdbcType=VARCHAR}, bname=#{param5}, grade=#{param7, jdbcType=VARCHAR}, subject=#{param8, jdbcType=VARCHAR}
+			WHERE idx=#{param6}
 	</update>
+	
 	<!-- 관리자 글 쓰기 -->
 	 <insert id="admin_write">
-		INSERT INTO board (idx, title, contents, id, attachedfile, visitcount, bname) 
-		Values (board_seq.nextval, #{_title }, #{_contents}, #{_id}, #{_attachedfile, jdbcType=VARCHAR }, #{visitcount}, #{_bname})
+		INSERT INTO board (idx, title, contents, id, attachedfile, bname, name, grade, subject) 
+		Values (board_seq.nextval, #{_title }, #{_contents}, #{_id}, #{_attachedfile, jdbcType=VARCHAR }, #{_bname}, #{_name}, #{_grade, jdbcType=VARCHAR}, #{_subject, jdbcType=VARCHAR})
 	</insert>
 	
 </mapper>  

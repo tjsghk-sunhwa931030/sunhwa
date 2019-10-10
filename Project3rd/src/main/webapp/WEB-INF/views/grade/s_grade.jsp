@@ -124,8 +124,8 @@
 	      var data = google.visualization.arrayToDataTable([
 	        ['과목', '등급', { role: 'style' }],
 	        	['국어', ${rate_korea}, 'blue'],
-	        	['수학', ${rate_math}, 'red'],
-	        	['영어', ${rate_english}, 'gold'],
+	        	['수학', ${rate_math}, 'gold'],
+	        	['영어', ${rate_english}, 'red'],
 	        	['사회', ${rate_society}, 'green'],
 	        	['과학', ${rate_science}, 'purple']
 	       ]); 
@@ -143,7 +143,7 @@
 	        }
 	      };
 	 
-	      var chart = new google.visualization.ColumnChart(document.getElementById('grade_graph2'));
+	      var chart = new google.visualization.BarChart(document.getElementById('grade_graph2'));
 	      chart.draw(data, options);
 	    }
 </script>
@@ -158,7 +158,7 @@
 			<div class="righttoptext">학생부 성적 분석 - 주요교과 분석</div>
 		</div>
 	</div>
-	<div class="contents">
+	<div class="contents" style="height: 2000px">
 		<div class="leftmenu">
 			<nav class="left1">
 				<ul class="navbar-nav1  bg-light ">

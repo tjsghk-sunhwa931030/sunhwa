@@ -10,6 +10,38 @@
 		alert("로그인후 이용해주세요.");
 		location.href="./login.do";
 	}
+	
+	function like(l_num){
+		   var l_num = l_num;
+		   var count = $("#count").text();
+		   
+		   $.ajax({
+		      url : "like_action.do",
+		      type : "post",
+		      data : {
+		         l_num : l_num,
+		      },
+		      success : function(d){
+		         //recCount();
+		         if(d.statusCode==0){
+		            alert("추천 실패");
+		         }
+		         else if(d.statusCode==1){
+		            alert("추천이 완료되었습니다.");
+		            $("#count").text(d.l_count);
+		            location.reload();
+		         }
+		         else if(d.statusCode==2){
+		            alert("추천이 취소되었습니다.");
+		            $("#count").text(d.l_count);
+		            location.reload();
+		         }
+		      },
+		      error : function(e){
+		         alert("ajax 실패...!");
+		      }
+		   });
+		} 
 </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">

@@ -12,7 +12,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <link rel="stylesheet" href="style/leftmenustyle.css" />
 <link rel="stylesheet" href="style/basic.css" />
@@ -270,7 +270,7 @@ function ch_major3(maj3){
 												<td>
 												</td>
 												<td>
-													<input type="checkbox" name="location"id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location"id="chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);">
 													<label for="chk_location_all">전체</label> 
 													<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);">
 													<label for="chk_location_1">강원</label> 
@@ -350,7 +350,6 @@ function ch_major3(maj3){
 									<th scope="col" rowspan="2">입학 정원</th>
 									<th scope="col" rowspan="2">취업률</th>
 									<th scope="col" colspan="2">전년도 최저</th>
-									<th scope="col" rowspan="2">입시결과</th>
 								</tr>
 								<tr>
 									<th>수시</th>
@@ -371,9 +370,15 @@ function ch_major3(maj3){
 										<td scope="col" rowspan="2">${rowh.mjobrate}</td>
 										<td scope="col" rowspan="2">${rowh.lastminis}</td>
 										<td scope="col" rowspan="2">${rowh.lastminij}</td>
-										<td scope="col" rowspan="2">${rowh.ibresult}</td>
 									</tr>
 								</c:forEach>
+								
+								<div style="width:100%;">
+									  <ul class="pagination pagination-sm" style="color: black;">
+									   ${pagingImg }
+									  </ul>
+								</div>
+								
 							</tbody>
 						</table>
 					</div>
@@ -460,7 +465,7 @@ function ch_major3(maj3){
 											<tr>
 												<td class="tt">지역</td>
 												<td>
-													<input type="checkbox" name="location"id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);">
+													<input type="checkbox" name="location"id="j_chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);">
 													<label for="chk_location_all">전체</label> 
 													<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);">
 													<label for="chk_location_1">강원</label> 
@@ -539,7 +544,6 @@ function ch_major3(maj3){
 									<th scope="col" rowspan="2">입학 정원</th>
 									<th scope="col" rowspan="2">취업률</th>
 									<th scope="col" colspan="2">전년도 최저</th>
-									<th scope="col" rowspan="2">입시결과</th>
 								</tr>
 								<tr>
 									<th>수시</th>
@@ -560,9 +564,15 @@ function ch_major3(maj3){
 										<td scope="col" rowspan="2">${rowh.mjobrate}</td>
 										<td scope="col" rowspan="2">${rowh.lastminis}</td>
 										<td scope="col" rowspan="2">${rowh.lastminij}</td>
-										<td scope="col" rowspan="2">${rowh.ibresult}</td>
 									</tr>
 								</c:forEach>
+							<!-- 페이징 -->
+						    	<div style="width:100%;">
+									<ul class="pagination pagination-sm" style="color: black;">
+										 ${pagingImg }
+									 </ul>
+								</div>
+							<!-- //페이징 -->
 							</tbody>
 						</table>
 					</div>
@@ -570,12 +580,6 @@ function ch_major3(maj3){
 
 				</div>
 				<!-- 전문대학교 끝 -->
-
-				<!-- 페이징 -->
-				<div class="paging" id="paginationholder">
-					<ul id="pagination" class="pages"></ul>
-				</div>
-				<!-- //페이징 -->
 
 			</div>
 			<!-- tab-content  -->

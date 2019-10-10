@@ -17,9 +17,10 @@
         <thead>
           <tr>
           	<th>번호</th>
-            <th>이름</th>
+            <th>제목</th>
             <th>내용</th>
-            <th>글쓴이</th>
+            <th>아이디</th>
+            <th>이름</th>
             <th>파일</th>
             <th>조회수</th>
             <th>게시판 종류</th>
@@ -34,12 +35,31 @@
             <td>${row.title }</td>
             <td>${row.contents }</td>
             <td>${row.id }</td>
+            <td>${row.name }</td>
             <td>${row.attachedfile }</td>
             <td>${row.visitcount }</td>
-            <td>${row.bname }</td>
+            <td>
+            <c:choose>
+				<c:when test="${row.bname eq 'group'}">
+					<c:out value="소모임 구함" />
+				</c:when>
+				<c:when test="${row.bname eq 'free'}">
+					<c:out value="공부꿀팁" />
+				</c:when>
+				<c:when test="${row.bname eq 'notice'}">
+					<c:out value="공지사항" />
+				</c:when>
+				<c:when test="${row.bname eq 'unient'}">
+					<c:out value="대입제도" />
+				</c:when>
+				<c:when test="${row.bname eq 'qna'}">
+					<c:out value="질문있어요!" />
+				</c:when>
+			</c:choose>
+            </td>
             <td>${row.postdate }</td>
             <td>
-            	<button type="button" class="btn btn-primary" onclick = "location.href = 'member_modify.do?id=${row.idx }'">수정</button>
+            	<button type="button" class="btn btn-primary" onclick = "location.href = 'admin_board_modify.do?idx=${row.idx }'">수정</button>
             </td>
           </tr>
          </c:forEach>

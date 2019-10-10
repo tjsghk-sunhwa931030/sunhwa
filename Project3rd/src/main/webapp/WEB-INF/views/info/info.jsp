@@ -107,33 +107,37 @@ function utypeClick(){
  }
 
 function click_interest(uname,id){
+	var member_id = "<%=(String)session.getAttribute("siteUserInfo")%>"
 
 		$.ajax({
 			url : "./interest_chk.do",
 			type : 'POST',
 			dataType : "html",
 			data :{
-				   univ_uname : uname,
+				   uname : uname,
 				   id : id
 			},
 			success : function(){
 				$("#noheart"+uname).toggle();
 				$("#heart"+uname).toggle();
+				
+				
+				$("#noheart2"+uname).toggle();
+				$("#heart2"+uname).toggle();
 		
 				alert("관심대학 설정되었습니다.")
-				alert("대학정보"+uname)
-				alert("id"+id)
-		
+			
 			
 			},
 			error : function(e){
-				alert("실패"+e.status)
-				alert("대학정보"+uname)
-				alert("id"+id)
-				
+				alert("이미 등록된 관심대학입니다"+e.status)
 			
+				
 			}
+			
 		});
+	
+		
 
 }
 
@@ -143,9 +147,10 @@ function click_nointerest(uname,id){
 	$.ajax({
 		url : "./interest_unchk.do",
 		type : 'GET',
+		contentType: "application/json",
 		dataType : "html",
 		data :{
-			univ_uname : uname,
+			uname : uname,
 			   id : id
 		},
 		success : function(){
@@ -153,10 +158,12 @@ function click_nointerest(uname,id){
 			$("#heart"+uname).toggle();
 			$("#noheart"+uname).toggle();
 			
+			$("#heart2"+uname).toggle();
+			$("#noheart2"+uname).toggle();
+			
 
 			alert("관심대학 설정이 취소되었습니다.")
-			alert("대학정보"+uname)
-			alert("id"+id)
+			
 	
 		
 		},
@@ -256,7 +263,7 @@ function click_nointerest(uname,id){
 										
 											<td class="tt">지역</td>
 											<td>
-												<input type="checkbox" name="location" id="chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="location" id="chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
 												<input type="checkbox" name=location id="chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
 												<input type="checkbox" name="location" id="chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
 												<input type="checkbox" name="location" id="chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
@@ -285,7 +292,7 @@ function click_nointerest(uname,id){
 											<td class="tt">설립유형</td>
 											<td>
 											
-		            							<input type="checkbox" name="p_type" id="chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+		            							<input type="checkbox" name="p_type" id="chk_ptype_all" value="" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
 												<input type="checkbox" name="p_type" id="chk_ptype_1" value="국공립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
 												<input type="checkbox" name="p_type" id="chk_ptype_2" value="사립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
 		            							
@@ -327,7 +334,7 @@ function click_nointerest(uname,id){
 		
 					<table class="list_tbl01">
 						<caption>검색버튼을 눌러주세요</caption>
-						<input type="hid-den" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
+						<input type="hidden" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 						<colgroup>
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -351,13 +358,14 @@ function click_nointerest(uname,id){
 								<th scope="col" rowspan="2">평균등록금</th>
 								<th scope="col" rowspan="2">설치학과</th>
 								<th scope="col" rowspan="2">전형정보</th>
-								<th scope="col" rowspan="2">관심설정</th>
+								<c:if test="${sessionScope.siteUserInfo ne null}">
+									<th scope="col" rowspan="2">관심설정</th>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody id="tbResult" >
-					
-							<c:forEach items="${lists }" var="row"  >
-									
+						
+							<c:forEach items="${lists }" var="row" >
 										<tr>
 										</tr>
 										<tr>
@@ -370,20 +378,39 @@ function click_nointerest(uname,id){
 											<td scope="col" rowspan="2">${row.tuition}</td>
 											<td scope="col" rowspan="2">${row.major_num}</td>
 											<td scope="col" rowspan="2">${row.enter_num}</td>
-											<td scope="col" rowspan="2">
-												<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart${row.uname }" class="far fa-star" style='font-size:24px'></i>
-												<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart${row.uname }" class="fas fa-star" style='display:none; font-size:24px'></i>
-											</td>
+											<c:if test="${sessionScope.siteUserInfo ne null}">
+												
+											<!-- 회원이라 관심항목 보여짐   -->
+												<td scope="col" rowspan="2">
+													
+														<c:choose>
+															<c:when test="${row.id=='null'}">
+																<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart${row.uname}" class="far fa-star" style='font-size:24px'></i>
+																<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart${row.uname}" class="fas fa-star" style='display:none; font-size:24px'></i>
+															</c:when>
+															<c:when test="${row.univ_uname !=null}"> 
+															<!-- 관심항목에 대학이름이 추가되어있으면 검은하트로 표시한다  -->
+																<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart${row.uname}" class="fas fa-star" style='font-size:24px'></i>
+																<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart${row.uname}" class="far fa-star" style='display:none; font-size:24px'></i>
+															</c:when>
+															
+															<c:otherwise>
+																<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart${row.uname}" class="far fa-star" style='font-size:24px'></i>
+																<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart${row.uname}" class="fas fa-star" style='display:none; font-size:24px'></i>
+															</c:otherwise>
+															
+														</c:choose>
+												
+												</td>
+											</c:if>
 										</tr>
 							</c:forEach>
-							
+						
 								<div style="width:100%;">
 									  <ul class="pagination pagination-sm" style="color: black;">
 									   ${pagingImg }
 									  </ul>
 								</div>
-								
-					
 						</tbody>
 					</table>
 				</div>
@@ -396,8 +423,7 @@ function click_nointerest(uname,id){
 			
 			<!-- 전문대학교 시작 -->
 				<div id="junmun" class="container tab-pane fade" onclick="javascript:utypeClick();"><br/>
-		<form id="checkfrm" name="checkfrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
-				
+					<form id="checkfrm" name="checkfrm" action="./checkAction.do" method="get" onsubmit="return checkboxFrm();">
 					<div class="search_tbl_box" >
 						<fieldset>
 							<!-- 대학 -->
@@ -433,7 +459,7 @@ function click_nointerest(uname,id){
 										
 											<td class="tt">지역</td>
 												<td>
-												<input type="checkbox" name="location" id="j_chk_location_all" value="%" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
+												<input type="checkbox" name="location" id="j_chk_location_all" value="" checked="checked" onclick="locationList_onclick(this);"><label for="chk_location_all">전체</label>
 												<input type="checkbox" name=location id="j_chk_location_1" value="강원" onclick="locationList_onclick(this);"><label for="chk_location_1">강원</label>
 												<input type="checkbox" name="location" id="j_chk_location_2" value="경기" onclick="locationList_onclick(this);"><label for="chk_location_2">경기</label>
 												<input type="checkbox" name="location" id="j_chk_location_3" value="경남" onclick="locationList_onclick(this);"><label for="chk_location_3">경남</label>
@@ -460,7 +486,7 @@ function click_nointerest(uname,id){
 											<td class="tt">설립유형</td>
 											<td>
 											
-		            							<input type="checkbox" name="p_type" id="j_chk_ptype_all" value="%" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
+		            							<input type="checkbox" name="p_type" id="j_chk_ptype_all" value="" checked="checked" onclick="ptypeList_onclick(this)"><label for="chk_ptype_all">전체</label>
 												<input type="checkbox" name="p_type" id="j_chk_ptype_1" value="국공립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_1">국공립</label>
 												<input type="checkbox" name="p_type" id="j_chk_ptype_2" value="사립" onclick="ptypeList_onclick(this)"><label for="chk_ptype_3">사립</label>
 		            							
@@ -500,7 +526,7 @@ function click_nointerest(uname,id){
 	
 					<table class="list_tbl01" id="result_list">
 						<caption>검색버튼을 눌러주세요</caption>
-						<input type="hid-den" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
+						<input type="hidden" name="id" id="${siteUserInfo }" value="${siteUserInfo }"/>
 						<colgroup>
 							<col style="width:70px;">
 							<col style="width:70px;">
@@ -525,7 +551,9 @@ function click_nointerest(uname,id){
 								<th scope="col" rowspan="2">평균등록금</th>
 								<th scope="col" rowspan="2">설치학과</th>
 								<th scope="col" rowspan="2">전형정보</th>
-								<th scope="col" rowspan="2">관심설정</th>
+								<c:if test="${sessionScope.siteUserInfo ne null}">
+									<th scope="col" rowspan="2">관심설정</th>
+								</c:if>
 							</tr>
 						</thead>
 						<tbody id="tbResult2">
@@ -542,27 +570,40 @@ function click_nointerest(uname,id){
 									<td scope="col" rowspan="2">${row.tuition}</td>
 									<td scope="col" rowspan="2">${row.major_num}</td>
 									<td scope="col" rowspan="2">${row.enter_num}</td>
-									<td scope="col" rowspan="2">
-										<%-- <i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart2${row.uname }" class="far fa-star" style='font-size:24px'></i>
-										<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart2${row.uname }" class="fas fa-star" style='display:none; font-size:24px'></i> --%>
-									</td>
+									<c:if test="${sessionScope.siteUserInfo ne null}">
+										<td scope="col" rowspan="2">
+											<c:choose>
+												<c:when test="${row.univ_uname !=null}" >
+													<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart2${row.uname }" class="fas fa-star" style='font-size:24px'></i>
+													<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart2${row.uname }" class="far fa-star" style='display:none;font-size:24px'></i>
+												</c:when>
+												<c:when test="${id == 'null'}">
+													<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart2${row.uname }" class="fas fa-star" style='font-size:24px'></i>
+													<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart2${row.uname }" class="far fa-star" style='display:none;font-size:24px'></i>
+												</c:when>
+												<c:otherwise>
+													<i onclick="click_interest('${row.uname}','${siteUserInfo }');" id="noheart2${row.uname }" class="far fa-star" style='font-size:24px'></i>
+													<i onclick="click_nointerest('${row.uname}','${siteUserInfo }');" id="heart2${row.uname }" class="fas fa-star" style='display:none; font-size:24px'></i>
+												</c:otherwise>
+											</c:choose>
+										</td>
+									</c:if>
 								</tr>
 							</c:forEach>
+							
+							<!-- 페이징 -->
+						    	<div style="width:100%;">
+									<ul class="pagination pagination-sm" style="color: black;">
+										 ${pagingImg }
+									 </ul>
+								</div>
+							<!-- //페이징 -->
 						</tbody>
 					</table>
 
 				</div>
 				<!-- //대학리스트 -->
-			
-				
-				<!-- 페이징 -->
-		    	<div style="width:100%;">
-					<ul class="pagination pagination-sm" style="color: black;">
-						 ${pagingImg }
-					 </ul>
-				</div>
-				<!-- //페이징 -->
-				
+		
 			</div>
 		</div><!-- tab-content  -->
 

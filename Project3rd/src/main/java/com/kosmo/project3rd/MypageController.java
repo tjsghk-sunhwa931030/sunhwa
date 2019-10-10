@@ -2,7 +2,6 @@ package com.kosmo.project3rd;
 
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,24 +17,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpServerErrorException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import common.BoardDTO;
+import common.BoardReplyDTO;
 import mybatis.CalexDTO;
 import mybatis.GradeImpl;
 import mybatis.MyAttendanceDTO;
-import mybatis.MyBoardDTO;
-import mybatis.MyBoardReplyDTO;
 import mybatis.MyInterestunivDTO;
 import mybatis.MyJunggradeDTO;
-import mybatis.MyQnaDTO;
-import mybatis.MyQnaReplyDTO;
 import mybatis.MySugradeDTO;
 import mybatis.MyVoluntaryDTO;
 import mybatis.MybatisMypageDAOImpl;
 import mybatis.PersonalDTO;
-import mybatis.TestScheduleDTO;
 
 @Controller
 public class MypageController {
@@ -314,27 +309,15 @@ public class MypageController {
 		
 		String id = req.getParameter("id");
 		
-		ArrayList<MyBoardDTO> lists1 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myboard(id);
-		ArrayList<MyBoardReplyDTO> lists2 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myboardreply(id);
-		ArrayList<MyQnaDTO> lists4 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myqna(id);
-		ArrayList<MyQnaReplyDTO> lists3 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myqnareply(id);
+		ArrayList<BoardDTO> lists1 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myboard(id);
+		ArrayList<BoardReplyDTO> lists2 = sqlSession.getMapper(MybatisMypageDAOImpl.class).myboardreply(id);
 		
 		model.addAttribute("lists1",lists1);
 		model.addAttribute("lists2",lists2);
-		model.addAttribute("lists4",lists4);
-		model.addAttribute("lists3",lists3);
 		
 		return "mypage/mylist";
 	}
 	
-	//질문항목삭제
-	@RequestMapping("/deleteqna.do")
-	public String deleteqna(Model model, HttpServletRequest req, HttpSession session) {
-		
-		sqlSession.getMapper(MybatisMypageDAOImpl.class).deleteqna(Integer.parseInt(req.getParameter("idx")));
-		
-		return "redirect:mylist.do?id="+req.getParameter("id");
-	}
 	//댓글항목삭제
 	@RequestMapping("/deletereply.do")
 	public String deletereply(Model model, HttpServletRequest req, HttpSession session) {
@@ -351,14 +334,7 @@ public class MypageController {
 		
 		return "redirect:mylist.do?id="+req.getParameter("id");
 	}
-	//질문댓글항목삭제
-	@RequestMapping("/deleteqnareply.do")
-	public String deleteqnareply(Model model, HttpServletRequest req, HttpSession session){
-		
-		sqlSession.getMapper(MybatisMypageDAOImpl.class).deleteqnareply(Integer.parseInt(req.getParameter("idx")));
-		
-		return "redirect:mylist.do?id="+req.getParameter("id");
-	}
+	
 	
 	//개인정보수정페이지진입
 	@RequestMapping("/personaldata.do")
@@ -382,6 +358,7 @@ public class MypageController {
 		String email_id = req.getParameter("email_id");
 		String email_domain = req.getParameter("email_domain");
 		String email = email_id+"@"+email_domain;
+		String phone = req.getParameter("phone1")+"-"+req.getParameter("phone2")+"-"+req.getParameter("phone3");
 		
 		System.out.println(email);
 		
@@ -402,13 +379,12 @@ public class MypageController {
 		System.out.println(sms_ok);
 		System.out.println(email_ok);
 		System.out.println(req.getParameter("name"));
-		System.out.println(req.getParameter("phone"));
 		System.out.println(req.getParameter("id"));
 		
 		sqlSession.getMapper(MybatisMypageDAOImpl.class).personalaction(
 				req.getParameter("name"),
 				email,
-				req.getParameter("phone"), 
+				phone, 
 				sms_ok,
 				email_ok,
 				req.getParameter("id")
@@ -473,177 +449,221 @@ public class MypageController {
 	
 	
 	
-		//달력에 데이터받아와서 표시
-		@RequestMapping("/jsonView.do")
-		@ResponseBody
-		public ArrayList<Map> responseBodyView(Model model, HttpServletRequest req,HttpSession session) {
-			
-			String userId = (String)session.getAttribute("siteUserInfo");
-			
-			if(userId==null) {
-				userId="???";
-			}
-			
-			String auth = "admin";
-			System.out.println("dfsdfsfsdfd"+userId);
-			
-			
-			ArrayList<CalexDTO> lists = sqlSession.getMapper(MybatisMypageDAOImpl.class).selectcal(userId,auth);
-			
-			ArrayList<Map> list = new ArrayList<Map>(); //[]형태
-			
-			
-			for(int i=0; i<lists.size(); i++) {
-				Map<String ,Object> map = new HashMap<String, Object>();
-				
-				lists.get(i).getId();
-				map.put("_id", lists.get(i).getId());
-				map.put("title", lists.get(i).getTitle());
-				map.put("description", lists.get(i).getDescriptions());
-				map.put("start", lists.get(i).getStarts());
-				map.put("end", lists.get(i).getEnds());
-				map.put("type", lists.get(i).getTypes());
-				map.put("username", lists.get(i).getUsername());
-				map.put("backgroundColor", lists.get(i).getBackgroundColor());
-				map.put("textColor", lists.get(i).getTextColor());
-				map.put("allDay", lists.get(i).getAllDay());
-				
-				System.out.println(lists.get(i).getId());
-				System.out.println(lists.get(i).getTitle());
-				System.out.println(lists.get(i).getDescriptions());
-				System.out.println(lists.get(i).getStarts());
-				System.out.println(lists.get(i).getEnds());
-				System.out.println(lists.get(i).getTypes());
-				System.out.println(lists.get(i).getUsername());
-				System.out.println(lists.get(i).getBackgroundColor());
-				System.out.println(lists.get(i).getTextColor());
-				System.out.println(lists.get(i).getAllDay());
-				
-				list.add(map);
-			}
-			
-			return list;
+	//달력에 데이터받아와서 표시
+	@RequestMapping("/jsonView.do")
+	@ResponseBody
+	public ArrayList<Map> responseBodyView(Model model, HttpServletRequest req,HttpSession session) {
+		
+		//로그인이 되어있을경우 session에서 아이디가져오기
+		String userId = (String)session.getAttribute("siteUserInfo");
+		
+		//session이 비어져있을때 null로 안만들기위한 초기화
+		if(userId==null) {
+			userId="???";
+		}
+
+		//관리자가 설정한 일정을가져오기위한 username초기화
+		String username = "공통일정";
+		System.out.println("session : "+userId);
+		
+		
+		//관심대학이름들 가져옴.
+		//ArrayList<MyInterestunivDTO> uname = sqlSession.getMapper(MybatisMypageDAOImpl.class).univname(userId);
+		ArrayList<String> uname = sqlSession.getMapper(MybatisMypageDAOImpl.class).univname(userId);
+		
+		HashMap<String,Object> maps = new HashMap<String, Object>();
+		maps.put("uname", uname);
+		maps.put("userId", userId);
+		maps.put("username", username);
+		
+		System.out.println(uname.size());
+		for(int i=0; i<uname.size(); i++) {
+			//System.out.println(uname.get(i).getUniv_uname());
 		}
 		
+		//달력일정저장용list선언
+		ArrayList<CalexDTO> lists = new ArrayList<CalexDTO>();
 		
-		//새로운 일정 저장
-		@RequestMapping(value="savecal.do", method=RequestMethod.GET)
-		public String savecal(Model model, HttpServletRequest req, HttpSession session) {
-			
-			String userId = req.getParameter("userId");
-			System.out.println(userId);
-			
-			sqlSession.getMapper(MybatisMypageDAOImpl.class).addcal(
-						req.getParameter("_id"),
-						req.getParameter("userId"),
-						req.getParameter("title"),
-						req.getParameter("start"),
-						req.getParameter("end"),
-						req.getParameter("description"),
-						req.getParameter("type"),
-						req.getParameter("username"),
-						req.getParameter("backgroundColor"),
-						req.getParameter("textColor"),
-						req.getParameter("allDay")
-					);
-			
-			System.out.println(req.getParameter("_id"));
-			System.out.println(req.getParameter("userId"));
-			System.out.println(req.getParameter("title"));
-			System.out.println(req.getParameter("start"));
-			System.out.println(req.getParameter("end"));
-			System.out.println(req.getParameter("description"));
-			System.out.println(req.getParameter("type"));
-			System.out.println(req.getParameter("username"));
-			System.out.println(req.getParameter("backgroundColor"));
-			System.out.println(req.getParameter("textColor"));
-			System.out.println(req.getParameter("allDay"));
-			
-			return "redirect:jsonView.do";
+		//아이디가 있을때랑 없을때를 구별해서 일정을 가져옴(쿼리문이 달라짐)
+		if(userId.equals("???")) {
+			lists = sqlSession.getMapper(MybatisMypageDAOImpl.class).selectcal(userId,username);
+		} 
+		else if(uname.size()==0 || maps.get(uname)==null) { 
+			//System.out.println("관심대학이 비어져있을때");
+			lists = sqlSession.getMapper(MybatisMypageDAOImpl.class).selectcal(userId,username);
 		}
-		
+		else{
+			//System.out.println("관심대학이 있을때");
+			lists = sqlSession.getMapper(MybatisMypageDAOImpl.class).selectcal2(maps); 
+		}
 		 
-		//일정수정
-		@RequestMapping("editcal.do")
-		public String editcal(HttpServletRequest req, Model model, HttpSession session, HttpServletResponse response) {
+		
+		//list에 담아서 전달
+		ArrayList<Map> list = new ArrayList<Map>(); //[]형태
+		for(int i=0; i<lists.size(); i++) {
+			Map<String ,Object> map = new HashMap<String, Object>();
 			
-			String userId = (String)session.getAttribute("siteUserInfo");
-			String id = req.getParameter("id");
-			String title = req.getParameter("title");
-			String start = req.getParameter("start");
-			String end = req.getParameter("end");
-			String description = req.getParameter("description");
-			String type = req.getParameter("type");
-			String backgroundColor = req.getParameter("backgroundColor");
-			String allDay = req.getParameter("allDay");
+			lists.get(i).getId();
+			map.put("_id", lists.get(i).getId());
+			map.put("title", lists.get(i).getTitle());
+			map.put("description", lists.get(i).getDescriptions());
+			map.put("start", lists.get(i).getStarts());
+			map.put("end", lists.get(i).getEnds());
+			map.put("type", lists.get(i).getTypes());
+			map.put("username", lists.get(i).getUsername());
+			map.put("backgroundColor", lists.get(i).getBackgroundColor());
+			map.put("textColor", lists.get(i).getTextColor());
+			map.put("allDay", lists.get(i).getAllDay());
 			
-			String whatId = sqlSession.getMapper(MybatisMypageDAOImpl.class).whatId(id);
-			
-			System.out.println("일정의 사용자아이디"+whatId);
-			 
-			int a= 0;
-			
-			if(userId.equals(whatId)) {
-				System.out.println("?????????????????????????????????????");
-				sqlSession.getMapper(MybatisMypageDAOImpl.class).editcal(
-						title,start,end,description,type,backgroundColor,allDay,id
-						);
-				
-				a = 1;
-			}
-			else {
-				System.out.println("|||||||||||||||||||||||||||||||||||");
-				a = 0;
-			}
-			
-			System.out.println(id);
-			System.out.println(userId);
 		/*
-		 * System.out.println(title); System.out.println(start);
-		 * System.out.println(end); System.out.println(description);
-		 * System.out.println(type); System.out.println(backgroundColor);
-		 * System.out.println(allDay);
+		 * System.out.println(lists.get(i).getId());
+		 * System.out.println(lists.get(i).getTitle());
+		 * System.out.println(lists.get(i).getDescriptions());
+		 * System.out.println(lists.get(i).getStarts());
+		 * System.out.println(lists.get(i).getEnds());
+		 * System.out.println(lists.get(i).getTypes());
+		 * System.out.println(lists.get(i).getUsername());
+		 * System.out.println(lists.get(i).getBackgroundColor());
+		 * System.out.println(lists.get(i).getTextColor());
+		 * System.out.println(lists.get(i).getAllDay());
 		 */
 			
-			
-			model.addAttribute("result",a);
-			
-			return "redirect:jsonView.do";
-			
+			list.add(map);
 		}
 		
-		//드롭일정수정(날짜)
-		@RequestMapping("editDate.do")
-		public String editdate(HttpServletRequest req, Model model, HttpSession session) {
-			
-			String id = req.getParameter("id");
-			String startDate = req.getParameter("startDate");
-			String endDate = req.getParameter("endDate"); 
-			
-			System.out.println(id);
-			System.out.println(startDate);
-			System.out.println(endDate);
-			
-			sqlSession.getMapper(MybatisMypageDAOImpl.class).editDate(
-					startDate,endDate,id
-					
+		return list;
+	}
+	
+	
+	//새로운 일정 저장
+	@RequestMapping(value="savecal.do", method=RequestMethod.GET)
+	public String savecal(Model model, HttpServletRequest req, HttpSession session) {
+		
+		String userId = req.getParameter("userId");
+		System.out.println(userId);
+		
+		sqlSession.getMapper(MybatisMypageDAOImpl.class).addcal(
+					req.getParameter("_id"),
+					req.getParameter("userId"),
+					req.getParameter("title"),
+					req.getParameter("start"),
+					req.getParameter("end"),
+					req.getParameter("description"),
+					req.getParameter("type"),
+					req.getParameter("username"),
+					req.getParameter("backgroundColor"),
+					req.getParameter("textColor"),
+					req.getParameter("allDay")
+				);
+		
+	/*
+	 * System.out.println(req.getParameter("_id"));
+	 * System.out.println(req.getParameter("userId"));
+	 * System.out.println(req.getParameter("title"));
+	 * System.out.println(req.getParameter("start"));
+	 * System.out.println(req.getParameter("end"));
+	 * System.out.println(req.getParameter("description"));
+	 * System.out.println(req.getParameter("type"));
+	 * System.out.println(req.getParameter("username"));
+	 * System.out.println(req.getParameter("backgroundColor"));
+	 * System.out.println(req.getParameter("textColor"));
+	 * System.out.println(req.getParameter("allDay"));
+	 */
+		
+		return "redirect:jsonView.do";
+	}
+	
+	 
+	//일정수정
+	@RequestMapping("editcal.do")
+	@ResponseBody
+	public Map<String, String> editcal(HttpServletRequest req, Model model, HttpSession session, HttpServletResponse response) {
+		
+		Map<String, String> map=new HashMap<String, String>();
+		
+		String userId = (String)session.getAttribute("siteUserInfo");
+		String id = req.getParameter("id");
+		String title = req.getParameter("title");
+		String start = req.getParameter("start");
+		String end = req.getParameter("end");
+		String description = req.getParameter("description");
+		String type = req.getParameter("type");
+		String backgroundColor = req.getParameter("backgroundColor");
+		String allDay = req.getParameter("allDay");
+		
+		String whatId = sqlSession.getMapper(MybatisMypageDAOImpl.class).whatId(id);
+		
+		System.out.println("일정의 사용자아이디"+whatId);
+		 
+		
+		String message = "";
+		
+		if(userId.equals(whatId)) {
+			System.out.println("?????????????????????????????????????");
+			sqlSession.getMapper(MybatisMypageDAOImpl.class).editcal(
+					title,start,end,description,type,backgroundColor,allDay,id
 					);
 			
+			map.put("message","수정이 완료되었습니다");
 			
-			return "redirect:jsonView.do";
+			
+			
+			
+			
+		}
+		else {
+			System.out.println("|||||||||||||||||||||||||||||||||||");
+			map.put("message","수정할 수 없습니다.");
+			message = "수정할 수 없습니다.";
 		}
 		
+		System.out.println(id);
+		System.out.println(userId);
+	/*
+	 * System.out.println(title); System.out.println(start);
+	 * System.out.println(end); System.out.println(description);
+	 * System.out.println(type); System.out.println(backgroundColor);
+	 * System.out.println(allDay);
+	 */
 		
-		//일정삭제
-		@RequestMapping("deletecal.do")
-		public String deletecal(HttpServletRequest req, Model model, HttpSession session) {
-			
-			String id = req.getParameter("id");
-			System.out.println(id);
-			
-			sqlSession.getMapper(MybatisMypageDAOImpl.class).deletecal(id);
-			
-			return "redirect:jsonView.do";
-		}
+		//model.addAttribute("msg",message);
+		
+		return map;
+		
+	}
+	
+	//드롭일정수정(날짜)
+	@RequestMapping("editDate.do")
+	public String editdate(HttpServletRequest req, Model model, HttpSession session) {
+		
+		String id = req.getParameter("id");
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate"); 
+		
+		System.out.println(id);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		
+		sqlSession.getMapper(MybatisMypageDAOImpl.class).editDate(
+				startDate,endDate,id
+				
+				);
+		
+		
+		return "redirect:jsonView.do";
+	}
+	
+	
+	//일정삭제
+	@RequestMapping("deletecal.do")
+	public String deletecal(HttpServletRequest req, Model model, HttpSession session) {
+		
+		String id = req.getParameter("id");
+		System.out.println(id);
+		
+		sqlSession.getMapper(MybatisMypageDAOImpl.class).deletecal(id);
+		
+		return "redirect:jsonView.do";
+	}
 
 }

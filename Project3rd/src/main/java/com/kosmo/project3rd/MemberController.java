@@ -253,14 +253,17 @@ public class MemberController {
 		 * System.out.println("아이디=" + abc);
 		 */
 
-		String[] subject = { "국어", "수학", "영어", "사회", "과학" };
+		int count = sqlSession.getMapper(GradeImpl.class).count_all_grade_by_id(userid);
+		if(count == 0) {
+			String[] subject = { "국어", "수학", "영어", "사회", "과학" };
 
-		// 내신 성적 초기화
-		for (int i = 1; i <= 3; i++) {
-			for (int j = 1; j <= 2; j++) {
-				for (int k = 0; k < 5; k++) {
-					sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
-							i + "학년", j + "학기", userid);
+			// 내신 성적 초기화
+			for (int i = 1; i <= 3; i++) {
+				for (int j = 1; j <= 2; j++) {
+					for (int k = 0; k < 5; k++) {
+						sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
+								i + "학년", j + "학기", userid);
+					}
 				}
 			}
 		}
@@ -317,15 +320,18 @@ public class MemberController {
 		// oauthToken.get
 
 		/* 네이버 로그인 성공 페이지 View 호출 */
+		
+		int count = sqlSession.getMapper(GradeImpl.class).count_all_grade_by_id(ID);
+		if(count == 0) {
+			String[] subject = { "국어", "수학", "영어", "사회", "과학" };
 
-		String[] subject = { "국어", "수학", "영어", "사회", "과학" };
-
-		// 내신 성적 초기화
-		for (int i = 1; i <= 3; i++) {
-			for (int j = 1; j <= 2; j++) {
-				for (int k = 0; k < 5; k++) {
-					sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
-							i + "학년", j + "학기", ID);
+			// 내신 성적 초기화
+			for (int i = 1; i <= 3; i++) {
+				for (int j = 1; j <= 2; j++) {
+					for (int k = 0; k < 5; k++) {
+						sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
+								i + "학년", j + "학기", ID);
+					}
 				}
 			}
 		}
@@ -402,31 +408,34 @@ public class MemberController {
 	}
 
 	@RequestMapping("join03.do")
-	   public String join03(Model model, HttpServletRequest req) {
+	public String join03(Model model, HttpServletRequest req) {
 
-	      String ID = req.getParameter("ID");
-	      String EMAIL = req.getParameter("EMAIL") + "@" + req.getParameter("email_domain");
-	      String PHONE = req.getParameter("PHONE") + "-" + req.getParameter("mobile2") + "-"
-	            + req.getParameter("mobile3");
+		String ID = req.getParameter("ID");
+		String EMAIL = req.getParameter("EMAIL") + "@" + req.getParameter("email_domain");
+		String PHONE = req.getParameter("PHONE") + "-" + req.getParameter("mobile2") + "-"
+				+ req.getParameter("mobile3");
 
-	      sqlSession.getMapper(MybatisMemberImpl.class).register(req.getParameter("NAME"), req.getParameter("ID"),
-	            req.getParameter("PASS1"), EMAIL, PHONE, req.getParameter("SMS_OK"), req.getParameter("EMAIL_OK"));
-	      
-	      String[] subject = { "국어", "수학", "영어", "사회", "과학" };
+		sqlSession.getMapper(MybatisMemberImpl.class).register(req.getParameter("NAME"), req.getParameter("ID"),
+				req.getParameter("PASS1"), EMAIL, PHONE, req.getParameter("SMS_OK"), req.getParameter("EMAIL_OK"));
+		
+		
+		int count = sqlSession.getMapper(GradeImpl.class).count_all_grade_by_id(ID);
+		if(count == 0) {
+			String[] subject = { "국어", "수학", "영어", "사회", "과학" };
 
-	      // 내신 성적 초기화
-	      for (int i = 1; i <= 3; i++) {
-	         for (int j = 1; j <= 2; j++) {
-	            for (int k = 0; k < 5; k++) {
-	               sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
-	                     i + "학년", j + "학기", ID);
-	            }
-	         }
-	      }
+			// 내신 성적 초기화
+			for (int i = 1; i <= 3; i++) {
+				for (int j = 1; j <= 2; j++) {
+					for (int k = 0; k < 5; k++) {
+						sqlSession.getMapper(MybatisMypageDAOImpl.class).sugrade(subject[k], "과목", 0, 0, 0, 0, 0, 0,
+								i + "학년", j + "학기", ID);
+					}
+				}
+			}
+		}
 
-	      return "member/join03";
-	   }
-
+		return "member/join03";
+	}
 
 	@RequestMapping("find_id.do")
 	public String find_id() {

@@ -138,13 +138,23 @@ function reflash(){
 			<!-- 댓글 리스트 반복 -->
 			<c:forEach items="${lists }" var="row"> 
 			<c:choose>
-			<c:when test="${row.show eq 'N' }">
+			<c:when test="${row.show eq 'N'}">
 			<tr style="border-top:1px #dee2e6 solid;">
 				<td colspan="3" style="padding-top:5px;">
 				<c:if test="${row.rstep ne 0 }">
 					<span style="color:#783712;">&nbsp;&nbsp;&nbsp;└ </span> 
 				</c:if>
 					삭제된 댓글입니다.
+				</td>
+			</tr>
+			</c:when>
+			<c:when test="${row.show eq 'A'}">
+			<tr style="border-top:1px #dee2e6 solid;">
+				<td colspan="3" style="padding-top:5px;">
+				<c:if test="${row.rstep ne 0 }">
+					<span style="color:#783712;">&nbsp;&nbsp;&nbsp;└ </span> 
+				</c:if>
+					관리자에 의해 규제된 댓글입니다.
 				</td>
 			</tr>
 			</c:when>
@@ -159,7 +169,7 @@ function reflash(){
 						<input type="hidden" value="${row.rgroup }" />
 						<input type="hidden" name="rstep" id="rstep" value="${row.rstep }" />
 						<input type="hidden" value="${row.id }" />
-						<input type="hid-den" value="${row.show }" />
+						<input type="hidden" value="${row.show }" />
 						<li style="float:left; padding-right:10px; padding-left:20px; font-weight:bold; font-size:14px;">
 						<c:if test="${row.rstep ne 0 }">
 						<span style="color:#783712;">└ </span> 

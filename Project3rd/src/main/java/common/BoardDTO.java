@@ -13,6 +13,8 @@ public class BoardDTO {
 	private String bname;
 	private Date postdate;
 	private String name;
+	private String grade;
+	private String subject;
 	
 	//가상번호
 	private int virtualNum;
@@ -21,7 +23,7 @@ public class BoardDTO {
 	public BoardDTO() {}
 	
 	public BoardDTO(int idx, String title, String contents, String id, String attachedfile, int visitcount,
-			String bname, Date postdate, String name, int virtualNum) {
+			String bname, Date postdate, String name, int virtualNum, String grade, String subject) {
 		super();
 		this.idx = idx;
 		this.title = title;
@@ -33,6 +35,8 @@ public class BoardDTO {
 		this.postdate = postdate;
 		this.name = name;
 		this.virtualNum = virtualNum;
+		this.grade = grade;
+		this.subject = subject;
 	}
 
 	public int getIdx() {
@@ -113,6 +117,22 @@ public class BoardDTO {
 
 	public void setVirtualNum(int virtualNum) {
 		this.virtualNum = virtualNum;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 	
 }

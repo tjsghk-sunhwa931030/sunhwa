@@ -45,19 +45,27 @@ public class BoardController {
 		}
 		
 		String bname = req.getParameter("bname");
-		model.addAttribute("bname",bname);
+		String grade = req.getParameter("grade");
+		String subject = req.getParameter("subject");
+		String keyField = req.getParameter("keyField");
+		String keyString = req.getParameter("keyString");
 		
+		model.addAttribute("bname",bname);
+
 		String queryStr = "";
 		if(bname!=null) {
 			queryStr += "bname="+bname+"&";
 		}
 		
-		String keyField = req.getParameter("keyField");
-		String keyString = req.getParameter("keyString");
-		
-		System.out.println("keyField="+keyField);
-		System.out.println("keyString="+keyString);
-		
+		if(grade!=null) {
+			model.addAttribute("grade",grade);
+			queryStr += "grade="+grade+"&";
+		}
+		if(subject!=null) {
+			model.addAttribute("subject",subject);
+			queryStr += "subject="+subject+"&";
+		}
+
 		if(keyString!=null) {
 			model.addAttribute("keyField",keyField);
 			model.addAttribute("keyString",keyString);
@@ -70,7 +78,7 @@ public class BoardController {
 		
 		//총 게시물 수
 		int totalRecordCount = sqlSession.getMapper(BoardDAOImpl.class)
-				.getTotalCount(bname, keyField, keyString);
+				.getTotalCount(bname, keyField, keyString, grade, subject);
 		
 		//전체페이지 수 계산
 		int totalPage = (int)Math.ceil((double)totalRecordCount/pageSize);
@@ -89,7 +97,7 @@ public class BoardController {
 					+"/board.do?"+queryStr);
 		model.addAttribute("pagingImg", pagingImg);
 		
-		ArrayList<BoardDTO> lists = sqlSession.getMapper(BoardDAOImpl.class).listPage(bname, start, end, keyField, keyString);
+		ArrayList<BoardDTO> lists = sqlSession.getMapper(BoardDAOImpl.class).listPage(bname, start, end, keyField, keyString, grade, subject);
 		
 		//일련번호
 		int virtualNum = 0; //가상번호
@@ -154,7 +162,8 @@ public class BoardController {
 			String contents= mhsr.getParameter("contents");
 			String id = mhsr.getParameter("id");
 			String bname = mhsr.getParameter("bname");
-
+			String grade = mhsr.getParameter("grade");
+			String subject = mhsr.getParameter("subject");
 			
 			model.addAttribute("bname", bname);
 			
@@ -200,7 +209,9 @@ public class BoardController {
 					contents,
 					id,
 					saveFileName,
-					bname
+					bname,
+					grade,
+					subject
 			); 
 		}
 		catch(IOException e) {
@@ -320,6 +331,8 @@ public class BoardController {
 			bname = mhsr.getParameter("bname");
 			nowPage = Integer.parseInt(mhsr.getParameter("nowPage"));
 			idx = Integer.parseInt(mhsr.getParameter("idx"));
+			String grade = mhsr.getParameter("grade");
+			String subject = mhsr.getParameter("subject");
 
 			/*
 			File객체를 통해 물리적경로로 지정된 디렉토리가 존재하는지 확인 후 없으면 생성한다.
@@ -368,7 +381,9 @@ public class BoardController {
 					title,
 					contents,
 					saveFileName,
-					idx
+					idx,
+					grade,
+					subject
 			);
 		}
 		catch(IOException e) {

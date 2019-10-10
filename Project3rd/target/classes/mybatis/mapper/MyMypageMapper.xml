@@ -45,11 +45,13 @@
 	
 	<!-- 관심대학일반출력 -->
 	<select id="interuniv1" resultType="mybatis.MyInterestunivDTO">
-		select * from interest_univ where u_type=#{param1} and id=#{param2}
+		select univ_uname, location, totalman, major_num, enter_num from interest_univ inner join info_univ
+		on interest_univ.univ_uname=info_univ.uname where id=#{param1} and u_type=#{param2}
 	</select>
 	<!-- 관심대학전문출력 -->
 	<select id="interuniv2" resultType="mybatis.MyInterestunivDTO">
-		select * from interest_univ where u_type=#{param1} and id=#{param2}
+		select univ_uname, location, totalman, major_num, enter_num from interest_univ inner join info_univ
+		on interest_univ.univ_uname=info_univ.uname where id=#{param1} and u_type=#{param2}
 	</select>
 	<!-- 관심대학삭제 -->
 	<delete id="deleteinteruniv">
@@ -121,25 +123,13 @@
 	</update>
 	
 	<!-- 내가쓴게시물출력 -->
-	<select id="myboard" resultType="mybatis.MyBoardDTO">
+	<select id="myboard" resultType="common.BoardDTO">
 		select * from board where id=#{param1}
 	</select>
 	<!-- 내가쓴댓글출력 -->
-	<select id="myboardreply" resultType="mybatis.MyBoardReplyDTO">
-		select * from board_reply where id=#{param1}
+	<select id="myboardreply" resultType="common.BoardReplyDTO">
+		select board_reply.b_idx,board_reply.re_idx,board_reply.contents, board_reply.replydate, board.bname from board_reply left outer join board on board_reply.b_idx=board.idx where board_reply.id=#{param1}
 	</select>
-	<!-- 내가쓴질문출력 -->
-	<select id="myqna" resultType="mybatis.MyQnaDTO">
-		select * from qna where id=#{param1}
-	</select>
-	<!-- 내가쓴질문댓글출력 -->
-	<select id="myqnareply" resultType="mybatis.MyQnaReplyDTO">
-		select * from qna_reply where id=#{param1}
-	</select>
-	<!-- 내가쓴질문삭제 -->
-	<delete id="deleteqna">
-		delete from qna where idx=#{param1}
-	</delete>
 	<!-- 내가쓴댓글삭제 -->
 	<delete id="deletereply">
 		delete from board_reply where re_idx=#{param1}
@@ -148,15 +138,12 @@
 	<delete id="deletewrite">
 		delete from board where idx=#{param1}
 	</delete>
-	<!-- 내가쓴질문댓글삭제 -->
-	<delete id="deleteqnareply">
-		delete from qna_reply where re_idx=#{param1}
-	</delete>
+	
 	
 	
 	<!-- 달력 데이터가져오기 -->
 	<select id="selectcal" resultType="mybatis.CalexDTO">
-		select * from calex where userId=#{param1} or userId=(select id from coconut where auth=#{param2})
+		select * from calex where userId=#{param1} or username=#{param2} 
 	</select>
 	<!-- 달력 insert -->
 	<insert id="addcal">
@@ -188,4 +175,28 @@
 	<select id="examdday" resultType="mybatis.CalexDTO">
 		select * from calex where types=#{param1} and userid=#{param2} and starts>sysdate
 	</select>
+	<!-- 관심대학 대학명가져오기 -->
+	<select id="univname" resultType="String">
+		select univ_uname from interest_univ where id=#{param1}
+	</select>
+	<!-- 관심대학포함 일정가져오기 -->
+	<!-- <select id="selectcal2" resultType="mybatis.CalexDTO" parameterType="ArrayList">
+		select * from calex where userId=#{param1} or username=#{param2} or
+		<foreach collection="#{param3}" item="item"  open="(" close=")" separator="or">
+			title like '%'||#{item}||'%' 
+		</foreach>
+	</select> -->
+	<!-- <select id="selectcal2" resultType="mybatis.CalexDTO" parameterType="hashmap">
+		select * from calex where userId=#{param1} or username=#{param2} or
+		<foreach collection="uname" item="item"  open="(" close=")" separator="or">
+			title like '%'||#{item}||'%' 
+		</foreach>
+	</select> -->
+	<select id="selectcal2" resultType="mybatis.CalexDTO" parameterType="hashmap">
+		select * from calex where userId=#{userId} or username=#{username} or
+		<foreach collection="uname" item="item"  open="(" close=")" separator="or">
+			title like '%'||#{item}||'%' 
+		</foreach>
+	</select>
+	
 </mapper>

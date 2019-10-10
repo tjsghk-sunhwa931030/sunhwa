@@ -28,6 +28,7 @@
 	.text-left{text-align:left; font-size:15px;}
 	.list_table{border-bottom:1px gray solid; border-top:2px gray solid;}
 	.searchbox{margin-top:10px;; height:60px; width:95%; background-color:#fafafa; border:1px gray solid;}
+	.selectli{list-style:none; float:left;}
 	/* div{border:1px blue solid;} */
 </style>
 <body> 
@@ -58,6 +59,9 @@
 	    <c:when test="${bname eq 'unient' }">
 	   		<div class="righttoptext">대입제도</div>
 	  	</c:when>
+		<c:when test="${bname eq 'qna' }">
+	   		<div class="righttoptext">질문있어요!</div>
+	  	</c:when>
       </c:choose>
       </div>
    	</div> 
@@ -73,7 +77,7 @@
 					    </c:when> 
 						<c:otherwise>					 
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=free">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-							<li class="nav-item1"><a class="nav-link" href="./qna.do">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=qna">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./board.do?bname=group">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 							<li class="nav-item1"><a class="nav-link" href="./library.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 						</c:otherwise>
@@ -84,18 +88,57 @@
 		<div class="rightcontents">
 			<form id="list_frm" name="list_frm" method="get">
 			<!-- 테이블검색영역 -->
-			<input type="hid-den" name="nowPage" value="${nowPage }" />
-			<input type="hid-den" name="bname" value="${bname }" />
-			<div class="searchbox"> 
-				<div class="search" style="margin-left:30%; margin-top:15px;">
-						<select name="keyField"  class="form-control form-control-sm" style="width:15%;">
-							<option value="title">제목</option>
-						    <option value="contents">내용</option>
-						    <option value="name">작성자</option>
-						</select>
-						<input type="text" name="keyString" class="form-control form-control-sm" style="width:40%; margin-left:10px;"/>
-						<button type="submit" class="btn btn-dark btn-sm" style="background-color:#783712; border-color:#783712;">검색</button>
+			<input type="hidden" name="nowPage" value="${nowPage }" />
+			<input type="hidden" name="bname" value="${bname }" />
+			<div class="searchbox">
+			<c:choose>
+			<c:when test="${bname eq 'qna' }">
+				<div class="search" style="margin-left:13%; margin-top:15px;">
+					<ul>
+						<li class="selectli" style="margin-right:5px; padding-top:2px; font-weight:bold;">학년</li>
+						<li class="selectli" style="width:10%; margin-right:10px;"> 
+							<select name="grade" id="grade" class="form-control form-control-sm">
+								<option value=''>선택</option> 
+								<option value="1학년">1학년</option> 
+							    <option value="2학년">2학년</option>
+							    <option value="3학년">3학년</option>
+							</select>
+						</li>
+						<li class="selectli" style="margin-right:5px; padding-top:2px; font-weight:bold;">과목</li>
+							<li class="selectli" style="width:10%; margin-right:10px;"> 
+								<select name="subject" id="subject" class="form-control form-control-sm">
+									<option value=''>선택</option> 
+									<option value="국어">국어</option> 
+								    <option value="영어">영어</option> 
+								    <option value="수학">수학</option>
+								    <option value="사회">사회</option>
+								    <option value="과학">과학</option>
+								    <option value="기타">기타</option>
+								</select>
+							</li>
+						</li>
+					</ul>
+					<select name="keyField" id="keyField" class="form-control form-control-sm" style="width:15%;">
+						<option value="title">제목</option> 
+					    <option value="contents">내용</option>
+					    <option value="name">작성자</option>
+					</select>
+					<input type="text" name="keyString" id="keyField" class="form-control form-control-sm" style="width:30%; margin-left:10px;"/>
+					<button type="submit" class="btn btn-dark btn-sm" style="background-color:#783712; border-color:#783712;">검색</button>
 				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="search" style="margin-left:30%; margin-top:15px;">
+					<select name="keyField"  class="form-control form-control-sm" style="width:15%;">
+						<option value="title">제목</option>
+					    <option value="contents">내용</option>
+					    <option value="name">작성자</option>
+					</select>
+					<input type="text" name="keyString" class="form-control form-control-sm" style="width:40%; margin-left:10px;"/>
+					<button type="submit" class="btn btn-dark btn-sm" style="background-color:#783712; border-color:#783712;">검색</button>
+				</div>
+			</c:otherwise>
+			</c:choose> 
 			</div>
 			</form> 
 			<div style="width:95%; margin-top:1%;">
@@ -131,7 +174,13 @@
 						<tr>
 							<td class="text-center">${row.virtualNum }</td>
 							<td class="text-left">
-								<a href="./view.do?bname=${bname }&idx=${row.idx }&nowPage=${nowPage}" class="title_view">${row.title }</a>
+								<a href="./view.do?bname=${bname }&idx=${row.idx }&nowPage=${nowPage}" class="title_view">
+								<c:if test="${bname eq 'qna'}">
+									<span style="color:#783712;">${row.grade }</span>
+									<span style="color:green;">${row.subject }</span>
+								</c:if>
+									${row.title }
+								</a>
 							</td>   
 							<td class="text-center">${row.name }</td>
 							<td class="text-center">${row.postdate }</td>
@@ -142,6 +191,7 @@
 				</c:choose>
 				</tbody>
 				</table>
+				
 				<button type="button" class="btn btn-dark" style="float:right;" onclick="location.href='./write.do?bname=${bname}';">글쓰기</button>
 				<!-- 페이지 번호 -->
 				<div style="width:100%;">

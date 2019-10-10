@@ -222,7 +222,7 @@
 			<div class="righttoptext">학생부 성적 분석 - 교과조합 분석</div>
 		</div>
 	</div>
-	<div class="contents">
+	<div class="contents" style="height: 2000px">
 		<div class="leftmenu">
 			<nav class="left1">
 				<ul class="navbar-nav1  bg-light ">
@@ -716,10 +716,10 @@
 					<!-- Links -->
 					  <ul class="navbar-nav">
 					    <li class="nav-item">
-					      <a class="nav-link" href="s_grade.do">주요교과 분석</a>
+					      <a class="nav-link" href="s_grade.do?id=${sessionScope.siteUserInfo }">주요교과 분석</a>
 					    </li>
 					    <li class="nav-item">
-					      <a class="nav-link" href="s_grade2.do">교과조합 분석</a>
+					      <a class="nav-link" href="s_grade2.do?id=${sessionScope.siteUserInfo }">교과조합 분석</a>
 					    </li>
 					  </ul>
 					</nav>

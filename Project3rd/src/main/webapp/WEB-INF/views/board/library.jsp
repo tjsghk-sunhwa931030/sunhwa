@@ -99,13 +99,12 @@ function initMap(latVar, lngVar) {
 			['${row.l_name }', ${row.hp_latitude }, ${row.hp_longitude }, 
 				'${row.sido}', '${row.sigungu}', '${row.addr}', '${row.rest_day}',
 				'${row.weekday_start}', '${row.weekday_end}', '${row.saturday_start}', '${row.saturday_end}',
-				'${row.holiday_start}', '${row.holiday_end}', '${row.phone_num}', '${row.l_url}', ${row.l_like}
+				'${row.holiday_start}', '${row.holiday_end}', '${row.phone_num}', '${row.l_url}', ${row.l_like}, '${row.l_num}'
 				], 
 		</c:forEach>
 	];
 	
  	var marker, i;
-
 	for (i=0; i<locations.length; i++) {  
 		marker = new google.maps.Marker({
 			id:i,
@@ -114,8 +113,11 @@ function initMap(latVar, lngVar) {
 			icon: './icon/icon_facil.png'
 		});
 		var url = locations[i][14];
+		
+		//alert(l_num);
 		google.maps.event.addListener(marker, 'click', (function(marker, i) {
 			return function() {
+				var l_num = locations[i][16];
 				//정보창에 HTML코드가 들어갈 수 있음.
 				infowindow.setContent("<a href=" + locations[i][14] + ">"+locations[i][0]+"</a><br/>" +
 						"주소: " + locations[i][3] + ", " + locations[i][4] + ", " + locations[i][5] + "<br/>"
@@ -124,11 +126,13 @@ function initMap(latVar, lngVar) {
 						+"공휴일: " + locations[i][11] + " ~ " + locations[i][12] + "<br/>"
 						+"휴관일: " + locations[i][6] + "<br/>"
 						+"전화번호: " + locations[i][13] + "<br/>"
-						/* +"추천수: " + locations[i][15] + "<br/>" */
+						+"일련번호: " +locations[i][16]+ "<br/>" 
+						/* +"추천수: " + locations[i][15] + "<br/>"  */
 						+"<button type=\"button\" class=\"btn btn-primary\" id=\"btn1\"" 
-						+"onclick=\"like()\"\">추천"
-						+"<span class=\"badge badge-light\">" + locations[i][15]
+						+"onclick=\"like("+l_num+")\"\">추천"    
+						+"<span class=\"badge badge-light\" id='count'>" + locations[i][15] 
 						+"</span>"
+						+"<div id='rec_count' class='rec_count'></div>"
 						+"</button>"
 				);
 				infowindow.open(map, marker);
@@ -140,9 +144,10 @@ function initMap(latVar, lngVar) {
 			marker.addListener('click', function() {
 				map.setZoom(16);
 				map.setCenter(this.getPosition());
+				
 			});
 		}
-	}
+	}  
 	//다중마커s
 	//////////////////////////////////////////////////////////////////////////
 }
@@ -160,10 +165,35 @@ var showError = function(error){
 	}
 }
 
-function like(){
+function like(l_num){
 	
-	alert('추천되었습니다');
+	var l_num = l_num;
+	var count = $("#count").text();
+	
+	$.ajax({
+		url : "like_action.do",
+		type : "post",
+		data : {
+			l_num : l_num,
+		},
+		success : function(d){
+			//recCount();
+			if(d.statusCode==0){
+				alert("추천 실패");
+			}
+			else if(d.statusCode==1){
+				alert("추천이 완료되었습니다.");
+				$("#count").text(d.l_count);
+				//location.reload();
+			}
+		},
+		error : function(e){
+			alert("ajax 실패...!");
+		}
+	});
 }
+
+
 
 </script>
 
@@ -178,12 +208,12 @@ function like(){
 			<div class="righttoptext">주변 도서관 검색</div>
 		</div>
 	</div>
-	<div class="contents">
+	<div class="contents" style="height:900px">
 		<div class="leftmenu">
 			<nav class="left1" >
 				<ul class="navbar-nav1  bg-light ">
 					<li class="nav-item1"><a class="nav-link" href="./board.do?bname=free">공부꿀팁<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
-					<li class="nav-item1"><a class="nav-link" href="./qna.do">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
+					<li class="nav-item1"><a class="nav-link" href="./board.do?bname=qna">질문있어요!<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 					<li class="nav-item1"><a class="nav-link" href="./board.do?bname=group">소모임구함<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 					<li class="nav-item1"><a class="nav-link" href="./library.do">내 주변 독서실<i class='fas fa-chevron-circle-right' style='margin-top:4px;'></i></a></li>
 				</ul>

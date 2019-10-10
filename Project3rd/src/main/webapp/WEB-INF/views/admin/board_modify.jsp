@@ -7,6 +7,7 @@
 <html lang="en">
 
 <head>
+<script type="text/javascript" src="<%=request.getContextPath() %>/smarteditor/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script>
 	function alertcall(){
 		alert("로그인후 이용해주세요.");
@@ -16,7 +17,6 @@
 	function fileDelete(){
 		if(confirm("파일을 삭제하시겠습니까?")){ 
 			document.getElementById("originalfile").value="";
-			location.replace('edit.do?bname='+${bname}+"&idx="+${idx}+"&nowPage="+${nowPage});
 		}
 		else{ 
 			return false; 
@@ -81,36 +81,70 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="member_modify.do">멤버수정</a>
+            <a href="admin_board.do">게시판관리</a>
           </li>
         </ol>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
-          <div class="card-header"><i class="fas fa-table"></i> 멤버 수정</div>
+          <div class="card-header"><i class="fas fa-table"></i>게시판 수정</div>
           <div class="card-body">
             <div class="table-responsive">
             <c:forEach items="${lists }" var="row">
             <form name="personFrm" method="post" enctype="multipart/form-data" onsubmit="return writeValidate(this);" action="<c:url value="./board_modify_action.do?idx=${row.idx }"/>">
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
+                <!-- <input type="hid-den" value="${row.bname }" /> -->
 				    <tr>
 				      <td>제목&nbsp;<span class="essential">*</span></td>
 				      <td>
 				      	<input type="text" value="${row.title }" name="title"/>
 				      </td>
 				    </tr>
+				    <c:if test="${row.bname eq 'qna' }">
+				    <tr>
+						<td>학년&nbsp;<span class="essential">*</span></td>
+				     	<td>
+				      		<select name="grade" id="grade" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="1학년"<c:if test="${row.grade eq '1학년' }">selected</c:if>>1학년</option> 
+							    <option value="2학년"<c:if test="${row.grade eq '2학년' }">selected</c:if>>2학년</option>
+							    <option value="3학년"<c:if test="${row.grade eq '3학년' }">selected</c:if>>3학년</option>
+							</select>
+				      	</td>		    
+				    </tr>
+				    <tr>
+						<td>과목&nbsp;<span class="essential">*</span></td>
+				     	<td>
+				      		<select name="subject" id="subject" class="form-control form-control-sm" style="width:15%;">
+								<option value="">선택</option> 
+								<option value="국어"<c:if test="${row.subject eq '국어' }">selected</c:if>>국어</option> 
+							    <option value="영어"<c:if test="${row.subject eq '영어' }">selected</c:if>>영어</option>
+							    <option value="수학"<c:if test="${row.subject eq '수학' }">selected</c:if>>수학</option>
+							    <option value="사회"<c:if test="${row.subject eq '사회' }">selected</c:if>>사회</option>
+							    <option value="과학"<c:if test="${row.subject eq '과학' }">selected</c:if>>과학</option>
+							    <option value="기타"<c:if test="${row.subject eq '기타' }">selected</c:if>>기타</option>
+							</select>
+				      	</td>		    
+				    </tr>
+				    </c:if>
 				    <tr>
 				      <td>내용&nbsp;<span class="essential">*</span></td>
 				      <td>
 				      	<%-- <input type="input" value="${row.contents }" width="150px" name="contents" /> --%>
-				      	<textarea name="contents" id="" cols="30" rows="10">${row.contents }</textarea>
+				      	<textarea name="contents" id="contents" cols="30" rows="10">${row.contents }</textarea>
 				      </td>
 				    </tr>
 				    <tr>
-				      <td>작성자&nbsp;<span class="essential">*</span></td>
+				      <td>아이디&nbsp;<span class="essential">*</span></td>
 				      <td>
-				      	<input type="text" value="${row.id }" name="id"/>
+				      	<input type="text" value="${row.id }" name="id" readonly/>
+				      </td>
+				    </tr>
+				     <tr>
+				      <td>이름&nbsp;<span class="essential">*</span></td>
+				      <td>
+				      	<input type="text" value="${row.name }" name="name" readonly/>
 				      </td>
 				    </tr>
 				    <tr>
@@ -122,23 +156,18 @@
 				      </td>
 				    </tr>
 				    <tr>
-				    	<td>조회수&nbsp;<span class="essential">*</span></td>
-				    	<td>
-				    		<input type="text" value="${row.visitcount }" name="visitcount" />
-				    	</td>
-				    </tr>
-				    <tr>
 				    	<td>게시판 종류&nbsp;<span class="essential">*</span></td>
 				    	<td>
 				    		<input type="radio" value="group" name="bname" <c:if test="${row.bname eq 'group' }">checked</c:if>/>&nbsp;소모임 구함
 				    		<input type="radio" value="free" name="bname" <c:if test="${row.bname eq 'free' }">checked</c:if>/>&nbsp;공부꿀팁
 				    		<input type="radio" value="notice" name="bname" <c:if test="${row.bname eq 'notice' }">checked</c:if>/>&nbsp;공지사항
 				    		<input type="radio" value="unient" name="bname" <c:if test="${row.bname eq 'unient' }">checked</c:if>/>&nbsp;대입제도
+				    		<input type="radio" value="qna" name="bname" <c:if test="${row.bname eq 'qna' }">checked</c:if>/>&nbsp;질문있어요!
 				    	</td>
 				    </tr>
 				  </tbody>
               </table>
-			<button type="submit" class="btn btn-primary">수정</button>&nbsp;
+			<button type="button" id="writeBtn" class="btn btn-primary">수정</button>&nbsp;
 			<button type="button" class="btn btn-danger" onclick = "location.href='delete_board_admin.do?idx=${row.idx }'">삭제</button>
 			</form>
 			</c:forEach>
@@ -168,7 +197,54 @@
 
   </div>
   <!-- /#wrapper -->
-
+	
+	<script type="text/javascript">
+	var oEditors = [];
+	nhn.husky.EZCreator.createInIFrame({
+	 oAppRef: oEditors,
+	 elPlaceHolder: "contents",
+	 sSkinURI: "<%=request.getContextPath()%>/smarteditor/SmartEditor2Skin.html",
+	 fCreator: "createSEditor2"
+	});	
+	</script>
+	<script type="text/javascript">
+	window.onload = function(){
+		var btn = document.getElementById("writeBtn");
+		btn.onclick = function(){
+	
+			submitContents(btn); 
+		}
+	}
+    
+	function submitContents(elClickedObj){
+		
+		var f = document.personFrm;
+		oEditors.getById["contents"].exec("UPDATE_CONTENTS_FIELD", []);
+		
+		if(f.id.value==""){
+			alert("작성자 이름을 입력하세요");
+			f.id.focus();
+			return false;
+		}
+		if(f.title.value==""){
+			alert("제목을 입력하세요");
+			f.title.focus(); 
+			return false;
+		} 
+		if(f.contents.value =="" ||f.contents.value== null || f.contents.value=='&nbsp;'||f.contents.value=='<p><br></p>'){
+			alert("내용을 입력하세요");
+			oEditors.getById["contents"].exec("FOCUS"); 
+			return false;
+		}
+		
+		try{
+			elClickedObj.form.submit();
+		}
+		catch(e){
+			 
+		}
+	}
+	</script>
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>

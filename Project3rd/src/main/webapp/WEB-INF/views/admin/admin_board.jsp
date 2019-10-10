@@ -25,7 +25,6 @@
 			}
 		});
 	}
-	
 </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -84,7 +83,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="admin_tables.do">게시판관리</a>
+            <a href="admin_board.do">게시판관리</a>
           </li>
         </ol>
 
@@ -101,6 +100,7 @@
           		<option value="group">소모임구함</option>
           		<option value="notice">공지사항</option>
           		<option value="unient">대입제도</option>
+          		<option value="qna">질문있어요!</option>
           	</select>
           </div>
             <div class="table-responsive" id="board_table">
@@ -111,7 +111,8 @@
 		          	<th>번호</th>
 		            <th>제목</th>
 		            <th>내용</th>
-		            <th>글쓴이</th>
+		            <th>아이디</th>
+		            <th>이름</th>
 		            <th>파일</th>
 		            <th>조회수</th>
 		            <th>게시판 종류</th>
@@ -126,6 +127,7 @@
 		            <td>${row.title }</td>
 		            <td>${row.contents }</td>
 		            <td>${row.id }</td>
+		            <td>${row.name }</td>
 		            <td>${row.attachedfile }</td>
 		            <td>${row.visitcount }</td>
 		            <td>
@@ -141,6 +143,9 @@
 						</c:when>
 						<c:when test="${row.bname eq 'unient'}">
 							<c:out value="대입제도" />
+						</c:when>
+						<c:when test="${row.bname eq 'qna'}">
+							<c:out value="질문있어요!" />
 						</c:when>
 					</c:choose>
 					</td>

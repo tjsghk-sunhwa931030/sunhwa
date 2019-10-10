@@ -47,6 +47,32 @@
 		VALUES (#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, reply_seq.nextval, #{param6})
 	</insert>
 
+	
+	<!-- 관리자페이지 댓글 리스트 -->
+	<select id="admin_reply" resultType="common.BoardReplyDTO">
+		select board_reply.contents, board_reply.id, replydate, board_reply.name,
+		show,re_idx,bname from board_reply left outer join board on board_reply.b_idx=board.idx
+	</select>
+	<select id="admin_reply_by_bname" resultType="common.BoardReplyDTO">
+		select board_reply.contents, board_reply.id, replydate, board_reply.name,
+		show, re_idx, bname from board_reply left outer join board on board_reply.b_idx=board.idx 
+		where bname=#{param1}
+	</select> 
+	
+	<!-- 관리자페이지 댓글 수정 -->
+	<select id="admin_reply_by_idx" resultType="common.BoardReplyDTO">
+		select * from board_reply where re_idx=#{param1}
+	</select>
+	<update id="admin_reply_edit">
+		UPDATE board_reply
+			SET contents=#{param1} where re_idx=#{param2}
+	</update>
+	
+	<!-- 관리자 댓글 삭제 -->
+	<select id="delete_reply_admin">
+		UPDATE board_reply SET show='A' where re_idx=#{param1}
+	</select>
+	
 </mapper>
 
 

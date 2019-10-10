@@ -1,8 +1,11 @@
 package com.kosmo.project3rd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import mybatis.AllInfoDTO;
 import mybatis.CalexDTO;
 import mybatis.GradeDTO;
 import mybatis.GradeImpl;
@@ -18,6 +23,7 @@ import mybatis.MyJunggradeDTO;
 import mybatis.MyLibraryDTO;
 import mybatis.MybatisMypageDAOImpl;
 import mybatis.TestScheduleDTO;
+import mybatis.UInfoDAOImpl;
 
 
 @Controller
@@ -43,8 +49,6 @@ public class GradeController {
 		ArrayList<GradeDTO> lists32 = sqlSession.getMapper(GradeImpl.class).grade("3학년", "2학기", id);
 		
 		Integer rate_korea11 = sqlSession.getMapper(GradeImpl.class).rate("국어", "1학년", "1학기", id);
-		
-		
 		Integer rate_english11 = sqlSession.getMapper(GradeImpl.class).rate("영어", "1학년", "1학기", id);
 		Integer rate_math11 = sqlSession.getMapper(GradeImpl.class).rate("수학", "1학년", "1학기", id);
 		Integer rate_society11 = sqlSession.getMapper(GradeImpl.class).rate("사회", "1학년", "1학기", id);
@@ -462,8 +466,191 @@ public class GradeController {
 	
 	//대학별 성적 분석
 	@RequestMapping("/u_grade.do")
-	public String u_grade() {
+	public String u_grade(HttpServletRequest req, Model model, HttpSession session) {
+		
+		ArrayList<AllInfoDTO> listM1 =sqlSession.getMapper(UInfoDAOImpl.class).listM1();
+		model.addAttribute("listsM1", listM1);
+		
 		return "/grade/u_grade";
+	}
+	
+	//(전형정보) 체크된 폼값 전달받음 
+	@RequestMapping("/u_grade_checkAction.do")
+	public String u_grade_checkAction(HttpServletRequest req, Model model, HttpSession session) {
+
+
+	 //체크한 값
+	 ArrayList<AllInfoDTO> listsJ =sqlSession.getMapper(UInfoDAOImpl.class).searchJ_all(
+
+			 req.getParameter("searchWord"),
+			 req.getParameter("recruit_time"),
+			 req.getParameter("enter_type"),
+			 req.getParameter("enter_name"),
+			 req.getParameter("location"),
+			 req.getParameter("enter_ele"),
+			 req.getParameter("major"),
+			 req.getParameter("major1"),
+			 req.getParameter("major2")
+		);
+
+	 model.addAttribute("listsJ", listsJ);
+	 
+	return "/grade/u_grade";
+		
+	}
+	
+	@RequestMapping("/get_grade.do")
+	public String get_grade(HttpServletRequest req, Model model, HttpSession session) {
+		
+		String idx = "";
+		if(req.getParameter("idx") != null) {
+			idx = req.getParameter("idx"); 
+		}
+		String recruit_time = "";
+		if(req.getParameter("recruit_time") != null) {
+			recruit_time = req.getParameter("recruit_time"); 
+		}
+		String id = "";
+		if(req.getParameter("id") != null) {
+			id = req.getParameter("id"); 
+		}
+		
+		String uname = "";
+		if(req.getParameter("uname") != null) {
+			uname = req.getParameter("uname"); 
+		}
+		
+		if(recruit_time.contains("수시")) {
+			
+			Integer rate_korea11 = sqlSession.getMapper(GradeImpl.class).rate("국어", "1학년", "1학기", id);
+			Integer rate_english11 = sqlSession.getMapper(GradeImpl.class).rate("영어", "1학년", "1학기", id);
+			Integer rate_math11 = sqlSession.getMapper(GradeImpl.class).rate("수학", "1학년", "1학기", id);
+			Integer rate_society11 = sqlSession.getMapper(GradeImpl.class).rate("사회", "1학년", "1학기", id);
+			Integer rate_science11 = sqlSession.getMapper(GradeImpl.class).rate("과학", "1학년", "1학기", id);
+			
+			Integer rate_korea12 = sqlSession.getMapper(GradeImpl.class).rate("국어", "1학년", "2학기", id);
+			Integer rate_english12 = sqlSession.getMapper(GradeImpl.class).rate("영어", "1학년", "2학기", id);
+			Integer rate_math12 = sqlSession.getMapper(GradeImpl.class).rate("수학", "1학년", "2학기", id);
+			Integer rate_society12 = sqlSession.getMapper(GradeImpl.class).rate("사회", "1학년", "2학기", id);
+			Integer rate_science12 = sqlSession.getMapper(GradeImpl.class).rate("과학", "1학년", "2학기", id);
+			
+			Integer rate_korea21 = sqlSession.getMapper(GradeImpl.class).rate("국어", "2학년", "1학기", id);
+			Integer rate_english21 = sqlSession.getMapper(GradeImpl.class).rate("영어", "2학년", "1학기", id);
+			Integer rate_math21 = sqlSession.getMapper(GradeImpl.class).rate("수학", "2학년", "1학기", id);
+			Integer rate_society21 = sqlSession.getMapper(GradeImpl.class).rate("사회", "2학년", "1학기", id);
+			Integer rate_science21 = sqlSession.getMapper(GradeImpl.class).rate("과학", "2학년", "1학기", id);
+			
+			Integer rate_korea22 = sqlSession.getMapper(GradeImpl.class).rate("국어", "2학년", "2학기", id);
+			Integer rate_english22 = sqlSession.getMapper(GradeImpl.class).rate("영어", "2학년", "2학기", id);
+			Integer rate_math22 = sqlSession.getMapper(GradeImpl.class).rate("수학", "2학년", "2학기", id);
+			Integer rate_society22 = sqlSession.getMapper(GradeImpl.class).rate("사회", "2학년", "2학기", id);
+			Integer rate_science22 = sqlSession.getMapper(GradeImpl.class).rate("과학", "2학년", "2학기", id);
+			
+			Integer rate_korea31 = sqlSession.getMapper(GradeImpl.class).rate("국어", "3학년", "1학기", id);
+			Integer rate_english31 = sqlSession.getMapper(GradeImpl.class).rate("영어", "3학년", "1학기", id);
+			Integer rate_math31 = sqlSession.getMapper(GradeImpl.class).rate("수학", "3학년", "1학기", id);
+			Integer rate_society31 = sqlSession.getMapper(GradeImpl.class).rate("사회", "3학년", "1학기", id);
+			Integer rate_science31 = sqlSession.getMapper(GradeImpl.class).rate("과학", "3학년", "1학기", id);
+			
+			Integer rate_korea32 = sqlSession.getMapper(GradeImpl.class).rate("국어", "3학년", "2학기", id);
+			Integer rate_english32 = sqlSession.getMapper(GradeImpl.class).rate("영어", "3학년", "2학기", id);
+			Integer rate_math32 = sqlSession.getMapper(GradeImpl.class).rate("수학", "3학년", "2학기", id);
+			Integer rate_society32 = sqlSession.getMapper(GradeImpl.class).rate("사회", "3학년", "2학기", id);
+			Integer rate_science32 = sqlSession.getMapper(GradeImpl.class).rate("과학", "3학년", "2학기", id);
+					
+			Integer korea11 = sqlSession.getMapper(GradeImpl.class).jumsu("국어", "1학년", "1학기", id);
+			Integer english11 = sqlSession.getMapper(GradeImpl.class).jumsu("영어", "1학년", "1학기", id);
+			Integer math11 = sqlSession.getMapper(GradeImpl.class).jumsu("수학", "1학년", "1학기", id);
+			Integer society11 = sqlSession.getMapper(GradeImpl.class).jumsu("사회", "1학년", "1학기", id);
+			Integer science11 = sqlSession.getMapper(GradeImpl.class).jumsu("과학", "1학년", "1학기", id);
+			
+			Integer korea12 = sqlSession.getMapper(GradeImpl.class).jumsu("국어", "1학년", "2학기", id);
+			Integer english12 = sqlSession.getMapper(GradeImpl.class).jumsu("영어", "1학년", "2학기", id);
+			Integer math12 = sqlSession.getMapper(GradeImpl.class).jumsu("수학", "1학년", "2학기", id);
+			Integer society12 = sqlSession.getMapper(GradeImpl.class).jumsu("사회", "1학년", "2학기", id);
+			Integer science12 = sqlSession.getMapper(GradeImpl.class).jumsu("과학", "1학년", "2학기", id);
+			
+			Integer korea21 = sqlSession.getMapper(GradeImpl.class).jumsu("국어", "2학년", "1학기", id);
+			Integer english21 = sqlSession.getMapper(GradeImpl.class).jumsu("영어", "2학년", "1학기", id);
+			Integer math21 = sqlSession.getMapper(GradeImpl.class).jumsu("수학", "2학년", "1학기", id);
+			Integer society21 = sqlSession.getMapper(GradeImpl.class).jumsu("사회", "2학년", "1학기", id);
+			Integer science21 = sqlSession.getMapper(GradeImpl.class).jumsu("과학", "2학년", "1학기", id);
+			
+			Integer korea22 = sqlSession.getMapper(GradeImpl.class).jumsu("국어", "2학년", "2학기", id);
+			Integer english22 = sqlSession.getMapper(GradeImpl.class).jumsu("영어", "2학년", "2학기", id);
+			Integer math22 = sqlSession.getMapper(GradeImpl.class).jumsu("수학", "2학년", "2학기", id);
+			Integer society22 = sqlSession.getMapper(GradeImpl.class).jumsu("사회", "2학년", "2학기", id);
+			Integer science22 = sqlSession.getMapper(GradeImpl.class).jumsu("과학", "2학년", "2학기", id);
+			
+			Integer korea31 = sqlSession.getMapper(GradeImpl.class).jumsu("국어", "3학년", "1학기", id);
+			Integer english31 = sqlSession.getMapper(GradeImpl.class).jumsu("영어", "3학년", "1학기", id);
+			Integer math31 = sqlSession.getMapper(GradeImpl.class).jumsu("수학", "3학년", "1학기", id);
+			Integer society31 = sqlSession.getMapper(GradeImpl.class).jumsu("사회", "3학년", "1학기", id);
+			Integer science31 = sqlSession.getMapper(GradeImpl.class).jumsu("과학", "3학년", "1학기", id);
+			
+			double rate_korea = (rate_korea11 + rate_korea12 + rate_korea21 + rate_korea22 + rate_korea31)/5;
+			double rate_english = (rate_english11 + rate_english12 + rate_english21 + rate_english22 + rate_english31)/5;
+			double rate_math = (rate_math11 + rate_math12 + rate_math21 + rate_math22 + rate_math31)/5;
+			double rate_society = (rate_society11 + rate_society12 + rate_society21 + rate_society22 + rate_society31)/5;
+			double rate_science = (rate_science11 + rate_science12 + rate_science21 + rate_science22 + rate_science31)/5;
+			
+			double avg;
+			if(rate_society < rate_science) {
+				avg = (rate_korea + rate_english + rate_math + rate_society)/4;
+			}
+			else {
+				avg = (rate_korea + rate_english + rate_math + rate_science)/4;
+			}
+			
+			model.addAttribute("rate_korea", rate_korea);
+			model.addAttribute("rate_english", rate_english);
+			model.addAttribute("rate_math", rate_math);
+			model.addAttribute("rate_society", rate_society);
+			model.addAttribute("rate_science", rate_science);
+			model.addAttribute("avg", avg);
+			
+		}
+		else {
+			ArrayList<MyJunggradeDTO> lists = sqlSession.getMapper(GradeImpl.class).all_junglist(id);
+			model.addAttribute("lists",lists);
+		}
+		
+		model.addAttribute("recruit_time", recruit_time);
+		
+		ArrayList<AllInfoDTO> selected_junh = sqlSession.getMapper(UInfoDAOImpl.class).select_junh_by_id(idx);
+		model.addAttribute("selected_junh", selected_junh);
+		
+		model.addAttribute("uname", uname);
+		
+		return "/grade/grade_temp";
+	}
+	
+	@RequestMapping("/get_grade2.do")
+	public String get_grade2(HttpServletRequest req, Model model, HttpSession session) {
+		
+		String idx = "";
+		if(req.getParameter("idx") != null) {
+			idx = req.getParameter("idx"); 
+		}
+		
+		String junh_idx = "";
+		if(req.getParameter("junh_idx") != null) {
+			junh_idx = req.getParameter("junh_idx"); 
+		}
+		
+		ArrayList<MyJunggradeDTO> lists = sqlSession.getMapper(GradeImpl.class).select_one(idx);
+		model.addAttribute("lists",lists);
+		
+		ArrayList<AllInfoDTO> selected_junh = sqlSession.getMapper(UInfoDAOImpl.class).select_junh_by_id(junh_idx);
+		model.addAttribute("selected_junh", selected_junh);
+		
+		String uname = "";
+		if(req.getParameter("uname") != null) {
+			uname = req.getParameter("uname"); 
+		}
+		model.addAttribute("uname", uname);
+		
+		return "/grade/grade_temp2";
 	}
 	
 	//지도 가져오기
@@ -490,22 +677,42 @@ public class GradeController {
 	}
 	
 	@RequestMapping("/like_action.do")
-	public String like_action(Model model, HttpServletRequest req) {
-		
-		String id=req.getParameter("id");
-		String l_name=req.getParameter("l_name");
-		
-		/*
-		int temp = sqlSession.getMapper(GradeImpl.class).is_there_like(id, l_name);
-		if(temp != 0) {
-			//sqlSession.getMapper(GradeImpl.class).like_action(id, l_name);
-		}
-		else {
-			
-		}
-		*/
-		
-		return "redirect:library.do";
-	}
+   @ResponseBody
+   public Map<String, Object> like_action(Model model, HttpServletRequest req, HttpSession session) {
+      
+      
+      Map<String, Object> map = new HashMap<String, Object>();
+      
+      String id = (String)session.getAttribute("siteUserInfo");
+      String l_num = req.getParameter("l_num");
+      
+      //중복체크 먼저
+      int like_check = sqlSession.getMapper(GradeImpl.class).like_check(id, l_num);
+      System.out.println("like_check="+like_check);
+      
+      if(like_check > 0) {
+         sqlSession.getMapper(GradeImpl.class).unlike(id, l_num);
+         map.put("statusCode",2);
+      }
+      else if(like_check==0) {
+         //좋아요 등록
+         int result = sqlSession.getMapper(GradeImpl.class).like_action(id, l_num);
+         
+         if(result<=0) {
+            map.put("statusCode",0);
+         }
+         else {
+            map.put("statusCode",1);
+         }
+      }
+      
+      //좋아요 총 개수
+      int l_count = sqlSession.getMapper(GradeImpl.class).like_count(l_num);
+      map.put("l_count",l_count);
+      
+      sqlSession.getMapper(GradeImpl.class).like_update(l_num, l_count); 
+      
+      return map;
+   }
 	
 }

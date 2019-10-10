@@ -10,6 +10,7 @@ import mybatis.MyLibraryDTO;
 public interface GradeImpl {
 	public ArrayList<GradeDTO> all_grade();
 	public ArrayList<GradeDTO> all_grade_by_id(String id);
+	public int count_all_grade_by_id(String id);
 	
 	public ArrayList<GradeDTO> grade(@Param("year") String year, @Param("semester") String semester, @Param("id") String id);
 	
@@ -20,6 +21,10 @@ public interface GradeImpl {
 	
 	//정시성적출력
 	public ArrayList<MyJunggradeDTO> junglist(String years, String dates, String year,String id);
+	public ArrayList<MyJunggradeDTO> jung_exam_by_id_idx(String id, String idx);
+	public String get_major_name(String idx);
+	public ArrayList<MyJunggradeDTO> all_junglist(String id);
+	public ArrayList<MyJunggradeDTO> select_one(String idx);
 	
 	//시험 일정 출력
 	public ArrayList<CalexDTO> test_schedule();
@@ -70,9 +75,23 @@ public interface GradeImpl {
 			@Param("l_like") int l_like
 	);
 	
+	//도서관 좋아요 입력
+	public int like_action(String id, String l_num);
+	
+	//도서관 좋아요 개수
+	public int like_count(String l_num);
+	
+	public void like_update(String l_num, int l_count);
+	
 	public void update_visit(@Param("visit_year") String visit_year,
 			@Param("visit_month") String visit_month, @Param("visit_day") String visit_day
 	);
 	
 	public int select_visit(String visit_year, String visit_month);
+	
+   //좋아요 중복체크
+   public int like_check(String id, String l_num);
+   
+   //좋아요 취소
+   public void unlike(String id, String l_num);
 }

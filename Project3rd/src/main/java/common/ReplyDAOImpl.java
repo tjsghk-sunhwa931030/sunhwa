@@ -27,5 +27,15 @@ public interface ReplyDAOImpl {
 	//7. 대댓글 쓰기
 	public int rerewrite(String id, int idx, String contents, int rgroup, int rstep, String name);
 	
+	//관리자 페이지 댓글 리스트
+	public ArrayList<BoardReplyDTO> admin_reply();
+	public ArrayList<BoardReplyDTO> admin_reply_by_bname(String bname);
+	
+	//관리자 댓글 수정
+	public ArrayList<BoardReplyDTO> admin_reply_by_idx(int idx);
+	public int admin_reply_edit(String contents, int idx);
+	
+	//관리자 댓글 삭제
+	public void delete_reply_admin(int idx);
 	
 }
